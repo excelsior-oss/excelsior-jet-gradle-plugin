@@ -1,0 +1,11 @@
+plugins {
+    id 'excelsiorJet'
+}
+
+apply plugin: "java"
+version = "1.0-SNAPSHOT"
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    mainClass = "HelloWorld"
+}
