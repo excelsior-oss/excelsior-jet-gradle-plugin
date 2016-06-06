@@ -1,8 +1,9 @@
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.AbstractLog
+import com.excelsiorjet.api.log.AbstractLog
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.logging.LogLevel
 
 class ExcelsiorJetPlugin implements Plugin<Project> {
 
@@ -14,7 +15,8 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         jetBuild.dependsOn(":jar", ":test")
         jetBuild.excelsiorJetExtension = ext
 
-        AbstractLog.instance = new GradleLog()
+        target.getLogging().captureStandardError(LogLevel.INFO)
+        AbstractLog.instance = new GradleLog(target.getLogger())
     }
 
 }

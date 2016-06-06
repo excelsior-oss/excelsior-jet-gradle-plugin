@@ -1,6 +1,6 @@
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.JetTask
+import com.excelsiorjet.api.tasks.JetTask
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 

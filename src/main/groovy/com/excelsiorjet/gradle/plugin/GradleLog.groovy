@@ -1,26 +1,39 @@
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.AbstractLog
+import com.excelsiorjet.api.log.AbstractLog
+import org.gradle.api.logging.Logger
 
 class GradleLog extends AbstractLog {
 
-    @Override
-    void info(CharSequence msg) {
-        println msg
+    private final Logger log;
+
+    GradleLog(Logger log) {
+        this.log = log
     }
 
     @Override
-    void warn(CharSequence msg) {
-        println msg
+    void debug(String msg, Throwable t) {
+        log.debug(msg, t)
     }
 
     @Override
-    void warn(CharSequence msg, Throwable t) {
-        println msg
+    void info(String msg) {
+        log.info(msg)
     }
 
     @Override
-    void error(CharSequence msg) {
-        System.err.println(msg)
+    void warn(String msg) {
+        log.warn(msg)
     }
+
+    @Override
+    void warn(String msg, Throwable t) {
+        log.warn(msg, t)
+    }
+
+    @Override
+    void error(String msg) {
+        log.error(msg)
+    }
+
 }

@@ -12,12 +12,11 @@ class HelloWorldFunTest extends Specification {
 
     final Path originalProjectDir = new File(getClass().getClassLoader().getResource("01-helloworld").file).toPath()
 
-/*    @Rule
-    final TemporaryFolder testProjectDir = new TemporaryFolder()*/
+    @Rule
+    final TemporaryFolder testProjectDir = new TemporaryFolder()
 
     def "hello world task prints hello world"() {
-        //def basedir = testProjectDir.root
-        def basedir = File.createTempDir()
+        def basedir = testProjectDir.root
         given:
         Utils.copyDirectoryContents(originalProjectDir, basedir.toPath())
 
@@ -26,7 +25,7 @@ class HelloWorldFunTest extends Specification {
                 .withProjectDir(basedir)
                 .withArguments('jetBuild')
                 .withPluginClasspath()
-                .withDebug(true)
+                //.withDebug(true)
                 .build()
 
         String ext = System.properties['os.name'].contains("Windows") ? ".exe" : ""

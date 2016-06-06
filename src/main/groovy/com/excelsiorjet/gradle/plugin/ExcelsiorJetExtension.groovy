@@ -1,13 +1,13 @@
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.AbstractLog
-import com.excelsiorjet.api.Artifact
-import com.excelsiorjet.api.ExcelsiorInstallerConfig
-import com.excelsiorjet.api.JetTaskConfig
-import com.excelsiorjet.api.OSXAppBundleConfig
-import com.excelsiorjet.api.SlimDownConfig
-import com.excelsiorjet.api.TomcatConfig
-import com.excelsiorjet.api.TrialVersionConfig
+import com.excelsiorjet.api.log.AbstractLog
+import com.excelsiorjet.api.tasks.ClasspathEntry
+import com.excelsiorjet.api.tasks.ExcelsiorInstallerConfig
+import com.excelsiorjet.api.tasks.JetTaskConfig
+import com.excelsiorjet.api.tasks.OSXAppBundleConfig
+import com.excelsiorjet.api.tasks.SlimDownConfig
+import com.excelsiorjet.api.tasks.TomcatConfig
+import com.excelsiorjet.api.tasks.TrialVersionConfig
 import org.gradle.api.Project
 
 import java.util.stream.Stream
@@ -264,8 +264,10 @@ class ExcelsiorJetExtension implements JetTaskConfig {
     }
 
     @Override
-    Stream<Artifact> getArtifacts() {
-        return project.configurations.getByName("compile").getDependencies().stream().map { new GradleDependency(it) }
+    Stream<ClasspathEntry> getArtifacts() {
+        return project.configurations.getByName("compile").getDependencies().stream().map {
+            new ClasspathEntry(new File(it.toString()), groupId().equals(it.group))
+        }
     }
 
     @Override
