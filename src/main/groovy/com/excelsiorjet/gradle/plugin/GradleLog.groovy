@@ -18,7 +18,7 @@ class GradleLog extends AbstractLog {
 
     @Override
     void info(String msg) {
-        log.info(msg)
+        log.quiet(msg)
     }
 
     @Override

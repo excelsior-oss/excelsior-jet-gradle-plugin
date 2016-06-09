@@ -2,12 +2,12 @@ package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.log.AbstractLog
 import com.excelsiorjet.api.tasks.ClasspathEntry
-import com.excelsiorjet.api.tasks.ExcelsiorInstallerConfig
-import com.excelsiorjet.api.tasks.JetTaskConfig
-import com.excelsiorjet.api.tasks.OSXAppBundleConfig
-import com.excelsiorjet.api.tasks.SlimDownConfig
-import com.excelsiorjet.api.tasks.TomcatConfig
-import com.excelsiorjet.api.tasks.TrialVersionConfig
+import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
+import com.excelsiorjet.api.tasks.config.JetTaskConfig
+import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
+import com.excelsiorjet.api.tasks.config.SlimDownConfig
+import com.excelsiorjet.api.tasks.config.TomcatConfig
+import com.excelsiorjet.api.tasks.config.TrialVersionConfig
 import org.gradle.api.Project
 
 import java.util.stream.Stream
@@ -19,6 +19,73 @@ class ExcelsiorJetExtension implements JetTaskConfig {
     def Project project
 
     @Override
+    String excelsiorJetPackaging() {
+        return "zip"
+    }
+
+    @Override
+    String artifactId() {
+        return project.name
+    }
+
+    @Override
+    String version() {
+        return project.version.toString()
+    }
+
+    @Override
+    String outputName() {
+        return "HelloWorld"
+    }
+
+    @Override
+    File jetOutputDir() {
+        return new File("${project.buildDir}/jet")
+    }
+
+    @Override
+    AbstractLog log() {
+        return AbstractLog.instance()
+    }
+
+    @Override
+    String packaging() {
+        return "jar"
+    }
+
+    @Override
+    File mainJar() {
+        return project.tasks.getByPath(":jar").archivePath
+    }
+
+    @Override
+    Stream<ClasspathEntry> getArtifacts() {
+        return project.configurations.getByName("compile").getDependencies().stream().map {
+            new ClasspathEntry(new File(it.toString()), groupId().equals(it.group))
+        }
+    }
+
+    @Override
+    File buildDir() {
+        return project.buildDir.toPath().resolve("jet/build").toFile()
+    }
+
+    @Override
+    String finalName() {
+        return "${artifactId()}-${version()}"
+    }
+
+    @Override
+    String mainClass() {
+        return mainClass
+    }
+
+    @Override
+    File packageFilesDir() {
+        return project.projectDir.toPath().resolve("src/main/jetresources/packagefiles").toFile()
+    }
+
+    @Override
     void setAddWindowsVersionInfo(boolean b) {
 
     }
@@ -26,11 +93,6 @@ class ExcelsiorJetExtension implements JetTaskConfig {
     @Override
     boolean isAddWindowsVersionInfo() {
         return false
-    }
-
-    @Override
-    String excelsiorJetPackaging() {
-        return "zip"
     }
 
     @Override
@@ -51,11 +113,6 @@ class ExcelsiorJetExtension implements JetTaskConfig {
     @Override
     String product() {
         return null
-    }
-
-    @Override
-    String artifactId() {
-        return project.name
     }
 
     @Override
@@ -134,18 +191,8 @@ class ExcelsiorJetExtension implements JetTaskConfig {
     }
 
     @Override
-    String version() {
-        return project.version.toString()
-    }
-
-    @Override
     OSXAppBundleConfig osxBundleConfiguration() {
         return null
-    }
-
-    @Override
-    String outputName() {
-        return "HelloWorld"
     }
 
     @Override
@@ -209,22 +256,7 @@ class ExcelsiorJetExtension implements JetTaskConfig {
     }
 
     @Override
-    File jetOutputDir() {
-        return new File("${project.buildDir}/jet")
-    }
-
-    @Override
-    File tomcatHome() {
-        return null
-    }
-
-    @Override
     File tomcatInBuildDir() {
-        return null
-    }
-
-    @Override
-    String warDeployName() {
         return null
     }
 
@@ -234,28 +266,8 @@ class ExcelsiorJetExtension implements JetTaskConfig {
     }
 
     @Override
-    AbstractLog log() {
-        return AbstractLog.instance()
-    }
-
-    @Override
     String jetHome() {
         return null
-    }
-
-    @Override
-    String packaging() {
-        return "jar"
-    }
-
-    @Override
-    File mainJar() {
-        return project.tasks.getByPath(":jar").archivePath
-    }
-
-    @Override
-    String mainClass() {
-        return mainClass
     }
 
     @Override
@@ -264,35 +276,13 @@ class ExcelsiorJetExtension implements JetTaskConfig {
     }
 
     @Override
-    Stream<ClasspathEntry> getArtifacts() {
-        return project.configurations.getByName("compile").getDependencies().stream().map {
-            new ClasspathEntry(new File(it.toString()), groupId().equals(it.group))
-        }
-    }
-
-    @Override
     String groupId() {
         return null
     }
 
     @Override
-    File buildDir() {
-        return project.buildDir.toPath().resolve("jet/build").toFile()
-    }
-
-    @Override
-    String finalName() {
-        return "${artifactId()}-${version()}"
-    }
-
-    @Override
     File basedir() {
         return null
-    }
-
-    @Override
-    File packageFilesDir() {
-        return project.projectDir.toPath().resolve("src/main/jetresources/packagefiles").toFile()
     }
 
     @Override

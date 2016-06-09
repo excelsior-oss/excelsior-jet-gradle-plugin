@@ -1,3 +1,14 @@
+// standalone run
+/*buildscript {
+    repositories {
+        flatDir dirs: "../../../../build/libs"
+        mavenLocal()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:0.1.0-SNAPSHOT"
+        classpath "com.excelsiorjet:api:0.1.0-SNAPSHOT"
+    }
+}*/
 plugins {
     id 'excelsiorJet'
 }
