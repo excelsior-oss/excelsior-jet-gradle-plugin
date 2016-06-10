@@ -44,11 +44,6 @@ class ExcelsiorJetExtension implements JetTaskConfig {
     }
 
     @Override
-    AbstractLog log() {
-        return AbstractLog.instance()
-    }
-
-    @Override
     String packaging() {
         return "jar"
     }
