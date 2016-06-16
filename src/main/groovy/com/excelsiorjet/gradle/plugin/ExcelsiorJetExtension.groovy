@@ -40,8 +40,6 @@ class ExcelsiorJetExtension {
 
     /**
      * Product version. Required for Excelsior Installer.
-     * Note: To specify a different (more precise) version number for the Windows executable version-information resource,
-     * use the {@link #winVIVersion} Mojo parameter.
      */
     String version
 
