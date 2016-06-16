@@ -15,7 +15,7 @@ class HelloWorldFunTest extends Specification {
     @Rule
     final TemporaryFolder testProjectDir = new TemporaryFolder()
 
-    def "hello world task prints hello world"() {
+    def "jetBuild task builds simple application"() {
         def basedir = testProjectDir.root
         given:
         Utils.copyDirectoryContents(originalProjectDir, basedir.toPath())
