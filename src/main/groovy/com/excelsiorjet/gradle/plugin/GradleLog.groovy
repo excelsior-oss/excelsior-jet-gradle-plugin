@@ -1,9 +1,12 @@
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.log.AbstractLog
+import com.excelsiorjet.api.log.Log
 import org.gradle.api.logging.Logger
 
-class GradleLog extends AbstractLog {
+/**
+ * Implementation of {@code Log} that redirects logs into gradle logging system
+ */
+class GradleLog extends Log {
 
     private final Logger log;
 
