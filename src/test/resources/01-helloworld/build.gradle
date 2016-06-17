@@ -10,13 +10,13 @@
     }
 }*/
 plugins {
-    id 'com.excelsior-usa.jet'
+    id 'excelsiorJet'
 }
 
 apply plugin: "java"
 version = "1.0-SNAPSHOT"
 
-apply plugin: 'com.excelsior-usa.jet'
+apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = "HelloWorld"
 }
