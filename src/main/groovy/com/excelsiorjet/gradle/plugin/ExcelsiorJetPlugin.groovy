@@ -59,8 +59,12 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
     }
 
     static Stream<ClasspathEntry> getDependencies(Project project) {
-        return project.configurations.getByName("compile").getDependencies().stream().map {
-            new ClasspathEntry(new File(it.toString()), project.group.equals(it.group))
+        def configuration = project.configurations.getByName("compile")
+        return configuration.getDependencies().stream().map {
+            def depFiles = configuration.files(it)
+            if (depFiles.size() > 0) {
+                new ClasspathEntry(depFiles.first(), project.group.equals(it.group))
+            }
         }
     }
 }

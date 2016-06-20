@@ -3,9 +3,9 @@ package com.excelsiorjet.maven.plugin
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 
-class HelloWorldFunTest extends BaseFunTest {
+class AppWithDepFunTest extends BaseFunTest {
 
-    def "jetBuild task builds simple application"() {
+    def "jetBuild task builds simple application with dependency"() {
         given:
         Utils.copyDirectoryContents(originalProjectDir, basedir.toPath())
 
@@ -16,21 +16,23 @@ class HelloWorldFunTest extends BaseFunTest {
                 .withDebug(true)
                 .build()
 
+        File dep = new File(basedir, "build/jet/build/AppWithDep_jetpdb/tmpres/commons-io-1.3.2__1.jar")
         then:
         exeFile.exists()
         zipFile.exists()
-        checkStdOutContains(exeFile, "Hello World")
+        dep.exists()
+        checkStdOutContains(exeFile, "HelloWorld")
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 
 
     @Override
     protected String testProjectDir() {
-        return "01-helloworld"
+        return "02-withdependency"
     }
 
     @Override
     protected String projectName() {
-        return "HelloWorld"
+        return "AppWithDep"
     }
 }
