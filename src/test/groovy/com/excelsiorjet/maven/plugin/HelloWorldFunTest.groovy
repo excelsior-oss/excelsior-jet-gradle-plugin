@@ -24,8 +24,7 @@ class HelloWorldFunTest extends Specification {
         def result = GradleRunner.create()
                 .withProjectDir(basedir)
                 .withArguments('jetBuild')
-                .withPluginClasspath()
-                //.withDebug(true)
+                .withDebug(true)
                 .build()
 
         String ext = System.properties['os.name'].contains("Windows") ? ".exe" : ""
