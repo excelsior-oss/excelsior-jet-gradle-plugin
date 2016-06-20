@@ -14,6 +14,7 @@ class HelloWorldFunTest extends Specification {
 
     @Rule
     final TemporaryFolder testProjectDir = new TemporaryFolder()
+    private String pluginVersion = "0.1.0-SNAPSHOT"
 
     def "jetBuild task builds simple application"() {
         def basedir = testProjectDir.root
@@ -23,7 +24,7 @@ class HelloWorldFunTest extends Specification {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(basedir)
-                .withArguments('jetBuild')
+                .withArguments("-DexcelsiorJetPluginVersion=" + pluginVersion, 'jetBuild')
                 .withDebug(true)
                 .build()
 

@@ -1,10 +1,11 @@
 buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
     repositories {
         mavenCentral()
         mavenLocal()
     }
     dependencies {
-        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:0.1.0-SNAPSHOT"
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
     }
 }
 
