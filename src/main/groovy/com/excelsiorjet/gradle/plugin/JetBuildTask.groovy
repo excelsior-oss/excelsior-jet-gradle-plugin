@@ -15,9 +15,7 @@ import java.util.stream.Stream
  */
 class JetBuildTask extends DefaultTask {
 
-    String artifactId
-    Stream<ClasspathEntry> dependencies
-    File buildDir
+    List<ClasspathEntry> dependencies
     String excelsiorJetPackaging
     String finalName
     File jetOutputDir
@@ -25,26 +23,24 @@ class JetBuildTask extends DefaultTask {
     File mainJar
     String outputName
     File packageFilesDir
-    ApplicationType appType
     String version
     String jetHome
+    File jetResourcesDir
+    String groupId
 
     @TaskAction
     def jetBuild() {
-        def jetProject = new JetProject()
+        def jetProject = new JetProject(project.name, getGroupId(), getVersion(), ApplicationType.PLAIN, project.buildDir, getJetResourcesDir())
 
         // getters should be used to fallback into convention mapping magic, when field is not set
-        jetProject.artifactId(getArtifactId())
-                .dependencies(getDependencies())
-                .buildDir(getBuildDir())
+        jetProject.dependencies(getDependencies())
                 .excelsiorJetPackaging(getExcelsiorJetPackaging())
-                .finalName(getFinalName())
+                .artifactName(getFinalName())
                 .jetOutputDir(getJetOutputDir())
                 .mainClass(getMainClass())
                 .mainJar(getMainJar())
                 .outputName(getOutputName())
                 .packageFilesDir(getPackageFilesDir())
-                .appType(getAppType())
                 .version(getVersion())
                 .jetHome(getJetHome())
 
