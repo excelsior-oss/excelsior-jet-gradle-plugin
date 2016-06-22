@@ -10,7 +10,9 @@ buildscript {
 }
 
 apply plugin: "java"
+apply plugin: "application"
 version = "1.0-SNAPSHOT"
+mainClassName = "AppWithDep"
 
 apply plugin: 'excelsiorJet'
 excelsiorJet {
@@ -24,3 +26,8 @@ repositories {
 dependencies {
     compile "org.apache.commons:commons-io:1.3.2"
 }
+
+task listJars << {
+    configurations.compile.each { File file -> println file.absolutePath }
+}
+
