@@ -33,10 +33,9 @@ class ExcelsiorJetExtension {
     String excelsiorJetPackaging
 
     /**
-     * Default name of application
-     * By default used {@code project.artifactId }
+     * Project groupId
      */
-    String artifactId
+    String groupId
 
     /**
      * Product version. Required for Excelsior Installer.
@@ -74,12 +73,6 @@ class ExcelsiorJetExtension {
     File mainJar
 
     /**
-     * ExcelsiorJET build directory.
-     * By default used `$buildDir/jet/build`
-     */
-    File buildDir
-
-    /**
      * Name of final executable file.
      * By default used "$artifactId-$version"
      */
@@ -107,4 +100,10 @@ class ExcelsiorJetExtension {
      */
     String jetHome
 
+    /**
+     * Directory containing Excelsior JET specific resource files such as application icons, installer splash,  etc.
+     * It is recommended to place the directory in the source root directory.
+     * The default value is "src/main/jetresources" subdirectory of the Gradle project.
+     */
+    File jetResourcesDir
 }
