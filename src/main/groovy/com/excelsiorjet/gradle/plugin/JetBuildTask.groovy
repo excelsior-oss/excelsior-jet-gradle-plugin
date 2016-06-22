@@ -33,6 +33,8 @@ class JetBuildTask extends DefaultTask {
                 .packageFilesDir(ext.getPackageFilesDir())
                 .version(ext.getVersion())
                 .jetHome(ext.getJetHome())
+                .hideConsole(ext.getHideConsole())
+                .icon(ext.getIcon())
 
         new com.excelsiorjet.api.tasks.JetBuildTask(jetProject).execute()
     }
