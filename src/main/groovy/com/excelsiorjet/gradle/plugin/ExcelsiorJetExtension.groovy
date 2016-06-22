@@ -106,4 +106,16 @@ class ExcelsiorJetExtension {
      * The default value is "src/main/jetresources" subdirectory of the Gradle project.
      */
     File jetResourcesDir
+
+    /**
+     * (Windows) If set to {@code true}, the resulting executable file will not have a console upon startup.
+     */
+    boolean hideConsole
+
+    /**
+     * (Windows) .ico file to associate with the resulting executable file.
+     *
+     * Default value is "icon.ico" of {@link #jetResourcesDir} directory.
+     */
+    File icon
 }
