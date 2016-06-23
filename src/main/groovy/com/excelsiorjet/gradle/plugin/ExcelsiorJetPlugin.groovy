@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2016 Excelsior LLC.
+ *
+ *  This file is part of Excelsior JET Gradle Plugin.
+ *
+ *  Excelsior JET Maven Plugin is free software:
+ *  you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Excelsior JET Maven Plugin is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Excelsior JET Gradle Plugin.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+*/
 package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.tasks.JetProject
@@ -6,11 +27,17 @@ import org.gradle.api.Project
 import org.gradle.api.logging.LogLevel
 
 /**
- * Excelsior JET plugin. Allows to compile project into native executable and pack it to native for platform package.
- * Adds tasks:
+ * Excelsior JET Gradle Plugin implementation class.
+ *
+ * Provides Gradle users with an easy way to compile their applications down to optimized native Windows, OS X,
+ * or Linux executables with Excelsior JET.
+ *
+ * Tasks provided by the plugin:
  * <ul>
- *     <li>jetBuild - compiles project into native executable and packs it into package of specified type</li>
+ *     <li>jetBuild - builds Java (JVM) applications with Excelsior JET.</li>
  * </ul>
+ *
+ * @author Aleksey Zhidkov
  */
 class ExcelsiorJetPlugin implements Plugin<Project> {
 
@@ -32,14 +59,10 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
     private static void addJetBuildConventions(Project project) {
         ExcelsiorJetExtension extension = project.extensions.findByName(ExcelsiorJetExtension.EXTENSION_NAME) as ExcelsiorJetExtension
         extension.conventionMapping.version = { project.version.toString() }
-        extension.conventionMapping.jetOutputDir = { new File("${project.buildDir}/jet") }
         extension.conventionMapping.excelsiorJetPackaging = { JetProject.ZIP }
-        extension.conventionMapping.finalName = { "${project.name}-${project.version}".toString() }
+        extension.conventionMapping.artifactName = { "${project.name}-${project.version}".toString() }
         extension.conventionMapping.mainJar = {
             new File(project.tasks.getByPath(':jar').archivePath as String)
-        }
-        extension.conventionMapping.packageFilesDir = {
-            project.projectDir.toPath().resolve('rc/main/jetresources/packagefiles').toFile()
         }
         extension.conventionMapping.jetHome = { System.getProperty("jet.home") }
         extension.conventionMapping.jetResourcesDir = {
