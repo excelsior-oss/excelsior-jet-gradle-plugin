@@ -21,8 +21,6 @@
 */
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.tasks.ApplicationType
-
 /**
  * Gradle Extension class for Excelsior JET Gradle Plugin.
  * Declares configuration parameters for all plugin tasks.
@@ -71,14 +69,14 @@ class ExcelsiorJetExtension {
      * Project group id. Unique identifier that can be shared by multiple projects.
      * Usually reverse domain name is used for group id such as "com.example".
      *
-     * Default value is {@code ${project.group}}.
+     * Default value is {@code "project.group"}.
      */
     String groupId
 
     /**
      * Product version. Required for Excelsior Installer.
      *
-     * Default value is {@code ${project.version}}.
+     * Default value is {@code "project.version"}.
      */
     String version
 
@@ -93,7 +91,7 @@ class ExcelsiorJetExtension {
      * <p>
      * The plugin will place the final self-contained package in the "app" subdirectory
      * of {@link #jetOutputDir}. You may deploy it to other systems using a simple copy operation.
-     * For convenience, the plugin will also create a ZIP archive {@code ${project.build.finalName}.zip}
+     * For convenience, the plugin will also create a ZIP archive {@code "project.build.finalName".zip}
      * with the same content, if the {@code packaging} parameter is set to {@code zip}.
      * </p>
      */

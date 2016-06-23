@@ -5,12 +5,13 @@
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-ext.githubRepoOwner="excelsior-oss"
-ext.githubRepo="excelsior-jet-gradle-plugin"
+ext.githubRepoOwner = "excelsior-oss"
+ext.githubRepo = "excelsior-jet-gradle-plugin"
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar, dependsOn: [javadoc, groovydoc]) {
     classifier = 'javadoc'
     from tasks.javadoc.destinationDir
+    from tasks.groovydoc.destinationDir
 }
 
 task sourcesJar(type: Jar) {
@@ -34,40 +35,44 @@ uploadArchives {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-              authentication(userName: sonatypeUsername, password: sonatypePassword)
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
 
             pom.project {
-               name 'Excelsior Jet Gradle Plugin'
-               packaging 'jar'
-               description '''
+                name 'Excelsior Jet Gradle Plugin'
+                packaging 'jar'
+                description '''
                            |Excelsior JET Gradle Plugin provides Gradle users with an easy way to compile their applications
                            |down to optimized native Windows, OS X, or Linux executables with Excelsior JET.'''.stripMargin('|')
-               url "https://github.com/${githubRepoOwner}/${githubRepo}"
+                url "https://github.com/${githubRepoOwner}/${githubRepo}"
 
-               scm {
-                   url 'https://github.com/${githubRepoOwner}/${githubRepo}'
-                   connection 'scm:git:https://github.com/${githubRepoOwner}/${githubRepo}.git'
-                   developerConnection 'scm:git:https://github.com/${githubRepoOwner}/${githubRepo}.git'
-                   tag 'HEAD'
-               }
+                scm {
+                    url 'https://github.com/${githubRepoOwner}/${githubRepo}'
+                    connection 'scm:git:https://github.com/${githubRepoOwner}/${githubRepo}.git'
+                    developerConnection 'scm:git:https://github.com/${githubRepoOwner}/${githubRepo}.git'
+                    tag 'HEAD'
+                }
 
-               licenses {
-                   license {
-                       name 'GNU General Public License</name'
-                       url 'http://www.gnu.org/licenses/gpl.txt'
-                       distribution 'repo'
-                   }
-               }
+                licenses {
+                    license {
+                        name 'GNU General Public License</name'
+                        url 'http://www.gnu.org/licenses/gpl.txt'
+                        distribution 'repo'
+                    }
+                }
 
-               developers {
-                   developer {
-                       id 'pjBooms'
-                       name 'Nikita Lipsky'
-                   }
-                   developer {
-                       id 'aleksey-zhidkov'
-                       name 'Aleksey Zhidkov'
+                developers {
+                    developer {
+                        id 'pjBooms'
+                        name 'Nikita Lipsky'
+                    }
+                    developer {
+                        id 'aleksey-zhidkov'
+                        name 'Aleksey Zhidkov'
+                    }
+                    developer {
+                        id 'dleskov'
+                        name 'Dmitry Leskov'
                    }
                }
            }
