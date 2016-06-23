@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2016 Excelsior LLC.
+ *
+ *  This file is part of Excelsior JET Gradle Plugin.
+ *
+ *  Excelsior JET Maven Plugin is free software:
+ *  you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Excelsior JET Maven Plugin is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Excelsior JET Gradle Plugin.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+*/
 package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.log.Log
@@ -11,9 +32,11 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 
 /**
- * Task that compiles project into native executable and packs it into package of specified type
+ * Main task for building Java (JVM) applications with Excelsior JET.
  *
  * @see ExcelsiorJetExtension
+ *
+ * @author Aleksey Zhidkov
  */
 class JetBuildTask extends DefaultTask {
 
@@ -25,7 +48,7 @@ class JetBuildTask extends DefaultTask {
         // getters should be used to fallback into convention mapping magic, when field is not set
         jetProject.dependencies(getDependencies(project))
                 .excelsiorJetPackaging(ext.getExcelsiorJetPackaging())
-                .artifactName(ext.getFinalName())
+                .artifactName(ext.getArtifactName())
                 .jetOutputDir(ext.getJetOutputDir())
                 .mainClass(ext.getMainClass())
                 .mainJar(ext.getMainJar())
