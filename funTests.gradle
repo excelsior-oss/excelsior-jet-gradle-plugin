@@ -1,0 +1,24 @@
+/**
+ * Configuration required to execute functional tests from gradle and IDE
+ */
+
+// put plugin into maven local before tests, so it's become available for tests
+test.dependsOn(install)
+
+// Need to debug plugin from IDE
+// Write the plugin's classpath to a file to share with the tests
+task createClasspathManifest {
+    def outputDir = file("$buildDir/$name")
+
+    inputs.files sourceSets.main.runtimeClasspath
+    outputs.dir outputDir
+
+    doLast {
+        outputDir.mkdirs()
+        file("$outputDir/plugin-classpath.txt").text = sourceSets.main.runtimeClasspath.join("\n")
+    }
+}
+// Add the classpath file to the test runtime classpath
+dependencies {
+    testRuntime files(createClasspathManifest)
+}

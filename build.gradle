@@ -1,10 +1,9 @@
 group 'com.excelsiorjet'
-version '0.1.0-SNAPSHOT'
+version '0.1.0'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'java-gradle-plugin'
-apply plugin: 'maven'
 
 repositories {
     mavenCentral()
@@ -21,23 +20,5 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.13'
 }
 
-// put plugin into maven local before tests, so it's become available for tests
-test.dependsOn(install)
-
-// Need to debug plugin from IDE
-// Write the plugin's classpath to a file to share with the tests
-task createClasspathManifest {
-    def outputDir = file("$buildDir/$name")
-
-    inputs.files sourceSets.main.runtimeClasspath
-    outputs.dir outputDir
-
-    doLast {
-        outputDir.mkdirs()
-        file("$outputDir/plugin-classpath.txt").text = sourceSets.main.runtimeClasspath.join("\n")
-    }
-}
-// Add the classpath file to the test runtime classpath
-dependencies {
-    testRuntime files(createClasspathManifest)
-}
+apply from: 'maven.gradle'
+apply from: 'funTests.gradle'
