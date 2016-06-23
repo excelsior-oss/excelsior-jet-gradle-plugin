@@ -1,5 +1,6 @@
 package com.excelsiorjet.maven.plugin
 
+import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
@@ -27,6 +28,13 @@ abstract class BaseFunTest extends Specification {
         zipFile = new File(basedir, "build/jet/${projectName()}-1.0-SNAPSHOT.zip")
     }
 
+    protected def runGradle() {
+        return GradleRunner.create()
+                .withProjectDir(basedir)
+                .withArguments("-DexcelsiorJetPluginVersion=" + pluginVersion, 'jetBuild')
+                .withDebug(true)
+                .build()
+    }
     protected static boolean checkStdOutContains(File exeFile, String str) {
         exeFile.absolutePath.execute().inputStream.text.contains(str)
     }

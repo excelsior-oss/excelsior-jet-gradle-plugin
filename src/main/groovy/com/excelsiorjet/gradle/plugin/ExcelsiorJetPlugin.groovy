@@ -25,6 +25,7 @@ import com.excelsiorjet.api.tasks.JetProject
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.logging.LogLevel
+import org.gradle.jvm.tasks.Jar
 
 /**
  * Excelsior JET Gradle Plugin implementation class.
@@ -60,7 +61,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         ExcelsiorJetExtension extension = project.extensions.findByName(ExcelsiorJetExtension.EXTENSION_NAME) as ExcelsiorJetExtension
         extension.conventionMapping.version = { project.version.toString() }
         extension.conventionMapping.excelsiorJetPackaging = { JetProject.ZIP }
-        extension.conventionMapping.artifactName = { "${project.name}-${project.version}".toString() }
+        extension.conventionMapping.artifactName = { getArchiveName(project.tasks.getByPath(':jar')) }
         extension.conventionMapping.mainJar = {
             new File(project.tasks.getByPath(':jar').archivePath as String)
         }
@@ -69,5 +70,13 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             new File("${project.projectDir}/src/main/jetresources" as String)
         }
         extension.conventionMapping.groupId = { project.group }
+    }
+
+    private static String getArchiveName(Jar jarTask) {
+        if (jarTask.extension != null && !jarTask.extension.isEmpty()) {
+            jarTask.archiveName.substring(0, jarTask.archiveName.lastIndexOf('.'))
+        } else {
+            jarTask.archiveName
+        }
     }
 }

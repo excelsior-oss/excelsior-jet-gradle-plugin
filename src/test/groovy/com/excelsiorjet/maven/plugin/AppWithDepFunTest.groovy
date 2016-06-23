@@ -1,6 +1,5 @@
 package com.excelsiorjet.maven.plugin
 
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 
 class AppWithDepFunTest extends BaseFunTest {
@@ -10,11 +9,7 @@ class AppWithDepFunTest extends BaseFunTest {
         Utils.copyDirectoryContents(originalProjectDir, basedir.toPath())
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(basedir)
-                .withArguments("-DexcelsiorJetPluginVersion=" + pluginVersion, 'jetBuild')
-                .withDebug(true)
-                .build()
+        def result = runGradle()
 
         File dep = new File(basedir, "build/jet/build/AppWithDep_jetpdb/tmpres/commons-io-1.3.2__1.jar")
         then:
