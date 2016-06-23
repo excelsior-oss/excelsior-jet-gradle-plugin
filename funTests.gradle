@@ -2,6 +2,10 @@
  * Configuration required to execute functional tests from gradle and IDE
  */
 
+test {
+    systemProperty 'excelsiorJetPluginVersion', version
+}
+
 // put plugin into maven local before tests, so it's become available for tests
 test.dependsOn(install)
 

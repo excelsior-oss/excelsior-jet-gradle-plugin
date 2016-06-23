@@ -8,7 +8,7 @@ import java.nio.file.Path
 
 abstract class BaseFunTest extends Specification {
 
-    protected static final String pluginVersion = "0.1.0-SNAPSHOT"
+    protected static final String pluginVersion = System.getProperty("excelsiorJetPluginVersion")
 
     protected static final String ext = System.properties['os.name'].contains("Windows") ? ".exe" : ""
 
