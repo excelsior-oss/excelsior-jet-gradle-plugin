@@ -4,7 +4,6 @@
 
 apply plugin: 'maven'
 
-
 // To run functional tests we need to install plugin to maven local, so it became available for test build script.
 // When signing plugin is applied it requires sonatype authentication data even for install into maven local.
 // So to run tests locally developer have to set sonatype authentication data, which is not always acceptable.
@@ -95,6 +94,14 @@ gradle.getTaskGraph().whenReady {
                     }
                 }
             }
+        }
+
+        // Gradle release plugin configuration
+        afterReleaseBuild.dependsOn uploadArchives
+        apply plugin: 'net.researchgate.release'
+        release {
+            failOnUpdateNeeded = false
+            failOnUnversionedFiles = false
         }
     }
 }

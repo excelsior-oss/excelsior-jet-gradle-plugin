@@ -1,5 +1,8 @@
+plugins {
+    id 'net.researchgate.release' version '2.4.0'
+}
+
 group 'com.excelsiorjet'
-version '0.1.0'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
