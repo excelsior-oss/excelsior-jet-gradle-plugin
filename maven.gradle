@@ -3,105 +3,111 @@
  */
 
 apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'io.codearte.nexus-staging'
+apply plugin: 'net.researchgate.release'
 
 // To run functional tests we need to install plugin to maven local, so it became available for test build script.
 // When signing plugin is applied it requires sonatype authentication data even for install into maven local.
 // So to run tests locally developer have to set sonatype authentication data, which is not always acceptable.
 // To work around this issue, we apply configuration required for uploading into sonatype, only when
 // 'uploadArchives' task is presented in task graph
-gradle.getTaskGraph().whenReady {
-    if (gradle.getTaskGraph().hasTask(":uploadArchives")) {
-        apply plugin: 'signing'
 
-        ext.githubRepoOwner = "excelsior-oss"
-        ext.githubRepo = "excelsior-jet-gradle-plugin"
+ext.githubRepoOwner = "excelsior-oss"
+ext.githubRepo = "excelsior-jet-gradle-plugin"
 
-        task javadocJar(type: Jar, dependsOn: [javadoc, groovydoc]) {
-            classifier = 'javadoc'
-            from tasks.javadoc.destinationDir
-            from tasks.groovydoc.destinationDir
-        }
+task javadocJar(type: Jar, dependsOn: [javadoc, groovydoc]) {
+    classifier = 'javadoc'
+    from tasks.javadoc.destinationDir
+    from tasks.groovydoc.destinationDir
+}
 
-        task sourcesJar(type: Jar) {
-            from sourceSets.main.allSource
-            classifier = 'sources'
-        }
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
 
-        artifacts {
-            archives jar
-            archives javadocJar
-            archives sourcesJar
-        }
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
 
-        signing {
-            sign configurations.archives
-        }
+signing {
+    sign configurations.archives
+}
 
-        uploadArchives {
-            repositories {
-                mavenDeployer {
-                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                        if (!this.hasProperty("sonatypeUsername")) {
-                            logger.warn("[WARN] sonatypeUsername is not set!")
-                            sonatypeUsername = ""
-                        }
-                        if (!this.hasProperty("sonatypePassword")) {
-                            logger.warn("[WARN] sonatypePassword is not set!")
-                            sonatypePassword = ""
-                        }
-                        authentication(userName: sonatypeUsername, password: sonatypePassword)
-                    }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                if (!this.hasProperty("sonatypeUsername")) {
+                    logger.warn("[WARN] sonatypeUsername is not set!")
+                    sonatypeUsername = ""
+                }
+                if (!this.hasProperty("sonatypePassword")) {
+                    logger.warn("[WARN] sonatypePassword is not set!")
+                    sonatypePassword = ""
+                }
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
 
-                    pom.project {
-                        name 'Excelsior Jet Gradle Plugin'
-                        packaging 'jar'
-                        description '''
+            pom.project {
+                name 'Excelsior Jet Gradle Plugin'
+                packaging 'jar'
+                description '''
                            |Excelsior JET Gradle Plugin provides Gradle users with an easy way to compile their applications
                            |down to optimized native Windows, OS X, or Linux executables with Excelsior JET.'''.stripMargin('|')
-                        url "https://github.com/${githubRepoOwner}/${githubRepo}"
+                url "https://github.com/${githubRepoOwner}/${githubRepo}"
 
-                        scm {
-                            url 'https://github.com/${githubRepoOwner}/${githubRepo}'
-                            connection 'scm:git:https://github.com/${githubRepoOwner}/${githubRepo}.git'
-                            developerConnection 'scm:git:https://github.com/${githubRepoOwner}/${githubRepo}.git'
-                            tag 'HEAD'
-                        }
+                scm {
+                    url 'https://github.com/${githubRepoOwner}/${githubRepo}'
+                    connection 'scm:git:https://github.com/${githubRepoOwner}/${githubRepo}.git'
+                    developerConnection 'scm:git:https://github.com/${githubRepoOwner}/${githubRepo}.git'
+                    tag 'HEAD'
+                }
 
-                        licenses {
-                            license {
-                                name 'GNU General Public License</name'
-                                url 'http://www.gnu.org/licenses/gpl.txt'
-                                distribution 'repo'
-                            }
-                        }
+                licenses {
+                    license {
+                        name 'GNU General Public License</name'
+                        url 'http://www.gnu.org/licenses/gpl.txt'
+                        distribution 'repo'
+                    }
+                }
 
-                        developers {
-                            developer {
-                                id 'pjBooms'
-                                name 'Nikita Lipsky'
-                            }
-                            developer {
-                                id 'aleksey-zhidkov'
-                                name 'Aleksey Zhidkov'
-                            }
-                            developer {
-                                id 'dleskov'
-                                name 'Dmitry Leskov'
-                            }
-                        }
+                developers {
+                    developer {
+                        id 'pjBooms'
+                        name 'Nikita Lipsky'
+                    }
+                    developer {
+                        id 'aleksey-zhidkov'
+                        name 'Aleksey Zhidkov'
+                    }
+                    developer {
+                        id 'dleskov'
+                        name 'Dmitry Leskov'
                     }
                 }
             }
         }
+    }
+}
 
-        // Gradle release plugin configuration
-        afterReleaseBuild.dependsOn uploadArchives
-        apply plugin: 'net.researchgate.release'
-        release {
-            failOnUpdateNeeded = false
-            failOnUnversionedFiles = false
+// Gradle release plugin configuration
+release {
+    failOnUpdateNeeded = false
+    failOnUnversionedFiles = false
+}
+afterReleaseBuild.dependsOn uploadArchives
+
+gradle.getTaskGraph().whenReady {
+    if (gradle.getTaskGraph().hasTask(":closeAndPromoteRepository")) {
+        nexusStaging {
+            username = sonatypeUsername
+            password = sonatypePassword
         }
     }
 }
