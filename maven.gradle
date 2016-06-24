@@ -29,12 +29,34 @@ signing {
     sign configurations.archives
 }
 
+// To run functional tests we need to install plugin to maven local, so it became available for test build script.
+// When signing plugin is applied it requires sonatype authentication data even for install into maven local.
+// So to run tests locally developer have to set sonatype authentication data, which is not always acceptable.
+// To work around this issue, all actions for 'signArchives' task removed, when 'uploadArchives' task is not present in task graph
+// and 'sonatypeUsername' and 'sonatypePassword' properties added with warning, when not presented.
+
+// do not sign when installing in maven local
+gradle.taskGraph.beforeTask { task ->
+    if (task.name == "signArchives" && !gradle.taskGraph.hasTask(":uploadArchives")) {
+        task.deleteAllActions()
+        logger.info("Task $task.name is being rendered useless for installation into maven local")
+    }
+}
+
 uploadArchives {
     repositories {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                if (!this.hasProperty("sonatypeUsername")) {
+                    logger.warn("[WARN] sonatypeUsername is not set!")
+                    sonatypeUsername = ""
+                }
+                if (!this.hasProperty("sonatypePassword")) {
+                    logger.warn("[WARN] sonatypePassword is not set!")
+                    sonatypePassword = ""
+                }
                 authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
 
@@ -73,9 +95,9 @@ uploadArchives {
                     developer {
                         id 'dleskov'
                         name 'Dmitry Leskov'
-                   }
-               }
-           }
+                    }
+                }
+            }
         }
     }
 }
