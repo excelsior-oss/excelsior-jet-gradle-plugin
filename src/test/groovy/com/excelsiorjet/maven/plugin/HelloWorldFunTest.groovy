@@ -5,9 +5,6 @@ import org.gradle.testkit.runner.TaskOutcome
 class HelloWorldFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple application"() {
-        given:
-        Utils.copyDirectoryContents(originalProjectDir, basedir.toPath())
-
         when:
         def result = runGradle()
 

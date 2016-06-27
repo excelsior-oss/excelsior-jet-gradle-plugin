@@ -5,9 +5,6 @@ import org.gradle.testkit.runner.TaskOutcome
 class AppWithDepFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple application with dependency"() {
-        given:
-        Utils.copyDirectoryContents(originalProjectDir, basedir.toPath())
-
         when:
         def result = runGradle()
 
