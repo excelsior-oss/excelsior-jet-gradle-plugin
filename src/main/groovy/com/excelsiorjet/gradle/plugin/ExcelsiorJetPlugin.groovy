@@ -42,17 +42,16 @@ import org.gradle.jvm.tasks.Jar
  */
 class ExcelsiorJetPlugin implements Plugin<Project> {
 
-
     @Override
     void apply(Project target) {
         target.getLogging().captureStandardError(LogLevel.INFO)
         def log = new GradleLog(target.getLogger())
-        JetProject.configureEnvironment(log, ResourceBundle.getBundle("GradleStrings", Locale.ENGLISH))
+        JetProject.configureEnvironment(log, ResourceBundle.getBundle("com.excelsiorjet.gradle.plugin.GradleStrings"))
 
         target.getExtensions().create(ExcelsiorJetExtension.EXTENSION_NAME, ExcelsiorJetExtension)
 
         def jetBuild = target.tasks.create("jetBuild", JetBuildTask)
-        jetBuild.dependsOn(":jar", ":test")
+        jetBuild.dependsOn(taskPath(target, "jar"), taskPath(target, "test"))
 
         addJetBuildConventions(target)
     }
@@ -61,9 +60,9 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         ExcelsiorJetExtension extension = project.extensions.findByName(ExcelsiorJetExtension.EXTENSION_NAME) as ExcelsiorJetExtension
         extension.conventionMapping.version = { project.version.toString() }
         extension.conventionMapping.excelsiorJetPackaging = { JetProject.ZIP }
-        extension.conventionMapping.artifactName = { getArchiveName(project.tasks.getByPath(':jar')) }
+        extension.conventionMapping.artifactName = { getArchiveName(project.tasks.getByPath(taskPath(project, "jar"))) }
         extension.conventionMapping.mainJar = {
-            new File(project.tasks.getByPath(':jar').archivePath as String)
+            new File(project.tasks.getByPath(taskPath(project, "jar")).archivePath as String)
         }
         extension.conventionMapping.jetHome = { System.getProperty("jet.home") }
         extension.conventionMapping.jetResourcesDir = {
@@ -77,6 +76,14 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             jarTask.archiveName.substring(0, jarTask.archiveName.lastIndexOf('.'))
         } else {
             jarTask.archiveName
+        }
+    }
+
+    private static String taskPath(Project target, String taskName) {
+        if (target.rootProject == target) {
+            return ":$taskName"
+        } else {
+            return ":${target.name}:$taskName"
         }
     }
 }
