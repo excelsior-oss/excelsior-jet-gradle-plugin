@@ -69,6 +69,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             new File("${project.projectDir}/src/main/jetresources" as String)
         }
         extension.conventionMapping.groupId = { project.group }
+        extension.conventionMapping.winVIDescription = { project.name }
     }
 
     private static String getArchiveName(Jar jarTask) {

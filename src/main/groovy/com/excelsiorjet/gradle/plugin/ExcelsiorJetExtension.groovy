@@ -21,6 +21,11 @@
 */
 package com.excelsiorjet.gradle.plugin
 
+import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
+import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
+import com.excelsiorjet.api.tasks.config.SlimDownConfig
+import com.excelsiorjet.api.tasks.config.TrialVersionConfig
+
 /**
  * Gradle Extension class for Excelsior JET Gradle Plugin.
  * Declares configuration parameters for all plugin tasks.
@@ -139,4 +144,183 @@ class ExcelsiorJetExtension {
      * Default value is "icon.ico" of {@link #jetResourcesDir} directory.
      */
     File icon
+
+    /**
+     * The target location for application execution profiles gathered during Test Run.
+     * By default, they are placed into the {@link #jetResourcesDir} directory.
+     * It is recommended to commit the collected profiles (.usg, .startup) to VCS to enable the plugin
+     * to re-use them during subsequent builds without performing a Test Run.
+     *
+     * @see TestRunTask
+     */
+    File execProfilesDir
+
+    /**
+     * The base file name of execution profiles. By default, ${project.artifactId} is used.
+     *
+     * Default value is ${project.artifactId}*/
+    String execProfilesName
+
+    /**
+     * Defines system properties and JVM arguments to be passed to the Excelsior JET JVM at runtime, e.g.:
+     * {@code -Dmy.prop1 -Dmy.prop2=value -ea -Xmx1G -Xss128M -Djet.gc.ratio=11}.
+     * <p>
+     * Please note that only some of the non-standard Oracle HotSpot JVM arguments
+     * (those prefixed with {@code -X}) are recognized.
+     * For instance, the {@code -Xms} argument setting the initial Java heap size on HotSpot
+     * has no meaning for the Excelsior JET JVM, which has a completely different
+     * memory management policy. At the same time, Excelsior JET provides its own system properties
+     * for GC tuning, such as {@code -Djet.gc.ratio}.
+     * For more details, consult the {@code README} file of the plugin or the Excelsior JET User's Guide.
+     * </p>
+     */
+    String[] jvmArgs
+
+    /**
+     * (Windows) If set to {@code true}, a version-information resource will be added to the final executable.
+     *
+     * @see #vendor vendor
+     * @see #product product
+     * @see #winVIVersion winVIVersion
+     * @see #winVICopyright winVICopyright
+     * @see #winVIDescription winVIDescription
+     */
+    boolean addWindowsVersionInfo = true
+
+    /**
+     * (Windows) Version number string for the version-information resource.
+     * (Both {@code ProductVersion} and {@code FileVersion} resource strings are set to the same value.)
+     * Must have {@code v1.v2.v3.v4} format where {@code vi} is a number.
+     * If not set, {@code project.version} is used. If the value does not meet the required format,
+     * it is coerced. For instance, "1.2.3-SNAPSHOT" becomes "1.2.3.0"
+     *
+     * @see #version version
+     */
+    String winVIVersion
+
+    /**
+     * (Windows) Legal copyright notice string for the version-information resource.
+     * By default, {@code "Copyright © [inceptionYear],[curYear] [vendor]"} is used.
+     */
+    String winVICopyright
+
+    /**
+     * (Windows) File description string for the version-information resource.
+     */
+    String winVIDescription
+
+    /**
+     * Year of the project's inception, specified with 4 digits. This value is used when generating copyright notices
+     */
+    String inceptionYear
+
+    /**
+     * Application vendor name. Required for Windows version-information resource and Excelsior Installer.
+     * By default, {@code project.group} is used, with first letter capitalized..
+     */
+    String vendor
+
+    /**
+     * Product name. Required for Windows version-information resource and Excelsior Installer.
+     * By default, {@code project.name} is used.
+     */
+    String product
+
+    /**
+     * Excelsior Installer configuration parameters.
+     *
+     * @see ExcelsiorInstallerConfig#eula
+     * @see ExcelsiorInstallerConfig#eulaEncoding
+     * @see ExcelsiorInstallerConfig#installerSplash
+     */
+    ExcelsiorInstallerConfig excelsiorInstallerConfig
+
+    /**
+     * (32-bit only) If set to {@code true}, the Global Optimizer is enabled,
+     * providing higher performance and lower memory usage for the compiled application.
+     * Performing a Test Run is mandatory when the Global Optimizer is enabled.
+     * The Global Optimizer is enabled automatically when you enable Java Runtime Slim-Down.
+     *
+     * @see TestRunTask
+     * @see #javaRuntimeSlimDown
+     */
+    boolean globalOptimizer
+
+    /**
+     * (32-bit only) Java Runtime Slim-Down configuration parameters.
+     *
+     * @see SlimDownConfig#detachedBaseURL
+     * @see SlimDownConfig#detachComponents
+     * @see SlimDownConfig#detachedPackage
+     */
+    SlimDownConfig javaRuntimeSlimdown
+
+    /**
+     * Trial version configuration parameters.
+     *
+     * @see TrialVersionConfig#expireInDays
+     * @see TrialVersionConfig#expireDate
+     * @see TrialVersionConfig#expireMessage
+     */
+    TrialVersionConfig trialVersion
+
+    /**
+     * OS X Application Bundle configuration parameters.
+     *
+     * @see OSXAppBundleConfig#fileName
+     * @see OSXAppBundleConfig#bundleName
+     * @see OSXAppBundleConfig#identifier
+     * @see OSXAppBundleConfig#shortVersion
+     * @see OSXAppBundleConfig#icon
+     * @see OSXAppBundleConfig#developerId
+     * @see OSXAppBundleConfig#publisherId
+     */
+    OSXAppBundleConfig osxBundle
+
+    /**
+     * If set to {@code true}, the multi-app mode is enabled for the resulting executable
+     * (it mimicks the command line syntax of the conventional {@code java} launcher).
+     */
+    boolean multiApp = false
+
+    /**
+     * Enable/disable startup accelerator.
+     * If enabled, the compiled application will run after build
+     * for {@link #profileStartupTimeout} seconds for collecting a startup profile.
+     */
+    boolean profileStartup = true
+
+    /**
+     * The duration of the after-build profiling session in seconds. Upon exhaustion,
+     * the application will be automatically terminated.
+     */
+    int profileStartupTimeout = 20
+
+    /**
+     * If set to {@code true}, enables protection of application data - reflection information,
+     * string literals, and resource files packed into the executable, if any.
+     *
+     * @see #cryptSeed
+     */
+    boolean protectData
+
+    /**
+     * Sets a seed string that will be used by the Excelsior JET compiler to generate a key for
+     * scrambling the data that the executable contains.
+     * If data protection is enabled, but {@code cryptSeed} is not set explicitly, a random value is used.
+     * <p>
+     * You may want to set a {@code cryptSeed} value if you need the data to be protected in a stable way.
+     * </p>
+     *
+     * @see #protectData
+     */
+    String cryptSeed
+
+    /**
+     * Add optional JET Runtime components to the package. Available optional components:
+     * {@code runtime_utilities}, {@code fonts}, {@code awt_natives}, {@code api_classes}, {@code jce},
+     * {@code accessibility}, {@code javafx}, {@code javafx-webkit}, {@code nashorn}, {@code cldr}
+     */
+    String[] optRtFiles
+
 }
