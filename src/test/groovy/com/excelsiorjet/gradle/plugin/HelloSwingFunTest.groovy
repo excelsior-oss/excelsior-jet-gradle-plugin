@@ -1,4 +1,4 @@
-package com.excelsiorjet.maven.plugin
+package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
 
