@@ -233,7 +233,13 @@ class ExcelsiorJetExtension {
      * @see ExcelsiorInstallerConfig#eulaEncoding
      * @see ExcelsiorInstallerConfig#installerSplash
      */
-    ExcelsiorInstallerConfig excelsiorInstallerConfig = new ExcelsiorInstallerConfig()
+    ExcelsiorInstallerConfig excelsiorInstaller = new ExcelsiorInstallerConfig()
+
+    def excelsiorInstaller(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = excelsiorInstaller
+        closure()
+    }
 
     /**
      * (32-bit only) If set to {@code true}, the Global Optimizer is enabled,
