@@ -3,9 +3,10 @@ package com.excelsiorjet.gradle.plugin
 import org.gradle.testkit.runner.TaskOutcome
 
 class MultiAppFunTest extends BaseFunTest {
+
     def "jetBuild task builds simple multiapp application"() {
         when:
-        def result = runGradle()
+        def result = runGradle('jetBuild')
 
         then:
         appExeFile.exists()

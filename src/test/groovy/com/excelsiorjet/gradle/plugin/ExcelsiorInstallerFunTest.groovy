@@ -6,7 +6,7 @@ class ExcelsiorInstallerFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple swing application and packs it with excelsior installer"() {
         when:
-        def result = runGradle()
+        def result = runGradle('jetBuild')
 
         boolean isWindows = System.properties['os.name'].contains("Windows");
         boolean isOX = System.properties['os.name'].contains("OS X");

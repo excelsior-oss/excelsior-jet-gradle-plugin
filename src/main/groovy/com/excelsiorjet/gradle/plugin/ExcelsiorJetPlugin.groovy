@@ -50,6 +50,9 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
         target.getExtensions().create(ExcelsiorJetExtension.EXTENSION_NAME, ExcelsiorJetExtension)
 
+        def testRun = target.tasks.create("testRun", TestRunTask)
+        testRun.dependsOn(taskPath(target, "jar"), taskPath(target, "test"))
+
         def jetBuild = target.tasks.create("jetBuild", JetBuildTask)
         jetBuild.dependsOn(taskPath(target, "jar"), taskPath(target, "test"))
 

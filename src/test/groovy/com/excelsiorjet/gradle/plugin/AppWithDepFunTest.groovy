@@ -6,7 +6,7 @@ class AppWithDepFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple application with dependency"() {
         when:
-        def result = runGradle()
+        def result = runGradle('jetBuild')
 
         File dep = new File(basedir, "build/jet/build/AppWithDep_jetpdb/tmpres/commons-io-1.3.2__1.jar")
         then:

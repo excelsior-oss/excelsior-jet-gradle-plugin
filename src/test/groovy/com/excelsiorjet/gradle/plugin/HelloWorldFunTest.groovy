@@ -6,7 +6,7 @@ class HelloWorldFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple application"() {
         when:
-        def result = runGradle()
+        def result = runGradle('jetBuild')
 
         then:
         buildExeFile.exists()

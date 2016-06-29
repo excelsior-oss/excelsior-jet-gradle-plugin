@@ -174,7 +174,7 @@ class ExcelsiorJetExtension {
      * For more details, consult the {@code README} file of the plugin or the Excelsior JET User's Guide.
      * </p>
      */
-    String[] jvmArgs
+    String[] jvmArgs = []
 
     /**
      * (Windows) If set to {@code true}, a version-information resource will be added to the final executable.
@@ -321,6 +321,6 @@ class ExcelsiorJetExtension {
      * {@code runtime_utilities}, {@code fonts}, {@code awt_natives}, {@code api_classes}, {@code jce},
      * {@code accessibility}, {@code javafx}, {@code javafx-webkit}, {@code nashorn}, {@code cldr}
      */
-    String[] optRtFiles
+    String[] optRtFiles = []
 
 }
