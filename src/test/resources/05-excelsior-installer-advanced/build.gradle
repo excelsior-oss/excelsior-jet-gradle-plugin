@@ -19,4 +19,7 @@ excelsiorJet {
     hideConsole = true
     packaging = 'excelsior-installer'
     profileStartup = false
+    excelsiorInstaller {
+        installerSplash = file('src/main/jetresources/splash.bmp')
+    }
 }
