@@ -47,11 +47,11 @@ uploadArchives {
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
                 if (!this.hasProperty("sonatypeUsername")) {
                     logger.warn("[WARN] sonatypeUsername is not set!")
-                    sonatypeUsername = ""
+                    ext.sonatypeUsername = ""
                 }
                 if (!this.hasProperty("sonatypePassword")) {
                     logger.warn("[WARN] sonatypePassword is not set!")
-                    sonatypePassword = ""
+                    ext.sonatypePassword = ""
                 }
                 authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
