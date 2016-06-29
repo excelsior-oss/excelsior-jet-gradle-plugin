@@ -9,9 +9,10 @@ class HelloWorldFunTest extends BaseFunTest {
         def result = runGradle()
 
         then:
-        exeFile.exists()
+        buildExeFile.exists()
+        appExeFile.exists()
         zipFile.exists()
-        checkStdOutContains(exeFile, "Hello World")
+        checkStdOutContains(buildExeFile, "Hello World")
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 
@@ -24,5 +25,10 @@ class HelloWorldFunTest extends BaseFunTest {
     @Override
     protected String projectName() {
         return "HelloWorld"
+    }
+
+    @Override
+    protected String projectVersion() {
+        return "1.0-SNAPSHOT"
     }
 }

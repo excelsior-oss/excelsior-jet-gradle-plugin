@@ -10,12 +10,14 @@ abstract class BaseFunTest extends Specification {
     protected static final String ext = System.properties['os.name'].contains("Windows") ? ".exe" : ""
 
     File basedir = new File(getClass().getClassLoader().getResource(testProjectDir()).file)
-    File exeFile
+    File buildExeFile
+    File appExeFile
     File zipFile
 
     void setup() {
-        exeFile = new File(basedir, "build/jet/build/${projectName()}$ext")
-        zipFile = new File(basedir, "build/jet/${projectName()}-1.0-SNAPSHOT.zip")
+        buildExeFile = new File(basedir, "build/jet/build/${projectName()}$ext")
+        appExeFile = new File( basedir, "build/jet/app/${projectName()}")
+        zipFile = new File(basedir, "build/jet/${projectName()}-" + projectVersion() + ".zip")
     }
 
     protected def runGradle() {
@@ -25,11 +27,13 @@ abstract class BaseFunTest extends Specification {
                 .withDebug(true)
                 .build()
     }
+
     protected static boolean checkStdOutContains(File exeFile, String str) {
         exeFile.absolutePath.execute().inputStream.text.contains(str)
     }
-
     protected abstract String testProjectDir()
 
     protected abstract String projectName()
+
+    protected abstract String projectVersion()
 }

@@ -68,7 +68,7 @@ class ExcelsiorJetExtension {
      * <dd>skip packaging altogether</dd>
      * </dl>
      */
-    String excelsiorJetPackaging
+    String packaging
 
     /**
      * Project group id. Unique identifier that can be shared by multiple projects.
@@ -233,7 +233,7 @@ class ExcelsiorJetExtension {
      * @see ExcelsiorInstallerConfig#eulaEncoding
      * @see ExcelsiorInstallerConfig#installerSplash
      */
-    ExcelsiorInstallerConfig excelsiorInstallerConfig
+    ExcelsiorInstallerConfig excelsiorInstallerConfig = new ExcelsiorInstallerConfig()
 
     /**
      * (32-bit only) If set to {@code true}, the Global Optimizer is enabled,
@@ -253,7 +253,7 @@ class ExcelsiorJetExtension {
      * @see SlimDownConfig#detachComponents
      * @see SlimDownConfig#detachedPackage
      */
-    SlimDownConfig javaRuntimeSlimdown
+    SlimDownConfig javaRuntimeSlimdown = new SlimDownConfig()
 
     /**
      * Trial version configuration parameters.
@@ -262,7 +262,7 @@ class ExcelsiorJetExtension {
      * @see TrialVersionConfig#expireDate
      * @see TrialVersionConfig#expireMessage
      */
-    TrialVersionConfig trialVersion
+    TrialVersionConfig trialVersion = new TrialVersionConfig()
 
     /**
      * OS X Application Bundle configuration parameters.
@@ -275,7 +275,7 @@ class ExcelsiorJetExtension {
      * @see OSXAppBundleConfig#developerId
      * @see OSXAppBundleConfig#publisherId
      */
-    OSXAppBundleConfig osxBundle
+    OSXAppBundleConfig osxBundle = new OSXAppBundleConfig()
 
     /**
      * If set to {@code true}, the multi-app mode is enabled for the resulting executable

@@ -11,9 +11,12 @@ buildscript {
 
 apply plugin: "java"
 group = "com.excelsior.it"
-version = "1.0-SNAPSHOT"
+version = "1.2.3-SNAPSHOT"
 
 apply plugin: 'excelsiorJet'
 excelsiorJet {
-    mainClass = "HelloWorld"
+    mainClass = 'HelloSwing'
+    hideConsole = true
+    packaging = 'excelsior-installer'
+    profileStartup = false
 }

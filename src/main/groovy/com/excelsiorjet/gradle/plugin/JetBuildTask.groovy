@@ -21,13 +21,10 @@
 */
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.log.Log
 import com.excelsiorjet.api.tasks.ApplicationType
 import com.excelsiorjet.api.tasks.ClasspathEntry
 import com.excelsiorjet.api.tasks.JetProject
-import com.excelsiorjet.api.util.Txt
 import org.gradle.api.DefaultTask
-import org.gradle.api.GradleScriptException
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 
@@ -47,7 +44,7 @@ class JetBuildTask extends DefaultTask {
 
         // getters should be used to fallback into convention mapping magic, when field is not set
         jetProject.dependencies(getDependencies(project))
-                .excelsiorJetPackaging(ext.getExcelsiorJetPackaging())
+                .excelsiorJetPackaging(ext.getPackaging())
                 .artifactName(ext.getArtifactName())
                 .jetOutputDir(ext.getJetOutputDir())
                 .mainClass(ext.getMainClass())

@@ -59,7 +59,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
     private static void addJetBuildConventions(Project project) {
         ExcelsiorJetExtension extension = project.extensions.findByName(ExcelsiorJetExtension.EXTENSION_NAME) as ExcelsiorJetExtension
         extension.conventionMapping.version = { project.version.toString() }
-        extension.conventionMapping.excelsiorJetPackaging = { JetProject.ZIP }
+        extension.conventionMapping.packaging = { JetProject.ZIP }
         extension.conventionMapping.artifactName = { getArchiveName(project.tasks.getByPath(taskPath(project, "jar"))) }
         extension.conventionMapping.mainJar = {
             new File(project.tasks.getByPath(taskPath(project, "jar")).archivePath as String)

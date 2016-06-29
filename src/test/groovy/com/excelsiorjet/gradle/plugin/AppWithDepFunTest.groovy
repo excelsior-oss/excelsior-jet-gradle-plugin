@@ -10,10 +10,11 @@ class AppWithDepFunTest extends BaseFunTest {
 
         File dep = new File(basedir, "build/jet/build/AppWithDep_jetpdb/tmpres/commons-io-1.3.2__1.jar")
         then:
-        exeFile.exists()
+        buildExeFile.exists()
+        appExeFile.exists()
         zipFile.exists()
         dep.exists()
-        checkStdOutContains(exeFile, "HelloWorld")
+        checkStdOutContains(buildExeFile, "HelloWorld")
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 
@@ -26,5 +27,10 @@ class AppWithDepFunTest extends BaseFunTest {
     @Override
     protected String projectName() {
         return "AppWithDep"
+    }
+
+    @Override
+    protected String projectVersion() {
+        return "1.0-SNAPSHOT"
     }
 }

@@ -10,18 +10,11 @@ buildscript {
 }
 
 apply plugin: "java"
+group = "com.excelsior.it"
 version = "1.0-SNAPSHOT"
 
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = 'HelloSwing'
     hideConsole = true
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile "org.apache.commons:commons-io:1.3.2"
 }
