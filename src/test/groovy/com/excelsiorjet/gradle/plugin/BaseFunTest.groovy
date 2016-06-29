@@ -16,7 +16,7 @@ abstract class BaseFunTest extends Specification {
 
     void setup() {
         buildExeFile = new File(basedir, "build/jet/build/${projectName()}$ext")
-        appExeFile = new File( basedir, "build/jet/app/${projectName()}")
+        appExeFile = new File( basedir, "build/jet/app/${projectName()}$ext")
         zipFile = new File(basedir, "build/jet/${projectName()}-" + projectVersion() + ".zip")
     }
 
