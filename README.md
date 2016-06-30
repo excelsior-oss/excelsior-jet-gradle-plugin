@@ -25,7 +25,7 @@ Excelsior JET runtime files. In addition, it can either pack that directory into
 (all platforms), create an Excelsior Installer setup (Windows and Linux only)
 or an OS X application bundle/installer.
 
-The current version of the plugin can handle two types of applications:
+The current version of the plugin can handle only one type of applications:
 
 * **Plain Java SE applications**, i.e. applications that have a main class
 and have all their dependencies explicitly listed in the JVM classpath at launch time, and
@@ -61,7 +61,7 @@ buildscript {
     }
 }
 
-apply plugin: "java"
+apply plugin: 'java'
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = ''
@@ -79,7 +79,7 @@ gradlew jetBuild
 In order to do its job, the plugin needs to locate an Excelsior JET installation.
 You have three ways to specify the Excelsior JET installation directory explicitly:
 
-- add the `<jetHome>` parameter to the `<configuration>` section of the plugin
+- add the `jetHome` parameter to the `excelsiorJet` plugin extension
 - pass the `jet.home` system property on the Gradle command line as follows:
 ```
 gradlew jetBuild -Djet.home=[JET-Home]
@@ -98,7 +98,7 @@ and copies all its run time dependencies to `jet/build/lib`.
 Then it invokes the Excelsior JET AOT compiler to compile all those jars into a native executable.
 Upon success, it copies that executable and the required Excelsior JET Runtime files
 into the `jet/app` directory, binds the executable to that copy of the Runtime,
-and copies the contents of the `<packageFilesDir>` directory recursively
+and copies the contents of the `packageFilesDir` directory recursively
 to `jet/app`, if applicable (see "Customizing Package Content" below.)
 
 > Your natively compiled application is ready for distribution at this point: you may copy
@@ -107,9 +107,9 @@ to `jet/app`, if applicable (see "Customizing Package Content" below.)
 
 Finally, the plugin packs the contents of the `jet/app` directory into
 a zip archive named `<excelsiorJet.artifactName>.zip` so as to aid single file re-distribution.
-On Windows and Linux, you can also set the `<packaging>excelsior-installer</packaging>`
+On Windows and Linux, you can also set the `packaging = 'excelsior-installer'`
 configuration parameter to have the plugin create an Excelsior Installer setup instead,
-and on OS X, setting `<packaging>osx-app-bundle</packaging>` will result in the creation
+and on OS X, setting `packaging = 'osx-app-bundle'` will result in the creation
 of an application bundle and, optionally, a native OS X installer package (`.pkg` file).
 
 ### Performing a Test Run
@@ -128,7 +128,7 @@ helps Excelsior JET:
 To perform a Test Run, execute the following Gradle command:
 
 ```
-gradle testRun
+gradlew testRun
 ```
 
 The plugin will place the gathered profiles in the `<project.projectDir>/src/main/jetresources` directory.
@@ -189,22 +189,22 @@ for Linux.
 To create an Excelsior Installer setup, add the following configuration into the `excelsiorJet` plugin
 extension:
 
-`packaging = excelsior-installer`
+`excelsiorJet.packaging = excelsior-installer`
 
 **Note:** if you use the same build.gradle for all three supported platforms (Windows, OS X, and Linux),
 it is recommended to use another configuration:
 
-`packaging = native-bundle`
+`excelsiorJet.packaging = native-bundle`
 
 to create Excelsior Installer setups on Windows and Linux and an application bundle and installer on OS X.
 
 Excelsior Installer setup, in turn, has the following configurations:
 
-* `excelsiorInstaller.product = <product-name>` - default is *<project.name>*
+* `excelsiorJet.product = <product-name>` - default is *<project.name>*
 
-* `excelsiorInstaller.vendor = <vendor-name>` -  default is *<project.group>*
+* `excelsiorJet.vendor = <vendor-name>` -  default is *<project.group>*
 
-* `excelsiorInstaller.version = <product-version>` - default is *<project.version>*
+* `excelsiorJet.version = <product-version>` - default is *<project.version>*
 
 The above parameters are also used by Windows Version Information and OS X bundle configurations.
 
@@ -524,9 +524,9 @@ Version 0.3.0 (01-Jul-2016)
    - running an application on the Excelsior JET JVM before pre-compiling it to native code
    - gathering application execution profiles to enable the Startup Optimizer
 * `<optRtFiles>` parameter introduced to add optional JET runtime components
-* Global Optimizer
-* Java Runtime Slim-Down
 * Reduced the download size and disk footprint of resulting packages by means of supporting:
+   * Global Optimizer
+   * Java Runtime Slim-Down
 * `<packageFilesDir>` parameter introduced to add extra files to the final package
 * Trial version generation is supported
 * `<jvmArgs>` parameter introduced to define system properties and JVM arguments
