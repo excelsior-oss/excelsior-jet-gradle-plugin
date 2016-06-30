@@ -3,13 +3,13 @@
  *
  *  This file is part of Excelsior JET Gradle Plugin.
  *
- *  Excelsior JET Maven Plugin is free software:
+ *  Excelsior JET Gradle Plugin is free software:
  *  you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  Excelsior JET Maven Plugin is distributed in the hope that it will be useful,
+ *  Excelsior JET Gradle Plugin is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
@@ -261,6 +261,11 @@ class ExcelsiorJetExtension {
      */
     SlimDownConfig javaRuntimeSlimdown = new SlimDownConfig()
 
+    def javaRuntimeSlimdown(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = javaRuntimeSlimdown
+        closure()
+    }
     /**
      * Trial version configuration parameters.
      *
@@ -270,6 +275,11 @@ class ExcelsiorJetExtension {
      */
     TrialVersionConfig trialVersion = new TrialVersionConfig()
 
+    def trialVersion(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = trialVersion
+        closure()
+    }
     /**
      * OS X Application Bundle configuration parameters.
      *
@@ -283,6 +293,11 @@ class ExcelsiorJetExtension {
      */
     OSXAppBundleConfig osxBundle = new OSXAppBundleConfig()
 
+    def osxBundle(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = osxBundle
+        closure()
+    }
     /**
      * If set to {@code true}, the multi-app mode is enabled for the resulting executable
      * (it mimicks the command line syntax of the conventional {@code java} launcher).

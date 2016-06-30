@@ -3,13 +3,13 @@
  *
  *  This file is part of Excelsior JET Gradle Plugin.
  *
- *  Excelsior JET Maven Plugin is free software:
+ *  Excelsior JET Gradle Plugin is free software:
  *  you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  Excelsior JET Maven Plugin is distributed in the hope that it will be useful,
+ *  Excelsior JET Gradle Plugin is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
@@ -72,7 +72,6 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             new File("${project.projectDir}/src/main/jetresources" as String)
         }
         extension.conventionMapping.groupId = { project.group }
-        extension.conventionMapping.winVIDescription = { project.name }
     }
 
     private static String getArchiveName(Jar jarTask) {
@@ -83,6 +82,11 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         }
     }
 
+    /**
+     * Resolves task name in the given project into valid full task name string (with project prefix, for subprojects).
+     * Tasks in root project should not be referenced with root project name prefix (e.g ":jar"),
+     * while task in subprojects should be referenced with project name prefix (e.g. ":subproject:jar").
+     */
     private static String taskPath(Project target, String taskName) {
         if (target.rootProject == target) {
             return ":$taskName"

@@ -44,7 +44,7 @@ callable via the Invocation API.
 The plugin does not yet support projects of these types nor some advanced Excelsior JET features.
 We plan to cover all that functionality in the future, but if you need the plugin to support
 a particular feature sooner rather than later, you can help us prioritize the roadmap
-by creating a feature request [here](https://github.com/excelsior-oss/excelsior-jet-maven-plugin/issues).
+by creating a feature request [here](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/issues).
 
 ### Usage
 
@@ -524,7 +524,6 @@ Version 0.3.0 (01-Jul-2016)
    - running an application on the Excelsior JET JVM before pre-compiling it to native code
    - gathering application execution profiles to enable the Startup Optimizer
 * `<optRtFiles>` parameter introduced to add optional JET runtime components
-* "[Changes are not reflected in compiled app if building without clean #11](https://github.com/excelsior-oss/excelsior-jet-maven-plugin/issues/11)" issue fixed
 * Global Optimizer
 * Java Runtime Slim-Down
 * Reduced the download size and disk footprint of resulting packages by means of supporting:

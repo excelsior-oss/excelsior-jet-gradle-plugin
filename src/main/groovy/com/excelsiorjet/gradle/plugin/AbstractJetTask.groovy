@@ -1,15 +1,42 @@
 package com.excelsiorjet.gradle.plugin
+/*
+ * Copyright (c) 2016 Excelsior LLC.
+ *
+ *  This file is part of Excelsior JET Gradle Plugin.
+ *
+ *  Excelsior JET Gradle Plugin is free software:
+ *  you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Excelsior JET Gradle Plugin is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Excelsior JET Gradle Plugin.
+ *  If not, see <http://www.gnu.org/licenses/>.
+ *
+*/
 
 import com.excelsiorjet.api.tasks.ApplicationType
 import com.excelsiorjet.api.tasks.ClasspathEntry
 import com.excelsiorjet.api.tasks.JetProject
+import com.excelsiorjet.gradle.plugin.ExcelsiorJetExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 
+/**
+ * Base class for ExcelsiorJet plugin tasks
+ *
+ * @author Aleksey Zhidkov
+ */
 class AbstractJetTask extends DefaultTask {
 
     protected JetProject createJetProject() {
-        ExcelsiorJetExtension ext = project.excelsiorJet
+        ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
         def jetProject = new JetProject(project.name, ext.getGroupId(), ext.getVersion(), ApplicationType.PLAIN, project.buildDir, ext.getJetResourcesDir())
 
         // getters should be used to fallback into convention mapping magic, when field is not set
@@ -46,7 +73,8 @@ class AbstractJetTask extends DefaultTask {
                 .protectData(ext.getProtectData())
                 .cryptSeed(ext.getCryptSeed())
                 .optRtFiles(ext.getOptRtFiles())
-        jetProject
+
+        return jetProject
     }
 
     static List<ClasspathEntry> getDependencies(Project project) {

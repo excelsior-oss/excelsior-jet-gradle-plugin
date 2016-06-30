@@ -4,7 +4,7 @@ import org.gradle.testkit.runner.TaskOutcome
 
 class ExcelsiorInstallerAdvancedFunTest extends BaseFunTest {
 
-    def "jetBuild task builds simple swing application and packs it with excelsior installer with cyrillic eula"() {
+    def "jetBuild task builds simple swing application and packs it with excelsior installer with cyrillic eula and splash in custom location"() {
         when:
         def result = runGradle('jetBuild')
 
