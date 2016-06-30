@@ -12,7 +12,7 @@ class HelloWorldFunTest extends BaseFunTest {
         buildExeFile.exists()
         appExeFile.exists()
         zipFile.exists()
-        checkStdOutContains(buildExeFile, "Hello World")
+        checkStdOutContains(appExeFile, "Hello World")
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 

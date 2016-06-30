@@ -14,7 +14,7 @@ class AppWithDepFunTest extends BaseFunTest {
         appExeFile.exists()
         zipFile.exists()
         dep.exists()
-        checkStdOutContains(buildExeFile, "HelloWorld")
+        checkStdOutContains(appExeFile, "HelloWorld")
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 
