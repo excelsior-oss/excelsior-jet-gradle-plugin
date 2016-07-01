@@ -47,21 +47,23 @@ a particular feature sooner rather than later, you can help us prioritize the ro
 by creating a feature request [here](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/issues).
 
 ### Usage
-
-If your project is a plain Java SE application, you need add plugin in the build script configuration in the `build.gradle` file:
+Excelsior JET Gradle plugin is hosted on Maven Central so at first
+you need to add the plugin dependency in the `buildscript` configuration of the `build.gradle` file, such as:
 
 ```gradle
 buildscript {
-    def pluginVersion = '0.3.0'
+    def jetPluginVersion = '0.3.0'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$jetPluginVersion"
     }
 }
 ```
-and apply and configure excelsiorJet plugin:
+
+and then apply and configure `excelsiorJet` plugin as:
+
 ```gradle
 apply plugin: 'excelsiorJet'
 excelsiorJet {
@@ -73,7 +75,7 @@ set the `mainClass` parameter, and use the following command line to build the a
 gradlew jetBuild
 ```
 
-**Note:** excelsiorJet requires, that Java plugin is applied preliminarily: ```apply plugin: 'java'```
+**Note:** Excelsior JET Gradle plugin requires, that Java plugin is applied preliminarily: ```apply plugin: 'java'```
 
 ### Excelsior JET Installation Directory Lookup
 
@@ -516,7 +518,7 @@ the "Intellectual Property Protection" chapter of the Excelsior JET User's Guide
 
 ## Release Notes
 
-Version 0.3.0 (01-Jul-2016)
+Version 0.3.0 (??-Jul-2016)
 * Support of Excelsior Installer setup generation
 * Windows Version Information generation
 * Support of multi-app executables

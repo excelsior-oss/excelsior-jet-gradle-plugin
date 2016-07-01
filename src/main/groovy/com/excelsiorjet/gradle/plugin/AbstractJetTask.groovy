@@ -24,12 +24,11 @@ package com.excelsiorjet.gradle.plugin
 import com.excelsiorjet.api.tasks.ApplicationType
 import com.excelsiorjet.api.tasks.ClasspathEntry
 import com.excelsiorjet.api.tasks.JetProject
-import com.excelsiorjet.gradle.plugin.ExcelsiorJetExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 
 /**
- * Base class for ExcelsiorJet plugin tasks
+ * Base class for ExcelsiorJet plugin tasks.
  *
  * @author Aleksey Zhidkov
  */

@@ -25,7 +25,37 @@ import com.excelsiorjet.api.tasks.JetProject
 import org.gradle.api.tasks.TaskAction
 
 /**
- * Main task for executing test run of Java (JVM) applications with Excelsior JET.
+ * Task for performing a Test Run before building the application.
+ * Running your Java application before optimization helps Excelsior JET:
+ * <ul>
+ *  <li>
+ *      Verify that your application can run on the Excelsior JET JVM flawlessly
+ *      (i.e. it has no implicit dependencies on the Oracle JVM implementation
+ *      and your Gradle project has no configuration issues specific to Excelsior JET).
+ *  </li>
+ *  <li>
+ *      Collect profile information to optimize your app more effectively.
+ *  </li>
+ *  <li>
+ *      Enable application startup time optimization.
+ *      Performing a Test Run can reduce the startup time by a factor of up to two.
+ *  </li>
+ * </ul>
+ * To perform a Test Run, issue the following Gradle command:
+ * <p>
+ * <code>
+ *     gradlew jetTestRun
+ * </code>
+ * </p>
+ * <p>
+ * It is recommended to commit the collected profiles (.usg, .startup) to VCS so as to
+ * enable the plugin to re-use them during subsequent builds without performing the Test Run.
+ * The profiles are placed to {@link ExcelsiorJetExtension#jetResourcesDir} by default.
+ * </p>
+ *
+ *  Note: During a Test Run, the application is executed in a special profiling mode,
+ *        so disregard its modest start-up time and performance.
+ *
  *
  * @see ExcelsiorJetExtension
  *
