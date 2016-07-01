@@ -6,7 +6,7 @@ class TestRunFunTest extends BaseFunTest {
 
     def "executes test run for project"() {
         when:
-        def testRunResult = runGradle('testRun')
+        def testRunResult = runGradle('jetTestRun')
         def jetBuildResult = runGradle('jetBuild')
 
         File startupProfile = new File( basedir, "src/main/jetresources/HelloWorld.startup");
@@ -16,7 +16,7 @@ class TestRunFunTest extends BaseFunTest {
         startupProfile.exists()
         reorderFile.exists();
 
-        testRunResult.task(":testRun").outcome == TaskOutcome.SUCCESS
+        testRunResult.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
         jetBuildResult.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 

@@ -1,4 +1,3 @@
-package com.excelsiorjet.gradle.plugin
 /*
  * Copyright (c) 2016 Excelsior LLC.
  *
@@ -20,6 +19,7 @@ package com.excelsiorjet.gradle.plugin
  *  If not, see <http://www.gnu.org/licenses/>.
  *
 */
+package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.tasks.ApplicationType
 import com.excelsiorjet.api.tasks.ClasspathEntry
@@ -64,7 +64,7 @@ class AbstractJetTask extends DefaultTask {
                 .product(ext.getProduct())
                 .excelsiorInstallerConfiguration(ext.getExcelsiorInstaller())
                 .globalOptimizer(ext.getGlobalOptimizer())
-                .javaRuntimeSlimDown(ext.getJavaRuntimeSlimdown())
+                .javaRuntimeSlimDown(ext.getJavaRuntimeSlimDown())
                 .trialVersion(ext.getTrialVersion())
                 .osxBundleConfiguration(ext.getOsxBundle())
                 .multiApp(ext.getMultiApp())

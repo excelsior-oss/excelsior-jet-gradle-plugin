@@ -48,7 +48,7 @@ by creating a feature request [here](https://github.com/excelsior-oss/excelsior-
 
 ### Usage
 
-If your project is a plain Java SE application, you need to copy and paste the following configuration into the `build.gradle` file:
+If your project is a plain Java SE application, you need add plugin in the build script configuration in the `build.gradle` file:
 
 ```gradle
 buildscript {
@@ -60,26 +60,27 @@ buildscript {
         classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
     }
 }
-
-apply plugin: 'java'
+```
+and apply and configure excelsiorJet plugin:
+```gradle
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = ''
 }
 ```
-
 set the `mainClass` parameter, and use the following command line to build the application:
-
 ```
 gradlew jetBuild
 ```
+
+**Note:** excelsiorJet requires, that Java plugin is applied preliminarily: ```apply plugin: 'java'```
 
 ### Excelsior JET Installation Directory Lookup
 
 In order to do its job, the plugin needs to locate an Excelsior JET installation.
 You have three ways to specify the Excelsior JET installation directory explicitly:
 
-- add the `jetHome` parameter to the `excelsiorJet` plugin extension
+- add the `jetHome` parameter to the `excelsiorJet{}` plugin extension
 - pass the `jet.home` system property on the Gradle command line as follows:
 ```
 gradlew jetBuild -Djet.home=[JET-Home]
@@ -106,7 +107,7 @@ to `jet/app`, if applicable (see "Customizing Package Content" below.)
 > the Oracle JRE installed, and the executable should work as expected.
 
 Finally, the plugin packs the contents of the `jet/app` directory into
-a zip archive named `<excelsiorJet.artifactName>.zip` so as to aid single file re-distribution.
+a zip archive named `<artifactName>.zip` so as to aid single file re-distribution.
 On Windows and Linux, you can also set the `packaging = 'excelsior-installer'`
 configuration parameter to have the plugin create an Excelsior Installer setup instead,
 and on OS X, setting `packaging = 'osx-app-bundle'` will result in the creation
@@ -119,16 +120,16 @@ using a JIT compiler before pre-compiling it to native code. This so-called Test
 helps Excelsior JET:
 
 * verify that your application can be executed successfully on the Excelsior JET JVM.
-  Usually, if the Test Run completes normally, the natively compiled application also works well.
+Usually, if the Test Run completes normally, the natively compiled application also works well.
 * detect the optional parts of Excelsior JET Runtime that are used by your application.
-  For instance, JavaFX Webkit is not included in the resulting package by default
-  due to its size, but if the application used it during a Test Run, it gets included automatically.
+For instance, JavaFX Webkit is not included in the resulting package by default
+due to its size, but if the application used it during a Test Run, it gets included automatically.
 * collect profile information to optimize your app more effectively
 
 To perform a Test Run, execute the following Gradle command:
 
 ```
-gradlew testRun
+gradlew jetTestRun
 ```
 
 The plugin will place the gathered profiles in the `<project.projectDir>/src/main/jetresources` directory.
@@ -139,26 +140,26 @@ to re-use them during automatic application builds without performing a Test Run
 It is recommended to perform a Test Run at least once before building your application.
 
 Note: 64-bit versions of Excelsior JET do not collect `.usg` profiles yet.
-      So it is recommended to perform a Test Run on the 32-bit version of Excelsior JET at least once.
+  So it is recommended to perform a Test Run on the 32-bit version of Excelsior JET at least once.
 
 The profiles will be used by the Startup Optimizer and the Global Optimizer (see below).
 
 Note: During a Test Run, the application executes in a special profiling mode,
-      so disregard its modest start-up time and performance.
+  so disregard its modest start-up time and performance.
 
-### Configurations other than `excelsiorJet.mainClass`
+### Configurations other than `mainClass`
 
 For a complete list of parameters, look into the Javadoc of field declarations
 of the
 [ExcelsiorJetExtension](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/blob/master/src/main/groovy/com/excelsiorjet/gradle/plugin/ExcelsiorJetExtension.groovy) class.
 Most of them have default values derived from your `build.gradle` project
-such as `excelsiorJet.outputName` parameter specifying resulting executable name.
+such as `outputName` parameter specifying resulting executable name.
 
 There are also two useful Windows-specific configuration parameters:
 
-`excelsiorJet.hideConsole = true` – hide console
+`hideConsole = true` – hide console
 
-`excelsiorJet.icon = <icon-file>` – set executable icon (in Windows .ico format)
+`icon = <icon-file>` – set executable icon (in Windows .ico format)
 
 It is recommended to place the executable icon into a VCS, and if you place it to
 `<project.projectDir>/src/main/jetresources/icon.ico`, you do not need to explicitly specify it
@@ -171,7 +172,7 @@ By default, the final package contains just the resulting executable and the nec
 However, you may want the plugin to add other files to it: README, license, media, help files,
 third-party native libraries, and so on. For that, add the following configuration parameter:
 
-`excelsiorJet.packageFilesDir = <extra-package-files-directory>`
+`packageFilesDir = <extra-package-files-directory>`
 
 referencing a directory with all such extra files that you need added to the package.
 The contents of the directory will be copied recursively to the final package.
@@ -186,25 +187,25 @@ The plugin supports the creation of Excelsior Installer setups -
 conventional installer GUIs for Windows or self-extracting archives with command-line interface
 for Linux.
 
-To create an Excelsior Installer setup, add the following configuration into the `excelsiorJet` plugin
+To create an Excelsior Installer setup, add the following configuration into the `excelsiorJet{}` plugin
 extension:
 
-`excelsiorJet.packaging = excelsior-installer`
+`packaging = excelsior-installer`
 
 **Note:** if you use the same build.gradle for all three supported platforms (Windows, OS X, and Linux),
 it is recommended to use another configuration:
 
-`excelsiorJet.packaging = native-bundle`
+`packaging = native-bundle`
 
 to create Excelsior Installer setups on Windows and Linux and an application bundle and installer on OS X.
 
 Excelsior Installer setup, in turn, has the following configurations:
 
-* `excelsiorJet.product = <product-name>` - default is *<project.name>*
+* `product = <product-name>` - default is *<project.name>*
 
-* `excelsiorJet.vendor = <vendor-name>` -  default is *<project.group>*
+* `vendor = <vendor-name>` -  default is *<project.group>*
 
-* `excelsiorJet.version = <product-version>` - default is *<project.version>*
+* `version = <product-version>` - default is *<project.version>*
 
 The above parameters are also used by Windows Version Information and OS X bundle configurations.
 
@@ -227,7 +228,7 @@ that has the following configuration parameters:
 
 The plugin supports the creation of OS X application bundles and installers.
 
-To create an OS X application bundle, add the following configuration into the `excelsiorJet` plugin extension:
+To create an OS X application bundle, add the following configuration into the `excelsiorJet{}` plugin extension:
 
 `packaging = "osx-app-bundle"`
 
@@ -276,7 +277,7 @@ On Windows, the plugin automatically adds a
 to the resulting executable. This can be disabled by specifying the following
 configuration:
 
-    excelsiorJet.addWindowsVersionInfo = false
+    addWindowsVersionInfo = false
 
 By default, the values of version-information resource strings are derived from project settings.
 The values of `product` and `vendor` configurations are used verbatim as
@@ -285,13 +286,13 @@ other defaults can be changed using the following configuration parameters:
 
 * `winVIVersion = <version-string>` - version number (both `FileVersion` and `ProductVersion` strings are set to this same value)
 
-    **Notice:** unlike Gradle `<project.version>`, this string must have format `v1.v2.v3.v4`, where vi is a number.
+    **Notice:** unlike Gradle `project.version`, this string must have format `v1.v2.v3.v4`, where vi is a number.
     The plugin would use heuristics to derive a correct version string from the specified value if the latter
-    does not meet this requirement, or from `<project.version>` if this configuration is not present.
+    does not meet this requirement, or from `project.version` if this configuration is not present.
 
 * `winVICopyright = <legal-copyright> - `LegalCopyright` string, with default value derived from other parameters
 
-* `winVIDescription = <executable-description>` - `FileDescription` string, default is `<project.name>`
+* `winVIDescription = <executable-description>` - `FileDescription` string, default is `project.name`
 
 #### Multi-app Executables
 
@@ -309,7 +310,7 @@ and the arguments of the application:
 
 To enable the multi-app mode add the following configuration parameter:
 
-`excelsiorJet.multiApp = true`
+`multiApp = true`
 
 <a name="jvmargs"></a>
 #### Defining System Properties and JVM Arguments

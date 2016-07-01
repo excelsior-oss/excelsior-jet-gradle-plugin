@@ -151,14 +151,15 @@ class ExcelsiorJetExtension {
      * It is recommended to commit the collected profiles (.usg, .startup) to VCS to enable the plugin
      * to re-use them during subsequent builds without performing a Test Run.
      *
-     * @see TestRunTask
+     * @see JetTestRunTask
      */
     File execProfilesDir
 
     /**
      * The base file name of execution profiles. By default, ${project.artifactId} is used.
      *
-     * Default value is ${project.artifactId}*/
+     * Default value is ${project.artifactId}
+     */
     String execProfilesName
 
     /**
@@ -210,13 +211,15 @@ class ExcelsiorJetExtension {
     String winVIDescription
 
     /**
-     * Year of the project's inception, specified with 4 digits. This value is used when generating copyright notices
+     * Inception year of this project.
+     *
+     * Used to construct default value of {@link #winVICopyright}.
      */
     String inceptionYear
 
     /**
      * Application vendor name. Required for Windows version-information resource and Excelsior Installer.
-     * By default, {@code project.group} is used, with first letter capitalized..
+     * By default, {@code project.group} is used, with first letter capitalized.
      */
     String vendor
 
@@ -247,7 +250,7 @@ class ExcelsiorJetExtension {
      * Performing a Test Run is mandatory when the Global Optimizer is enabled.
      * The Global Optimizer is enabled automatically when you enable Java Runtime Slim-Down.
      *
-     * @see TestRunTask
+     * @see JetTestRunTask
      * @see #javaRuntimeSlimDown
      */
     boolean globalOptimizer
@@ -259,11 +262,11 @@ class ExcelsiorJetExtension {
      * @see SlimDownConfig#detachComponents
      * @see SlimDownConfig#detachedPackage
      */
-    SlimDownConfig javaRuntimeSlimdown = new SlimDownConfig()
+    SlimDownConfig javaRuntimeSlimDown = new SlimDownConfig()
 
-    def javaRuntimeSlimdown(Closure closure) {
+    def javaRuntimeSlimDown(Closure closure) {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = javaRuntimeSlimdown
+        closure.delegate = javaRuntimeSlimDown
         closure()
     }
     /**

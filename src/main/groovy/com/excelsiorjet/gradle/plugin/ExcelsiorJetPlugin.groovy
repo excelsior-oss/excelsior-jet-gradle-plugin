@@ -22,8 +22,10 @@
 package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.tasks.JetProject
+import com.excelsiorjet.api.util.Txt
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.ProjectConfigurationException
 import org.gradle.api.logging.LogLevel
 import org.gradle.jvm.tasks.Jar
 
@@ -36,6 +38,7 @@ import org.gradle.jvm.tasks.Jar
  * Tasks provided by the plugin:
  * <ul>
  *     <li>jetBuild - builds Java (JVM) applications with Excelsior JET.</li>
+ *     <li>jetTestRun - executes test run of Java (JVM) applications with Excelsior JET.</li>
  * </ul>
  *
  * @author Aleksey Zhidkov
@@ -50,8 +53,8 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
         target.getExtensions().create(ExcelsiorJetExtension.EXTENSION_NAME, ExcelsiorJetExtension)
 
-        def testRun = target.tasks.create("testRun", TestRunTask)
-        testRun.dependsOn(taskPath(target, "jar"), taskPath(target, "test"))
+        def jetTestRun = target.tasks.create("jetTestRun", JetTestRunTask)
+        jetTestRun.dependsOn(taskPath(target, "jar"), taskPath(target, "test"))
 
         def jetBuild = target.tasks.create("jetBuild", JetBuildTask)
         jetBuild.dependsOn(taskPath(target, "jar"), taskPath(target, "test"))
@@ -61,7 +64,15 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
     private static void addJetBuildConventions(Project project) {
         ExcelsiorJetExtension extension = project.extensions.findByName(ExcelsiorJetExtension.EXTENSION_NAME) as ExcelsiorJetExtension
-        extension.conventionMapping.version = { project.version.toString() }
+        extension.conventionMapping.version = {
+            if (project.version.toString() == "unspecified") {
+                project.logger.warn(Txt.s("ExcelsiorJetGradlePlugin.ProjectVersionIsNotSet"))
+                extension.version = "1.0"
+                return extension.version
+            } else {
+                return project.version.toString()
+            }
+        }
         extension.conventionMapping.packaging = { JetProject.ZIP }
         extension.conventionMapping.artifactName = { getArchiveName(project.tasks.getByPath(taskPath(project, "jar"))) }
         extension.conventionMapping.mainJar = {
@@ -71,7 +82,18 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         extension.conventionMapping.jetResourcesDir = {
             new File("${project.projectDir}/src/main/jetresources" as String)
         }
-        extension.conventionMapping.groupId = { project.group }
+        extension.conventionMapping.groupId = {
+            if (project.group.toString().isEmpty() && (extension.vendor ?: "").isEmpty()) {
+                throw new ProjectConfigurationException(Txt.s("ExcelsiorJetGradlePlugin.ProjectGroupIsNotSet"), null)
+            }
+
+            if (project.group.toString().isEmpty()) {
+                return extension.vendor
+            } else {
+                return project.group.toString()
+            }
+        }
+
     }
 
     private static String getArchiveName(Jar jarTask) {
