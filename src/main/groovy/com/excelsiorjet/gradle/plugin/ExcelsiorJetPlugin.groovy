@@ -26,8 +26,8 @@ import com.excelsiorjet.api.util.Txt
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
+import org.gradle.api.Task
 import org.gradle.api.logging.LogLevel
-import org.gradle.jvm.tasks.Jar
 
 /**
  * Excelsior JET Gradle Plugin implementation class.
@@ -96,7 +96,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
     }
 
-    private static String getArchiveName(Jar jarTask) {
+    private static String getArchiveName(Task jarTask) {
         if (jarTask.extension != null && !jarTask.extension.isEmpty()) {
             jarTask.archiveName.substring(0, jarTask.archiveName.lastIndexOf('.'))
         } else {
