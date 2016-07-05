@@ -6,8 +6,8 @@ import spock.lang.Specification
 abstract class BaseFunTest extends Specification {
 
     protected static final String pluginVersion = System.getProperty("excelsiorJetPluginVersion")
-
-    protected static final String ext = System.properties['os.name'].contains("Windows") ? ".exe" : ""
+    protected static final String osName = System.properties['os.name']
+    protected static final String ext = osName.contains("Windows") ? ".exe" : ""
 
     File basedir = new File(getClass().getClassLoader().getResource(testProjectDir()).file)
     File buildExeFile
