@@ -1,0 +1,21 @@
+buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+    }
+}
+
+apply plugin: "java"
+group = "com.excelsior.it"
+version = "1.0-SNAPSHOT"
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    mainClass 'HelloSwing'
+    profileStartup false
+    packaging 'osx-app-bundle'
+}
