@@ -30,8 +30,14 @@ abstract class BaseFunTest extends Specification {
     }
 
     protected static boolean checkStdOutContains(File exeFile, String str) {
-        exeFile.absolutePath.execute().inputStream.text.contains(str)
+        cmdOutput(exeFile).contains(str)
     }
+
+    public static String cmdOutput(File exeFile) {
+        def process = exeFile.absolutePath.execute()
+        process.inputStream.text + process.errorStream.text
+    }
+
     protected abstract String testProjectDir()
 
     protected abstract String projectName()
