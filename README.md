@@ -48,7 +48,7 @@ by creating a feature request [here](https://github.com/excelsior-oss/excelsior-
 
 ### Usage
 Excelsior JET Gradle plugin is hosted on Maven Central so at first
-you need to add the plugin dependency in the `buildscript` configuration of the `build.gradle` file, such as:
+you need to add the plugin dependency in the `buildscript{}` configuration of the `build.gradle` file such as:
 
 ```gradle
 buildscript {
@@ -518,7 +518,7 @@ the "Intellectual Property Protection" chapter of the Excelsior JET User's Guide
 
 ## Release Notes
 
-Version 0.3.0 (??-Jul-2016)
+Version 0.3.0 (06-Jul-2016)
 * Support of Excelsior Installer setup generation
 * Windows Version Information generation
 * Support of multi-app executables
