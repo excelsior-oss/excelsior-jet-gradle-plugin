@@ -10,13 +10,15 @@ abstract class BaseFunTest extends Specification {
     protected static final String ext = osName.contains("Windows") ? ".exe" : ""
 
     File basedir = new File(getClass().getClassLoader().getResource(testProjectDir()).file)
+    File appDir
     File buildExeFile
     File appExeFile
     File zipFile
 
     void setup() {
+        appDir = new File(basedir, "build/jet/app")
         buildExeFile = new File(basedir, "build/jet/build/${projectName()}$ext")
-        appExeFile = new File( basedir, "build/jet/app/${projectName()}$ext")
+        appExeFile = new File(appDir, "${projectName()}$ext")
         zipFile = new File(basedir, "build/jet/${projectName()}-" + projectVersion() + ".zip")
     }
 
