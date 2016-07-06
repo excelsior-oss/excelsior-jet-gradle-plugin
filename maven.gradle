@@ -36,7 +36,7 @@ signing {
 // So to run tests locally developer have to set sonatype authentication data, which is not always acceptable.
 // To work around this issue, we execute 'signArchives' task, only when 'uploadArchives' task is presented in task graph
 gradle.taskGraph.whenReady {
-    signArchives.onlyIf { gradle.taskGraph.hasTask("uploadArchives")}
+    signArchives.onlyIf { gradle.taskGraph.hasTask(":uploadArchives") }
 }
 
 uploadArchives {
