@@ -24,6 +24,7 @@ package com.excelsiorjet.gradle.plugin
 import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
 import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
 import com.excelsiorjet.api.tasks.config.SlimDownConfig
+import com.excelsiorjet.api.tasks.config.TomcatConfig
 import com.excelsiorjet.api.tasks.config.TrialVersionConfig
 
 /**
@@ -301,6 +302,7 @@ class ExcelsiorJetExtension {
         closure.delegate = osxBundle
         closure()
     }
+
     /**
      * If set to {@code true}, the multi-app mode is enabled for the resulting executable
      * (it mimicks the command line syntax of the conventional {@code java} launcher).
@@ -346,5 +348,21 @@ class ExcelsiorJetExtension {
      * {@code accessibility}, {@code javafx}, {@code javafx-webkit}, {@code nashorn}, {@code cldr}
      */
     String[] optRtFiles = []
+
+    /**
+     * Tomcat web applications specific parameters.
+     *
+     * @see TomcatConfig#tomcatHome
+     * @see TomcatConfig#warDeployName
+     * @see TomcatConfig#hideConfig
+     * @see TomcatConfig#genScripts
+     */
+    TomcatConfig tomcat
+
+    def tomcat(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = tomcat
+        closure()
+    }
 
 }
