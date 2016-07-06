@@ -5,16 +5,20 @@ import org.gradle.testkit.runner.TaskOutcome
 class HelloSwingFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple swing application"() {
+        setup:
+        boolean isWindows = osName.contains("Windows");
+
         when:
         def result = runGradle('jetBuild')
 
-        boolean isWindows = System.properties['os.name'].contains("Windows");
         then:
         buildExeFile.exists()
         appExeFile.exists()
         zipFile.exists()
+
         !isWindows || new File(basedir, "build/jet/build/HelloSwing_jetpdb/HelloSwing.rsp").text.contains("icon.ico")
         !isWindows || new File(basedir, "build/jet/build/HelloSwing_jetpdb/HelloSwing.rsp").text.contains("-sys=W")
+
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 

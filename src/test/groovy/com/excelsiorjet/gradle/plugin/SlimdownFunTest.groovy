@@ -2,23 +2,22 @@ package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
 
-class SlimdownFunTest extends BaseFunTest {
+class SlimdownFunTest extends BaseFunTest implements HelloWorldProject {
 
     def "test java runtime slimdown"() {
-        when:
-        def cleanResult = runGradle('clean')
-        def testRunResult = runGradle('jetTestRun')
-        def jetBuildResult = runGradle('jetBuild')
-
-        int jetRtFilesCount = new File(basedir, "build/jet/app/rt/jetrt").listFiles().length;
+        setup:
+        File jetRtFiles= new File(basedir, "build/jet/app/rt/jetrt")
         File rt0Jar = new File(basedir, "build/jet/app/rt/lib/rt-0.jar")
 
-        then:
-        (jetRtFilesCount > 1 || rt0Jar.exists())
+        when:
+        def result = runGradle('clean', 'jetTestRun', 'jetBuild')
 
-        cleanResult.task(":clean").outcome == TaskOutcome.SUCCESS
-        testRunResult.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
-        jetBuildResult.task(":jetBuild").outcome == TaskOutcome.SUCCESS
+        then:
+        (jetRtFiles.listFiles().length > 1 || rt0Jar.exists())
+
+        result.task(":clean").outcome == TaskOutcome.SUCCESS || result.task(":clean").outcome == TaskOutcome.UP_TO_DATE
+        result.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
+        result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 
     @Override
@@ -26,13 +25,4 @@ class SlimdownFunTest extends BaseFunTest {
         return "09-slimdown"
     }
 
-    @Override
-    protected String projectName() {
-        return "HelloWorld"
-    }
-
-    @Override
-    protected String projectVersion() {
-        return "1.0-SNAPSHOT"
-    }
 }

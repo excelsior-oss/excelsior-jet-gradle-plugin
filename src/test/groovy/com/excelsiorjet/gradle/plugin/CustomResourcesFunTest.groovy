@@ -2,12 +2,11 @@ package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
 
-class CustomResourcesFunTest extends BaseFunTest {
+class CustomResourcesFunTest extends BaseFunTest implements HelloWorldProject {
 
     def "test custom resources"() {
         when:
-        def jetTestRunResult = runGradle('jetTestRun')
-        def jetBuildResult = runGradle('jetBuild')
+        def result = runGradle('jetTestRun', 'jetBuild')
 
         then:
         buildExeFile.exists()
@@ -19,8 +18,8 @@ class CustomResourcesFunTest extends BaseFunTest {
         new File(basedir, "build/jet/build/custom.file").exists()
         new File(basedir, "build/jet/build/subdir/subdir.file").exists()
 
-        jetTestRunResult.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
-        jetBuildResult.task(":jetBuild").outcome == TaskOutcome.SUCCESS
+        result.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
+        result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 
     @Override
@@ -28,13 +27,4 @@ class CustomResourcesFunTest extends BaseFunTest {
         return "10-customresources"
     }
 
-    @Override
-    protected String projectName() {
-        return "HelloWorld"
-    }
-
-    @Override
-    protected String projectVersion() {
-        return "1.0-SNAPSHOT"
-    }
 }

@@ -2,7 +2,7 @@ package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
 
-class MultiAppFunTest extends BaseFunTest {
+class MultiAppFunTest extends BaseFunTest implements HelloWorldProject {
 
     def "jetBuild task builds simple multiapp application"() {
         when:
@@ -22,13 +22,4 @@ class MultiAppFunTest extends BaseFunTest {
         return "06-multiapp"
     }
 
-    @Override
-    protected String projectName() {
-        return "HelloWorld"
-    }
-
-    @Override
-    protected String projectVersion() {
-        return "1.0-SNAPSHOT"
-    }
 }

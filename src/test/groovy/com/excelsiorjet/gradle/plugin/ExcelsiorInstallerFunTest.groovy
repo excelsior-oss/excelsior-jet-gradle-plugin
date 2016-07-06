@@ -5,14 +5,13 @@ import org.gradle.testkit.runner.TaskOutcome
 class ExcelsiorInstallerFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple swing application and packs it with excelsior installer"() {
-        when:
-        def result = runGradle('jetBuild')
-
-        boolean isWindows = System.properties['os.name'].contains("Windows");
-        boolean isOX = System.properties['os.name'].contains("OS X");
-        String ext = isWindows ? ".exe" : ""
+        setup:
+        boolean isOX = osName.contains("OS X");
         File installer = new File(basedir, "build/jet/HelloSwing-1.2.3-SNAPSHOT" + ext)
         File versionRes = new File(basedir, "build/jet/build/jetpdb/version.rc");
+
+        when:
+        def result = runGradle('jetBuild')
 
         then:
         buildExeFile.exists()

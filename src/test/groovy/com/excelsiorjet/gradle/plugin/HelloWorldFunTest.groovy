@@ -2,7 +2,7 @@ package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
 
-class HelloWorldFunTest extends BaseFunTest {
+class HelloWorldFunTest extends BaseFunTest implements HelloWorldProject {
 
     def "jetBuild task builds simple application"() {
         when:
@@ -12,23 +12,14 @@ class HelloWorldFunTest extends BaseFunTest {
         buildExeFile.exists()
         appExeFile.exists()
         zipFile.exists()
+
         checkStdOutContains(appExeFile, "Hello World")
+
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 
-
-    @Override
-    protected String testProjectDir() {
+    public String testProjectDir() {
         return "01-helloworld"
     }
 
-    @Override
-    protected String projectName() {
-        return "HelloWorld"
-    }
-
-    @Override
-    protected String projectVersion() {
-        return "1.0-SNAPSHOT"
-    }
 }

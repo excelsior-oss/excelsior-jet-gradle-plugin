@@ -5,13 +5,12 @@ import org.gradle.testkit.runner.TaskOutcome
 class ExcelsiorInstallerAdvancedFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple swing application and packs it with excelsior installer with cyrillic eula and splash in custom location"() {
+        setup:
+        boolean isOX = osName.contains("OS X");
+        File installer = new File(basedir, "build/jet/HelloSwing-1.2.3-SNAPSHOT" + ext)
+
         when:
         def result = runGradle('jetBuild')
-
-        boolean isWindows = System.properties['os.name'].contains("Windows");
-        boolean isOX = System.properties['os.name'].contains("OS X");
-        String ext = isWindows ? ".exe" : ""
-        File installer = new File(basedir, "build/jet/HelloSwing-1.2.3-SNAPSHOT" + ext)
 
         then:
         buildExeFile.exists()

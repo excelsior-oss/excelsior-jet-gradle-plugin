@@ -20,10 +20,11 @@ abstract class BaseFunTest extends Specification {
         zipFile = new File(basedir, "build/jet/${projectName()}-" + projectVersion() + ".zip")
     }
 
-    protected def runGradle(String tasksToExecute) {
+    protected def runGradle(String... tasksToExecute) {
+        def args = (tasksToExecute as List) + ("-DexcelsiorJetPluginVersion=" + pluginVersion)
         return GradleRunner.create()
                 .withProjectDir(basedir)
-                .withArguments("-DexcelsiorJetPluginVersion=" + pluginVersion, tasksToExecute)
+                .withArguments(args)
                 .withDebug(true)
                 .build()
     }
