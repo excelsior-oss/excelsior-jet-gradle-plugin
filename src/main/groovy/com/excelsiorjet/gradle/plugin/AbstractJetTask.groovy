@@ -36,7 +36,7 @@ class AbstractJetTask extends DefaultTask {
 
     protected JetProject createJetProject() {
         ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
-        def jetProject = new JetProject(project.name, ext.getGroupId(), ext.getVersion(), ApplicationType.PLAIN, project.buildDir, ext.getJetResourcesDir())
+        def jetProject = new JetProject(project.name, ext.getGroupId(), ext.getVersion(), ext.appType, project.buildDir, ext.getJetResourcesDir())
 
         // getters should be used to fallback into convention mapping magic, when field is not set
         jetProject.dependencies(getDependencies(project))
@@ -45,6 +45,7 @@ class AbstractJetTask extends DefaultTask {
                 .jetOutputDir(ext.getJetOutputDir())
                 .mainClass(ext.getMainClass())
                 .mainJar(ext.getMainJar())
+                .mainWar(ext.getMainWar())
                 .outputName(ext.getOutputName())
                 .packageFilesDir(ext.getPackageFilesDir())
                 .version(ext.getVersion())
@@ -72,6 +73,7 @@ class AbstractJetTask extends DefaultTask {
                 .protectData(ext.getProtectData())
                 .cryptSeed(ext.getCryptSeed())
                 .optRtFiles(ext.getOptRtFiles())
+                .tomcatConfiguration(ext.getTomcat())
 
         return jetProject
     }

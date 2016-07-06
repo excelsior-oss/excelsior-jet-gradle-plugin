@@ -21,11 +21,13 @@
 */
 package com.excelsiorjet.gradle.plugin
 
+import com.excelsiorjet.api.tasks.ApplicationType
 import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
 import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
 import com.excelsiorjet.api.tasks.config.SlimDownConfig
 import com.excelsiorjet.api.tasks.config.TomcatConfig
 import com.excelsiorjet.api.tasks.config.TrialVersionConfig
+import groovy.transform.PackageScope
 
 /**
  * Gradle Extension class for Excelsior JET Gradle Plugin.
@@ -108,6 +110,12 @@ class ExcelsiorJetExtension {
      * The default is the main project artifact, if it is a jar file.
      */
     File mainJar
+
+    /**
+     * The main web application archive.
+     * The default is the main project artifact, if it is a war file.
+     */
+    File mainWar
 
     /**
      * Name of the final artifact of the project. Used as the default value for {@link #mainJar},
@@ -357,12 +365,26 @@ class ExcelsiorJetExtension {
      * @see TomcatConfig#hideConfig
      * @see TomcatConfig#genScripts
      */
-    TomcatConfig tomcat
+    TomcatConfig tomcat = new TomcatConfig()
 
     def tomcat(Closure closure) {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.delegate = tomcat
         closure()
+    }
+
+    // appType is package private property in Java terms
+    @PackageScope
+    ApplicationType appType
+
+    @PackageScope
+    ApplicationType getAppType() {
+        return this.appType
+    }
+
+    @PackageScope
+    void setAppType(ApplicationType appType) {
+        this.appType = appType
     }
 
 }
