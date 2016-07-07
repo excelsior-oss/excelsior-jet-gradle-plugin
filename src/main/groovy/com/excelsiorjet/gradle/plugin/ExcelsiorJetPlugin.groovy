@@ -92,8 +92,10 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         extension.conventionMapping.mainJar = {
             new File(project.tasks.getByPath(taskPath(project, "jar")).archivePath as String)
         }
-        extension.conventionMapping.mainWar = {
-            new File(project.tasks.getByPath(taskPath(project, "war")).archivePath as String)
+        if (appType == ApplicationType.TOMCAT) {
+            extension.conventionMapping.mainWar = {
+                new File(project.tasks.getByPath(taskPath(project, "war")).archivePath as String)
+            }
         }
         extension.conventionMapping.jetHome = { System.getProperty("jet.home") }
         extension.conventionMapping.jetResourcesDir = {
