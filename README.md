@@ -22,13 +22,13 @@ separately. The supported platforms are Windows (32- and 64-bit), Linux (32- and
 This plugin will transform your application into an optimized native executable for the platform
 on which you run Gradle, and place it into a separate directory together with all required
 Excelsior JET runtime files. In addition, it can either pack that directory into a zip archive
-(all platforms), create an Excelsior Installer setup (Windows and Linux only)
-or an OS X application bundle/installer.
+(all platforms), create an Excelsior Installer setup (Windows and Linux only),
+or create an OS X application bundle/installer.
 
 The current version of the plugin can handle only one type of applications:
 
 * **Plain Java SE applications**, i.e. applications that have a main class
-and have all their dependencies explicitly listed in the JVM classpath at launch time, and
+and have all their dependencies explicitly listed in the JVM classpath at launch time.
 
 In other words, if your application can be launched using a command line
 of the following form:
@@ -75,7 +75,7 @@ set the `mainClass` parameter, and use the following command line to build the a
 gradlew jetBuild
 ```
 
-**Note:** Excelsior JET Gradle plugin requires, that Java plugin is applied preliminarily: ```apply plugin: 'java'```
+**Note:** The Excelsior JET Gradle plugin requires the Java plugin be applied beforehand: ```apply plugin: 'java'```
 
 ### Excelsior JET Installation Directory Lookup
 
@@ -141,12 +141,12 @@ to re-use them during automatic application builds without performing a Test Run
 
 It is recommended to perform a Test Run at least once before building your application.
 
-Note: 64-bit versions of Excelsior JET do not collect `.usg` profiles yet.
+**Note:** 64-bit versions of Excelsior JET do not collect `.usg` profiles yet.
   So it is recommended to perform a Test Run on the 32-bit version of Excelsior JET at least once.
 
 The profiles will be used by the Startup Optimizer and the Global Optimizer (see below).
 
-Note: During a Test Run, the application executes in a special profiling mode,
+**Note:** During a Test Run, the application executes in a special profiling mode,
   so disregard its modest start-up time and performance.
 
 ### Configurations other than `mainClass`
@@ -154,8 +154,8 @@ Note: During a Test Run, the application executes in a special profiling mode,
 For a complete list of parameters, look into the Javadoc of field declarations
 of the
 [ExcelsiorJetExtension](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/blob/master/src/main/groovy/com/excelsiorjet/gradle/plugin/ExcelsiorJetExtension.groovy) class.
-Most of them have default values derived from your `build.gradle` project
-such as `outputName` parameter specifying resulting executable name.
+Most of them have default values derived from your `build.gradle` project,
+such as the `outputName` parameter specifying the name of the resulting executable.
 
 There are also two useful Windows-specific configuration parameters:
 
@@ -203,11 +203,11 @@ to create Excelsior Installer setups on Windows and Linux and an application bun
 
 Excelsior Installer setup, in turn, has the following configurations:
 
-* `product = <product-name>` - default is *<project.name>*
+* `product = `&nbsp;*` product-name`* - default is `<project.name>`
 
-* `vendor = <vendor-name>` -  default is *<project.group>*
+* `vendor = `&nbsp;*`vendor-name`* -  default is `<project.group>`
 
-* `version = <product-version>` - default is *<project.version>*
+* `version = `&nbsp;*`product-version`* - default is `<project.version>`
 
 The above parameters are also used by Windows Version Information and OS X bundle configurations.
 
@@ -220,11 +220,11 @@ excelsiorInstaller {
 
 that has the following configuration parameters:
 
-* `eula = <end-user-license-agreement-file>` - default is *<project.projectDir>/src/main/jetresources/eula.txt*
+* `eula = `&nbsp;*`end-user-license-agreement-file`* - default is `<project.projectDir>/src/main/jetresources/eula.txt`
 
-* `eulaEncoding = <eula-file-encoding>` - default is *autodetect*. Supported encodings are US-ASCII (plain text), UTF16-LE
+* `eulaEncoding = `&nbsp;*`eula-file-encoding`* - default is `autodetect`. Supported encodings are `US-ASCII` (plain text), `UTF16-LE`
 
-* `installerSplash = <installer-splash-screen-image>` - default is *<project.projectDir>/src/main/jetresources/installerSplash.bmp*
+* `installerSplash = `&nbsp;*`installer-splash-screen-image`* - default is `<project.projectDir>/src/main/jetresources/installerSplash.bmp`
 
 #### Creating OS X application bundles and installers
 
@@ -260,8 +260,8 @@ but to distribute your application to your customers you probably need to sign i
 OS X installer (`.pkg` file).
 The plugin enables you to do that using the following parameters under `osxBundle` section:
 
-* `developerId = <developer-identity-certificate>` - "Developer ID Application" or "Mac App Distribution" certificate name for signing resulting OSX app bundle with `codesign` tool.
-* `publisherId = <publisher-identity-certificate>` - "Developer ID Installer" or "Mac Installer Distribution"
+* `developerId = `&nbsp;*`developer-identity-certificate`* - "Developer ID Application" or "Mac App Distribution" certificate name for signing resulting OSX app bundle with `codesign` tool.
+* `publisherId = `&nbsp;*`publisher-identity-certificate`* - "Developer ID Installer" or "Mac Installer Distribution"
 certificate name for signing the resulting OS X Installer Package (`.pkg` file) with the `productbuild` tool.
 
 If you do not want to expose above parameters via `build.gradle`, you may pass them as system properties
@@ -286,15 +286,21 @@ The values of `product` and `vendor` configurations are used verbatim as
 `ProductName` and `CompanyName` respectively;
 other defaults can be changed using the following configuration parameters:
 
-* `winVIVersion = <version-string>` - version number (both `FileVersion` and `ProductVersion` strings are set to this same value)
+  * `winVIVersion =`&nbsp;*`version-string`*
+ 
+    Version number (both `FileVersion` and `ProductVersion` strings are set to this same value)
 
     **Notice:** unlike Gradle `project.version`, this string must have format `v1.v2.v3.v4`, where vi is a number.
     The plugin would use heuristics to derive a correct version string from the specified value if the latter
     does not meet this requirement, or from `project.version` if this configuration is not present.
 
-* `winVICopyright = <legal-copyright> - `LegalCopyright` string, with default value derived from other parameters
+  * `winVICopyright =`&nbsp;*`legal-copyright`*
 
-* `winVIDescription = <executable-description>` - `FileDescription` string, default is `project.name`
+    `LegalCopyright` string, with default value derived from other parameters
+
+  * `winVIDescription =`&nbsp;*`executable-description`*
+
+    `FileDescription` string, default is `project.name`
 
 #### Multi-app Executables
 
@@ -391,7 +397,7 @@ configuration:
 You may also specify the duration of the profiling session in seconds by specifying the following
 configuration:
 
-`profileStartupTimeout = <duration-in-seconds>`
+`profileStartupTimeout =`&nbsp;*`duration-in-seconds`*
 
 As soon as the specified period elapses, profiling stops and the application is automatically terminated,
 so ensure that the timeout value is large enough to capture all actions the application normally carries out
@@ -456,7 +462,7 @@ and detaches the respective JET Runtime components from the installation package
 Alternatively, you may enforce detaching of particular components using the following parameter
 under the `javaRuntimeSlimDown` configuration section:
 
-`detachComponents = <comma-separated list of APIs>`
+`detachComponents =`&nbsp;*`comma-separated list of APIs`*
 
 Available detachable components: `corba, management, xml, jndi, jdbc, awt/java2d, swing, jsound, rmi, jax-ws`
 
@@ -496,7 +502,7 @@ You can also set a particular, fixed expiration date by using the `expireDate` p
 instead of `expireInDays`. The format of the `expireDate` parameter value
 is *ddMMMyyyy*, for example `15Sep2020`.
 
-**Note:** If you choose the `excelsior-installer` `packaging` type, the generated setup
+**Note:** If you choose the `"excelsior-installer"` `packaging` type, the generated setup
 package will also expire, displaying the same message to the user.
 
 One common usage scenario of this functionality is setting the hard expiration date further into the future,
