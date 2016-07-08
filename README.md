@@ -57,7 +57,7 @@ you need to add the plugin dependency in the `buildscript{}` configuration of th
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.7.0'
+    ext.jetPluginVersion = '0.7.0'
     repositories {
         mavenCentral()
     }

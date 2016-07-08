@@ -39,6 +39,20 @@ class ExcelsiorJetExtension {
 
     public static final String EXTENSION_NAME = "excelsiorJet"
 
+    // appType is package private property in Java terms
+    @PackageScope
+    ApplicationType appType
+
+    @PackageScope
+    ApplicationType getAppType() {
+        return this.appType
+    }
+
+    @PackageScope
+    void setAppType(ApplicationType appType) {
+        this.appType = appType
+    }
+
     /**
      * Excelsior JET installation directory.
      * If unspecified, the plugin uses the following algorithm to set the value of this property:
@@ -371,20 +385,6 @@ class ExcelsiorJetExtension {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.delegate = tomcat
         closure()
-    }
-
-    // appType is package private property in Java terms
-    @PackageScope
-    ApplicationType appType
-
-    @PackageScope
-    ApplicationType getAppType() {
-        return this.appType
-    }
-
-    @PackageScope
-    void setAppType(ApplicationType appType) {
-        this.appType = appType
     }
 
 }

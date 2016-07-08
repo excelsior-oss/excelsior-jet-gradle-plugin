@@ -65,7 +65,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             appType = ApplicationType.PLAIN
             archiveTaskName = 'jar'
         } else {
-            throw new ProjectConfigurationException(Txt.s("ExcelsiorJetGradlePlugin.ProjectGroupIsNotSet"), null)
+            throw new ProjectConfigurationException(Txt.s("ExcelsiorJetGradlePlugin.NoJarOrWarPluginsFound"), null)
         }
 
         def jetTestRun = target.tasks.create("jetTestRun", JetTestRunTask)
@@ -89,10 +89,11 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         }
         extension.conventionMapping.packaging = { JetProject.ZIP }
         extension.conventionMapping.artifactName = { getArchiveName(project.tasks.getByPath(taskPath(project, "jar"))) }
-        extension.conventionMapping.mainJar = {
-            new File(project.tasks.getByPath(taskPath(project, "jar")).archivePath as String)
-        }
-        if (appType == ApplicationType.TOMCAT) {
+        if (appType == ApplicationType.PLAIN) {
+            extension.conventionMapping.mainJar = {
+                new File(project.tasks.getByPath(taskPath(project, "jar")).archivePath as String)
+            }
+        } else if (appType == ApplicationType.TOMCAT) {
             extension.conventionMapping.mainWar = {
                 new File(project.tasks.getByPath(taskPath(project, "war")).archivePath as String)
             }
