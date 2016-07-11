@@ -583,7 +583,7 @@ excelsiorJet {
 }
 ```
 
-and the set the `tomcatHome` parameter, which has to point to the *master* Tomcat installation &mdash; basically,
+and then set the `tomcatHome` parameter, which has to point to the *master* Tomcat installation &mdash; basically,
 a clean Tomcat instance that was never launched.
 
 You may also set the above parameter by passing the `tomcat.home` system property on the Gradle command line as follows:
@@ -692,7 +692,7 @@ of a Test Run. You may launch it from any standard Tomcat installation.
 
 ## Release Notes
 
-Version 0.7.0
+Version 0.7.0 (12-Jul-2016)
 
 * Compilation of Tomcat Web applications is supported
 
