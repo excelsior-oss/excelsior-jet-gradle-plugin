@@ -557,8 +557,8 @@ The next version of Excelsior JET will support Tomcat 8 and Tomcat 7.0.63+ versi
 For now, please stick to Tomcat 7.0.62 or earlier.
 
 #### Usage
-The plugin will treat your Gradle project as a Tomcat Web application project if `war` plugin is applied **before** `excelsiorJet` plugin.
-To enable native compilation of your Tomcat Web application, you need to add the plugin dependency in the `buildscript` configuration of the `build.gradle` file, such as:
+The plugin will treat your Gradle project as a Tomcat Web application project if the `war` plugin is applied **before** the `excelsiorJet` plugin.
+To enable native compilation of your Tomcat Web application, you need to add the plugin dependency to the `buildscript` configuration of the `build.gradle` file, e.g.:
 
 ```gradle
 buildscript {
@@ -572,7 +572,7 @@ buildscript {
 }
 ```
 
-and then apply and configure `excelsiorJet` plugin as:
+then apply and configure the `excelsiorJet` plugin as follows:
 
 ```gradle
 apply plugin: 'excelsiorJet'
@@ -583,7 +583,7 @@ excelsiorJet {
 }
 ```
 
-and set the `tomcatHome` parameter, which has to point to the *master* Tomcat installation &mdash; basically,
+and the set the `tomcatHome` parameter, which has to point to the *master* Tomcat installation &mdash; basically,
 a clean Tomcat instance that was never launched.
 
 You may also set the above parameter by passing the `tomcat.home` system property on the Gradle command line as follows:
@@ -685,9 +685,10 @@ You can launch your Tomcat Web application on Excelsior JET JVM using a JIT comp
 before pre-compiling it to native code using the `jetTestRun` task the same way as with plain Java SE applications.
 
 However, please note that a running Tomcat instance would not terminate until you run its standard `shutdown` script.
-Technically, you can terminate it using <key>Ctrl-C</key>, but that would terminate the entire Gradle build and would not constitute a correct Tomcat termination.
-So it is recommended to use the standard Tomcat `shutdown` script for correct Tomcat termination at the end of a Test Run.
-You may launch it from any standard Tomcat installation.
+Technically, you can terminate it using <key>Ctrl-C</key>, but that would terminate the entire Gradle build
+and would not constitute a correct Tomcat termination.
+So it is recommended to use the standard Tomcat `shutdown` script for correct Tomcat termination at the end
+of a Test Run. You may launch it from any standard Tomcat installation.
 
 ## Release Notes
 
