@@ -134,7 +134,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
         // Map Gradle SourceSet objects to sources root
         List<File> allCodeSrcDirs = allCodeSourceSets.collect({ it.srcDirs }).flatten() as List<File>
-        def guessedGroups = allCodeSrcDirs.collect { Utils.guessGroupId(it) }
+        def guessedGroups = allCodeSrcDirs.collect { guessGroupId(it) }
         def guessedGroup = guessedGroups.find { it != null }
         if (guessedGroup != null) {
             project.logger.warn(Txt.s("ExcelsiorJetGradlePlugin.ProjectGroupIsGuessed", guessedGroup))
@@ -164,5 +164,30 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         } else {
             return ":${target.name}:$taskName"
         }
+    }
+
+    /**
+     * Tries to guess groupId by given sources root.
+     * If given sources root is not directory or do not contain subdirectories returns {@code null}.
+     * Otherwise group id is formed from first subdirectory and, if exists, first subdirectory if that directory names joined with '.'.
+     */
+    private static String guessGroupId(File sourcesRoot) {
+        if (!sourcesRoot.isDirectory()) {
+            return null
+        }
+
+        def firstLevelDirs = sourcesRoot.listFiles({File f -> f.isDirectory()} as FileFilter)
+        if (firstLevelDirs == null || firstLevelDirs.size() == 0) {
+            return null
+        }
+        def firstDir = firstLevelDirs.first()
+
+        def secondLevelDirs = firstDir.listFiles({File f -> f.isDirectory()} as FileFilter)
+        if (secondLevelDirs == null || secondLevelDirs.size() == 0) {
+            return firstDir.name
+        }
+        def secondDir = secondLevelDirs.first()
+
+        return "${firstDir.name}.${secondDir.name}"
     }
 }

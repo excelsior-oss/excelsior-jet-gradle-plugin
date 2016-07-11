@@ -10,12 +10,11 @@ buildscript {
 }
 
 apply plugin: "java"
-group = "com.excelsior.it"
 version = "1.0-SNAPSHOT"
 
 apply plugin: 'excelsiorJet'
 excelsiorJet {
-    mainClass 'HelloSwing'
+    mainClass 'com.excelsior.HelloSwing'
     profileStartup false
     packaging 'osx-app-bundle'
 }

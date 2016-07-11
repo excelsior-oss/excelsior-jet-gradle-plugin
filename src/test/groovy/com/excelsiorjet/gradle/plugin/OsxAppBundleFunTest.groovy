@@ -14,6 +14,7 @@ class OsxAppBundleFunTest extends BaseFunTest {
             appExeFile.exists()
             infoPlist.exists()
             infoPlist.text.contains("CFBundleIconFile")
+            infoPlist.text.contains("com.excelsior")
         }
     }
 
