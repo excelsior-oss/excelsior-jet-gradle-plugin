@@ -104,7 +104,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         }
         extension.conventionMapping.groupId = {
             if (project.group.toString().isEmpty() && (extension.vendor ?: "").isEmpty()) {
-                throw new ProjectConfigurationException(Txt.s("ExcelsiorJetGradlePlugin.ProjectGroupIsNotSet"), null)
+                return setGroupId(project)
             }
 
             if (project.group.toString().isEmpty()) {
@@ -116,6 +116,33 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
         extension.appType = appType
 
+    }
+
+    private String setGroupId(Object project) {
+        // see
+        // https://docs.gradle.org/current/javadoc/org/gradle/api/file/SourceDirectorySet.html
+        // https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/SourceSet.html
+        // https://docs.gradle.org/current/userguide/java_plugin.html#N1503E
+        // https://docs.gradle.org/current/dsl/org.gradle.api.tasks.SourceSet.html
+
+        // Get all Gradle SourceSet objects, that contains source code
+        def allCodeSourceSets = project.sourceSets.main.allSource.source.findAll({
+            // pattern: "main <<language> source|resources>",
+            // eg: "main Java source", "main resources"
+            (it.name as String).matches('^main \\w+ source$')
+        })
+
+        // Map Gradle SourceSet objects to sources root
+        List<File> allCodeSrcDirs = allCodeSourceSets.collect({ it.srcDirs }).flatten() as List<File>
+        def guessedGroups = allCodeSrcDirs.collect { Utils.guessGroupId(it) }
+        def guessedGroup = guessedGroups.find { it != null }
+        if (guessedGroup != null) {
+            project.logger.warn(Txt.s("ExcelsiorJetGradlePlugin.ProjectGroupIsGuessed", guessedGroup))
+            extension.groupId = guessedGroup
+        } else {
+            throw new ProjectConfigurationException(Txt.s("ExcelsiorJetGradlePlugin.ProjectGroupIsNotSet"), null)
+        }
+        return guessedGroup
     }
 
     private static String getArchiveName(Task jarTask) {
