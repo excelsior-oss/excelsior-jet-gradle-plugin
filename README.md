@@ -690,6 +690,25 @@ and would not constitute a correct Tomcat termination.
 So it is recommended to use the standard Tomcat `shutdown` script for correct Tomcat termination at the end
 of a Test Run. You may launch it from any standard Tomcat installation.
 
+## Sample Project
+
+To demonstrate the process and result of plugin usage, we have forked the [Pax Britannica](https://github.com/libgdx/libgdx-demo-pax-britannica) Libgdx demo project on GitHub,
+added the Excelsior JET plugin to its `build.gradle` file, and run it through Gradle to build native binaries for three platforms.
+
+You can download the binaries from here:
+
+* [Windows (32-bit, 27MB installer)](http://www.excelsior-usa.com/download/jet/gradle/pax-britannica-windows-x86.exe)
+* [OS X (64-bit, 50MB installer)](http://www.excelsior-usa.com/download/jet/gradle/pax-britannica-osx-amd64.pkg)
+* [Linux (64-bit, 37MB installer)](http://www.excelsior-usa.com/download/jet/gradle/pax-britannica-linux-amd64.bin)
+
+or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britannica) and build it yourself:
+
+```
+    git clone https://github.com/excelsior-oss/libgdx-demo-pax-britannica
+    cd libgdx-demo-pax-britannica
+    gradlew :desktop:jetBuild
+```
+
 ## Release Notes
 
 Version 0.7.0 (12-Jul-2016)
