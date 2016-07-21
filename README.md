@@ -578,7 +578,7 @@ then apply and configure the `excelsiorJet` plugin as follows:
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     tomcat {
-        tomcatHome ""
+        tomcatHome = ""
     }
 }
 ```
