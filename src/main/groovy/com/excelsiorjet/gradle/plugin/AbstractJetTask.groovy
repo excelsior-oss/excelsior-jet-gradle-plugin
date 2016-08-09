@@ -52,6 +52,9 @@ class AbstractJetTask extends DefaultTask {
                 .jetHome(ext.getJetHome())
                 .hideConsole(ext.getHideConsole())
                 .icon(ext.getIcon())
+                .splash(ext.getSplash())
+                .inlineExpansion(ext.getInlineExpansion())
+                .stackTraceSupport(ext.getStackTraceSupport())
                 .execProfilesDir(ext.getExecProfilesDir())
                 .execProfilesName(ext.getExecProfilesName())
                 .jvmArgs(ext.getJvmArgs())
@@ -73,6 +76,8 @@ class AbstractJetTask extends DefaultTask {
                 .protectData(ext.getProtectData())
                 .cryptSeed(ext.getCryptSeed())
                 .optRtFiles(ext.getOptRtFiles())
+                .locales(ext.getLocales())
+                .compilerOptions(ext.getCompilerOptions())
                 .tomcatConfiguration(ext.getTomcat())
 
         return jetProject
