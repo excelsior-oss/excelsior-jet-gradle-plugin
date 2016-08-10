@@ -167,16 +167,36 @@ of the
 Most of them have default values derived from your `build.gradle` project,
 such as the `outputName` parameter specifying the name of the resulting executable.
 
+#### Application appearance
+**New in 0.7.1:**
+
+If the startup of your client application takes longer than you would have liked,
+the thumb rule is to show a splash screen.
+A splash screen provides visial feedback about the loading process to the end user, and
+gives you an opportunity to display information about your product and company.
+The splash screen functionality appeared in the Java API since Java SE 6. For more details, see
+http://docs.oracle.com/javase/tutorial/uiswing/misc/splashscreen.html
+
+If the splash image has been specified in the manifest of the application JAR file,
+the respective image will be obtained automatically,
+otherwise, you may assign a splash screen image to the application manually:
+
+`splash = `&nbsp;*`splash-image-file`*
+
+It is recommended to store the splash image in a VCS, and if you place it at
+`<project.projectDir>/src/main/jetresources/splash.png`, you won't need to specify it
+in the configuration explicitly. The plugin uses the location `<project.projectDir>/src/main/jetresources`
+for other Excelsior JET-specific resource files (such as the EULA for Excelsior Installer setups).
+
 There are also two useful Windows-specific configuration parameters:
 
 `hideConsole = true` – hide console
 
-`icon = <icon-file>` – set executable icon (in Windows .ico format)
+`icon = `&nbsp;*`icon-file`*  – set executable icon (in Windows .ico format)
 
-It is recommended to place the executable icon into a VCS, and if you place it to
-`<project.projectDir>/src/main/jetresources/icon.ico`, you do not need to explicitly specify it
-in the configuration. The plugin uses the location `<project.projectDir>/src/main/jetresources`
-for other Excelsior JET-specific resource files (such as the EULA for Excelsior Installer setups).
+Just as it works for the splash image, if you place the icon file at
+`<project.projectDir>/src/main/jetresources/icon.ico`, you won't need to specify it
+in the configuration explicitly.
 
 #### Customizing Package Content
 
@@ -184,7 +204,7 @@ By default, the final package contains just the resulting executable and the nec
 However, you may want the plugin to add other files to it: README, license, media, help files,
 third-party native libraries, and so on. For that, add the following configuration parameter:
 
-`packageFilesDir = <extra-package-files-directory>`
+`packageFilesDir = `&nbsp;*`extra-package-files-directory`*
 
 referencing a directory with all such extra files that you need added to the package.
 The contents of the directory will be copied recursively to the final package.
@@ -311,6 +331,42 @@ other defaults can be changed using the following configuration parameters:
   * `winVIDescription =`&nbsp;*`executable-description`*
 
     `FileDescription` string, default is `project.name`
+
+#### Stack trace support
+**New in 0.7.1:**
+
+The Excelsior JET Runtime supports three modes of stack trace printing: `minimal`, `full`, and `none`.
+
+In the `minimal` mode (default), line numbers and names of some methods are omitted in call stack entries,
+but class names are exact.
+
+In the `full` mode, the stack trace info includes all line numbers and method names.
+However, enabling the full stack trace has a side effect &mdash; substantial growth of the resulting executable in size, approximately by 30%.
+
+In the `none` mode, `Throwable.printStackTrace()` methods print a few fake elements.
+It may result in a performance improvement, if the application throws and catches exceptions repeatedly.
+Note, however, that certain third-party APIs rely on stack trace printing. One example is the Log4J API that provides logging services.
+
+To set the stack trace support mode, use the `stackTraceSupport` configuration parameter:
+
+`stackTraceSupport =`&nbsp;*`stack-trace-mode`*
+
+#### Method Inlining
+**New in 0.7.1:**
+
+When optimizing a Java program, the compiler often replaces method call statements with bodies of the methods
+that would be called at run time. This optimization, known as method inlining, improves application performance,
+especially when tiny methods, such as get/set accessors, are inlined.
+However, inlining of larger methods increases code size, and its impact on performance may be uncertain.
+To control the aggressiveness of method inlining, use the `inlineExpansion` plugin parameter:
+
+`inlineExpansion =`&nbsp;*`inline-expasnion-mode`*
+
+The available modes are:
+  `aggressive` (default), `very-aggressive`, `medium`, `low`, and `tiny-methods-only`
+
+If you need to reduce the size of the executable, opt for the `low` or `tiny-methods-only` setting.
+Note that it does not necessarily worsen application performance.
 
 #### Multi-app Executables
 
@@ -441,6 +497,45 @@ To enable the Global Optimizer, add the following configuration parameter:
 
 **Note:** performing a Test Run is mandatory if the Global Optimizer is enabled.
 
+#### Optional Runtime Components Configurations
+
+##### Locales and charsets
+**New in 0.7.1:**
+
+Additional locales and character encoding sets that may potentially be in use in the regions
+where you distribute your application can be added to the package with the following configuration:
+
+```gradle
+locales = ["Locale"`, "Locale2"]
+```
+
+You may specify `["all"]` as the value of `locales` to add all locales and charsets at once or
+`["none"]` to not include any of them.
+The available sets of locales and encodings are:
+
+`European`, `Indonesian`, `Malay`, `Hebrew`, `Arabic`, `Chinese`, `Japanese`, `Korean`, `Thai`,
+`Vietnamese`, `Hindi`, `Extended_Chinese`, `Extended_Japanese`, `Extended_Korean`, `Extended_Thai`,
+`Extended_IBM`, `Extended_Macintosh`, `Latin_3`
+
+By default, only the `European` locales are added.
+
+##### Optional components
+To include optional JET Runtime components in the package, use the following configuration:
+
+```gradle
+optRtFiles = ["optRtFile1", "optRtFile2"]
+```
+
+You may specify `["all"]` as the value of `optRtFiles` to add all components at once or
+`["none"]` to not include any of them.
+
+The available optional components are:
+
+`runtime_utilities`, `fonts`, `awt_natives`, `api_classes`, `jce`, `accessibility`, `javafx`, `javafx-webkit`, `nashorn`, `cldr`
+
+*Note:* by default, the plugin automatically includes the optional components which the compiler detected
+   as used when building the executable(s).
+
 #### Java Runtime Slim-Down Configurations
 
 The 32-bit versions of Excelsior JET feature Java Runtime Slim-Down, a unique
@@ -531,8 +626,25 @@ to be visible in the resulting executable, enable data protection by specifying 
 For more details on data protection, refer to the "Data Protection" section of
 the "Intellectual Property Protection" chapter of the Excelsior JET User's Guide.
 
+#### Additional Compiler Options and Equations
+**New in 0.7.1:**
+
+The commonly used compiler options and equations are mapped to the parameters of the plugin.
+However the compiler also has some advanced options and equations that you may find in the
+Excelsior JET User's Guide, plus some troubleshooting settings that the Excelsior JET Support
+team may suggest you to use.
+You may enumerate such options using the `compilerOptions` configuration, for instance:
+
+```gradle
+compilerOptions = ["-disablestacktrace+", "-inlinetolimit=200"]
+```
+
+These options will be appended to Excelsior JET project file generated by the plugin.
+
+**Notice:** Care must be taken with using this parameter to avoid conflicts
+with other project parameters.
+
 ### Building Tomcat Web Applications
-**New in 0.7.0:**
 
 The plugin enables you to compile Apache Tomcat together with your Web applications down
 to a native binary using Excelsior JET. Compared to running your
@@ -711,6 +823,17 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
+Version 0.7.1 (??-Aug-2016)
+
+This release covers most of the compiler options that are available in the JET Control Panel UI,
+and all options of the `xpack` utility as of Excelsior JET 11.0 release:
+
+  * `splash` parameter introduced to control the appearance of your application on startup
+  * `inlineExpansion` parameter introduced to control aggressiveness of methods inlining
+  * `stackTraceSupport` parameter introduced to set stack trace support level
+  * `compilerOptions` parameter introduced to set advanced compiler options and equations
+  * `locales` parameter introduced to add additional locales and charsets to the resulting package
+
 Version 0.7.0 (12-Jul-2016)
 
 * Compilation of Tomcat Web applications is supported
@@ -724,14 +847,14 @@ Version 0.3.0 (06-Jul-2016)
 * Test Run Task implemented that enables:
    - running an application on the Excelsior JET JVM before pre-compiling it to native code
    - gathering application execution profiles to enable the Startup Optimizer
-* `<optRtFiles>` parameter introduced to add optional JET runtime components
+* `optRtFiles` parameter introduced to add optional JET runtime components
 * Reduced the download size and disk footprint of resulting packages by means of supporting:
    * Global Optimizer
    * Java Runtime Slim-Down
-* `<packageFilesDir>` parameter introduced to add extra files to the final package
+* `packageFilesDir` parameter introduced to add extra files to the final package
 * Trial version generation is supported
-* `<jvmArgs>` parameter introduced to define system properties and JVM arguments
-* `<protectData>` parameter added to enable data protection
+* `jvmArgs` parameter introduced to define system properties and JVM arguments
+* `protectData` parameter added to enable data protection
 * Mac OS X application bundles and installers support
 
 Version 0.1.0 (24-Jun-2016)
@@ -743,6 +866,7 @@ and placing it into a separate directory with required Excelsior JET runtime fil
 Even though we are going to base the plugin development on your feedback in the future, we have our own short-term plan as well.
 So the next few releases will add the following features:
 
+* Advanced dependencies management
 * Windows services support.
 * Multi-component support: building dependencies into separate native libraries
                            to reuse them across multiple Gradle project builds

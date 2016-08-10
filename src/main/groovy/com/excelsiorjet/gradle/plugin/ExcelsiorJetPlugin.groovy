@@ -87,7 +87,6 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
                 return project.version.toString()
             }
         }
-        extension.conventionMapping.packaging = { JetProject.ZIP }
         extension.conventionMapping.artifactName = { getArchiveName(project.tasks.getByPath(taskPath(project, "jar"))) }
         if (appType == ApplicationType.PLAIN) {
             extension.conventionMapping.mainJar = {
