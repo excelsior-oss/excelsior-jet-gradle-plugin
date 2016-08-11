@@ -57,7 +57,7 @@ you need to add the plugin dependency in the `buildscript{}` configuration of th
 
 ```gradle
 buildscript {
-    ext.jetPluginVersion = '0.7.0'
+    ext.jetPluginVersion = '0.7.1'
     repositories {
         mavenCentral()
     }
@@ -823,7 +823,7 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
-Version 0.7.1 (??-Aug-2016)
+Version 0.7.1 (10-Aug-2016)
 
 This release covers most of the compiler options that are available in the JET Control Panel UI,
 and all options of the `xpack` utility as of Excelsior JET 11.0 release:
