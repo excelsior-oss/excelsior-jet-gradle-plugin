@@ -458,4 +458,8 @@ class ExcelsiorJetExtension {
         closure()
     }
 
+    /**
+     * Command line arguments, that will be passed to program while startup accelerator profiling run and test run.
+     */
+    String[] programArgs = []
 }

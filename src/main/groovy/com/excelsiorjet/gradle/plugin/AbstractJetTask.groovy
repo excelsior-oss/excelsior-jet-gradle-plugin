@@ -79,6 +79,7 @@ class AbstractJetTask extends DefaultTask {
                 .locales(ext.getLocales())
                 .compilerOptions(ext.getCompilerOptions())
                 .tomcatConfiguration(ext.getTomcat())
+                .programArgs(ext.getProgramArgs())
 
         return jetProject
     }
