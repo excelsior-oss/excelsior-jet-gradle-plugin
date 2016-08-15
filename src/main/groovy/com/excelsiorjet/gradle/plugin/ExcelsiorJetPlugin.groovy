@@ -77,13 +77,6 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
         addJetBuildConventions(target)
 
-        // Override program args from system property
-        target.afterEvaluate {
-            String programArgs = System.properties["excelsiorJet.programArgs"]
-            if (programArgs != null) {
-                extension.programArgs = Utils.parseProgramArgs(programArgs)
-            }
-        }
     }
 
     private void addJetBuildConventions(Project project) {

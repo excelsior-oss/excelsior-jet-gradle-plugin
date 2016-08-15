@@ -21,7 +21,6 @@
 */
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.tasks.ApplicationType
 import com.excelsiorjet.api.tasks.ClasspathEntry
 import com.excelsiorjet.api.tasks.JetProject
 import org.gradle.api.DefaultTask
@@ -79,7 +78,7 @@ class AbstractJetTask extends DefaultTask {
                 .locales(ext.getLocales())
                 .compilerOptions(ext.getCompilerOptions())
                 .tomcatConfiguration(ext.getTomcat())
-                .programArgs(ext.getProgramArgs())
+                .runArgs(ext.getRunArgs())
 
         return jetProject
     }
