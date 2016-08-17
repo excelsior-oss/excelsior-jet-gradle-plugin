@@ -24,6 +24,7 @@ package com.excelsiorjet.gradle.plugin
 import com.excelsiorjet.api.tasks.ApplicationType
 import com.excelsiorjet.api.tasks.JetProject
 import com.excelsiorjet.api.util.Txt
+import com.excelsiorjet.api.util.Utils
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
@@ -75,6 +76,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         jetBuild.dependsOn(taskPath(target, archiveTaskName), taskPath(target, "test"))
 
         addJetBuildConventions(target)
+
     }
 
     private void addJetBuildConventions(Project project) {
@@ -175,13 +177,13 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             return null
         }
 
-        def firstLevelDirs = sourcesRoot.listFiles({File f -> f.isDirectory()} as FileFilter)
+        def firstLevelDirs = sourcesRoot.listFiles({ File f -> f.isDirectory() } as FileFilter)
         if (firstLevelDirs == null || firstLevelDirs.size() == 0) {
             return null
         }
         def firstDir = firstLevelDirs.first()
 
-        def secondLevelDirs = firstDir.listFiles({File f -> f.isDirectory()} as FileFilter)
+        def secondLevelDirs = firstDir.listFiles({ File f -> f.isDirectory() } as FileFilter)
         if (secondLevelDirs == null || secondLevelDirs.size() == 0) {
             return firstDir.name
         }

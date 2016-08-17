@@ -458,4 +458,11 @@ class ExcelsiorJetExtension {
         closure()
     }
 
+    /**
+     * Command line arguments that will be passed to the application during startup accelerator profiling and the test run.
+     * You may also set the parameter via the {@code jet.runArgs} system property, where arguments
+     * are comma separated (use "\" to escape commas within arguments,
+     * i.e. {@code -Djet.runArgs="arg1,Hello\, World"} will be passed to your application as {@code arg1 "Hello, World"})
+     */
+    String[] runArgs = []
 }
