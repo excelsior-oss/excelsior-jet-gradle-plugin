@@ -160,12 +160,11 @@ The profiles will be used by the Startup Optimizer and the Global Optimizer (see
   so disregard its modest start-up time and performance.
 
 **New in 0.7.2:**
-Your application may require command line arguments to run. If this is the case, set `runArgs` plugin parameter as:
+Your application may require command line arguments to run. If that is the case, set the `runArgs` plugin parameter as follows:
 ```gradle
 runArgs = ["arg1", "arg2"]
 ```
-You may also pass the arguments via the {@code jet.runArgs} system property, where arguments are comma separated (use "\" 
-to echo comma itself, i.e. {@code -Djet.runArgs="arg1,Hello\, World"} will be passed to your application as {@code arg1 "Hello, World"})
+You may also pass the arguments via the `jet.runArgs` system property, where arguments are comma-separated (use "\" to escape commas within arguments, e.g. `-Djet.runArgs="arg1,Hello\, World"` will be passed to your application as `arg1 "Hello, World"`)
 
 ### Configurations other than `mainClass`
 
@@ -472,7 +471,8 @@ so ensure that the timeout value is large enough to capture all actions the appl
 during startup. (It is safe to close the application manually if the profiling period proves to be excessively long.)
 
 **New in 0.7.2:**
-If your application requires command line arguments to run then set `runArgs` plugin parameter the same way as for [Test Run](#performing-a-test-run).
+If your application requires command line arguments to run, set the `runArgs` plugin parameter
+in the same way as for a [Test Run](#performing-a-test-run).
 
 #### Global Optimizer
 
@@ -826,7 +826,8 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 Version 0.7.2 (??-Aug-2016)
 
-This release adds possibility to specify run arguments for startup profiling run and test run.
+This release adds the capability to pass commmand-line arguments to the application
+during startup profiling and the test run.
 
 Version 0.7.1 (10-Aug-2016)
 
