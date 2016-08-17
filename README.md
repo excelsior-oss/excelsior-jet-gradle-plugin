@@ -164,7 +164,7 @@ Your application may require command line arguments to run. If that is the case,
 ```gradle
 runArgs = ["arg1", "arg2"]
 ```
-You may also pass the arguments via the `jet.runArgs` system property, where arguments are comma-separated (use "\" to escape commas within arguments, e.g. `-Djet.runArgs="arg1,Hello\, World"` will be passed to your application as `arg1 "Hello, World"`)
+You may also pass the arguments via the `jet.runArgs` system property, where arguments are comma-separated (use "`\`" to escape commas within arguments, e.g. `-Djet.runArgs="arg1,Hello\, World"` will be passed to your application as `arg1 "Hello, World"`)
 
 ### Configurations other than `mainClass`
 
