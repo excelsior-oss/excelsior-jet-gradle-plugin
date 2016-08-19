@@ -57,7 +57,7 @@ you need to add the plugin dependency in the `buildscript{}` configuration of th
 
 ```gradle
 buildscript {
-    ext.jetPluginVersion = '0.7.1'
+    ext.jetPluginVersion = '0.7.2'
     repositories {
         mavenCentral()
     }
@@ -675,7 +675,7 @@ To enable native compilation of your Tomcat Web application, you need to add the
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.7.0'
+    def jetPluginVersion = '0.7.2'
     repositories {
         mavenCentral()
     }
@@ -824,7 +824,7 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
-Version 0.7.2 (??-Aug-2016)
+Version 0.7.2 (19-Aug-2016)
 
 This release adds the capability to pass commmand-line arguments to the application
 during startup profiling and the test run.
