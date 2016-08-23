@@ -1,0 +1,78 @@
+buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+    }
+}
+
+apply plugin: "java"
+group = "com.excelsior.it"
+version = "1.0-SNAPSHOT"
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    mainClass = "AppWithDep"
+    dependencies {
+        dependency {
+            artifactId = 'commons-io'
+            pack = 'all'
+        }
+        dependency {
+            path = new File(project.projectDir, "lib/junit-4.8.2.jar")
+            pack = 'all'
+            protect = 'all'
+            optimize = 'all'
+        }
+        dependency {
+            artifactId = 'jackson-databind'
+            pack = 'none'
+        }
+        dependency {
+            artifactId = 'log4j'
+            pack = 'none'
+            packagePath = 'libs'
+        }
+        dependency {
+            path = new File(project.projectDir, "extDir")
+            pack = 'none'
+        }
+        dependency {
+            path = new File(project.projectDir, "extDir")
+            packagePath = 'extDirCp'
+            pack = 'none'
+        }
+        // xpack will halts with error if not packed resource would not be disabled
+        dependency {
+            path = new File(project.projectDir, "lib/google-collections-1.0.jar")
+            pack = 'none'
+            disableCopyToPackage = true
+        }
+        dependency {
+            groupId = 'com.fasterxml.jackson.core'
+            protect = 'all'
+        }
+        dependency {
+            groupId = 'com.fasterxml.jackson.core'
+            artifactId = 'jackson-core'
+            isLibrary = false
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+       dirs 'lib'
+   }
+}
+
+dependencies {
+    compile "org.apache.commons:commons-io:1.3.2"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.8.0"
+    compile "log4j:log4j:1.2.17"
+    compile name: "junit-4.8.2"
+}

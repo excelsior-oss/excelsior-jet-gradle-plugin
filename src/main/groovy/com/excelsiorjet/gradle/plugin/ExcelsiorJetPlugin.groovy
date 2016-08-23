@@ -24,7 +24,6 @@ package com.excelsiorjet.gradle.plugin
 import com.excelsiorjet.api.tasks.ApplicationType
 import com.excelsiorjet.api.tasks.JetProject
 import com.excelsiorjet.api.util.Txt
-import com.excelsiorjet.api.util.Utils
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
@@ -116,7 +115,6 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         }
 
         extension.appType = appType
-
     }
 
     private String setGroupId(Object project) {

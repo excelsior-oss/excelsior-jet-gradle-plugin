@@ -11,12 +11,14 @@ abstract class BaseFunTest extends Specification {
 
     File basedir = new File(getClass().getClassLoader().getResource(testProjectDir()).file)
     File appDir
+    File jetBuildDir
     File buildExeFile
     File appExeFile
     File zipFile
 
     void setup() {
         appDir = new File(basedir, "build/jet/app")
+        jetBuildDir = new File(basedir, "build/jet/build")
         buildExeFile = new File(basedir, "build/jet/build/${projectName()}$ext")
         appExeFile = new File(appDir, "${projectName()}$ext")
         zipFile = new File(basedir, "build/jet/${projectName()}-" + projectVersion() + ".zip")
