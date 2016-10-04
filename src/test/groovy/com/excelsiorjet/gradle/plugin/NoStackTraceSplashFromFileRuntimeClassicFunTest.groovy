@@ -2,7 +2,7 @@ package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
 
-class NolStackTraceSplashFromFilePackAllFunTest extends BaseFunTest implements HelloWorldProject {
+class NoStackTraceSplashFromFileRuntimeClassicFunTest extends BaseFunTest implements HelloWorldProject {
 
     def "jetBuild task builds application with no stack trace, splash from file, -pack=all"() {
         when:
@@ -22,13 +22,13 @@ class NolStackTraceSplashFromFilePackAllFunTest extends BaseFunTest implements H
         new File(basedir, "build/jet/build/HelloWorld_jetpdb/HelloWorld.rsp").text.contains("splash.png")
 
         //check -pack=all and splash from file (tmpres does not exist as no resources should be prepared)
-        !new File(basedir, "build/jet/build/HelloWorld_jetpdb/tmpres").exists()
+        new File(basedir, "build/jet/build/HelloWorld_jetpdb/HelloWorld.rsp").text.contains('-config=RuntimeKind:CLASSIC')
 
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }
 
     public String testProjectDir() {
-        return "18-nostacktrace-splashfromfile-packall"
+        return "18-nostacktrace-splashfromfile-runtimeclassic"
     }
 
 }

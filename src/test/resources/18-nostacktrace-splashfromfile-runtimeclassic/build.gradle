@@ -19,7 +19,7 @@ excelsiorJet {
     mainClass = "HelloWorld"
     stackTraceSupport = "none"
     inlineExpansion = "tiny-methods-only"
-    compilerOptions = ["-pack=all"]
+    compilerOptions = ["-jetrt=CLASSIC"]
 }
 
 repositories {

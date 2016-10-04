@@ -21,6 +21,7 @@
 */
 package com.excelsiorjet.gradle.plugin
 
+import com.excelsiorjet.api.ExcelsiorJet
 import com.excelsiorjet.api.tasks.JetProject
 import org.gradle.api.tasks.TaskAction
 
@@ -35,8 +36,10 @@ class JetBuildTask extends AbstractJetTask {
 
     @TaskAction
     def jetBuild() {
+        ExcelsiorJet excelsiorJet = new ExcelsiorJet(jetHome)
         JetProject jetProject = createJetProject()
-        new com.excelsiorjet.api.tasks.JetBuildTask(jetProject).execute()
+        new com.excelsiorjet.api.tasks.JetBuildTask(excelsiorJet, jetProject).execute()
     }
+
 
 }
