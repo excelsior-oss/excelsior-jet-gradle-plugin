@@ -85,8 +85,12 @@ class AbstractJetTask extends DefaultTask {
 
     static List<ClasspathEntry> getDependencies(Project project) {
         def configuration = project.configurations.getByName("compile")
-        return configuration.getResolvedConfiguration().getResolvedArtifacts().collect() {
+        def list = configuration.getResolvedConfiguration().getResolvedArtifacts().collect() {
             new ClasspathEntry(it.file, project.group.equals(it.moduleVersion.id.module.group))
         }
+        (configuration.collect() - configuration.getResolvedConfiguration().getResolvedArtifacts().collect()*.file).each {
+            list.add(new ClasspathEntry(it as File, false))
+        }
+        return list;
     }
 }
