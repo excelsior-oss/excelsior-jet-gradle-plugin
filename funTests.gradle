@@ -4,6 +4,8 @@
 
 test {
     systemProperty 'excelsiorJetPluginVersion', version
+    systemProperty 'jet.home', System.properties['jet.home']
+    systemProperty 'tomcat.home', System.properties['tomcat.home']
 }
 
 // put plugin into maven local before tests, so it's become available for tests

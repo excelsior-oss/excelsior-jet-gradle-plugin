@@ -24,36 +24,44 @@ class DependencyManagementFunTest extends BaseFunTest {
         zipFile.exists()
 
         dep.exists()
-        prj.text.contains("""!classpathentry lib/commons-io-1.3.2.jar
+
+        def prjText = prj.text.replaceAll("\r\n", "\n")
+        prjText.contains("""
+!classpathentry lib/commons-io-1.3.2.jar
   -optimize=autodetect
   -protect=nomatter
   -pack=all
 !end""")
 
         junitLib.exists()
-        prj.text.contains("""!classpathentry lib/junit-4.8.2.jar
+        prjText.contains("""
+!classpathentry lib/junit-4.8.2.jar
   -optimize=all
   -protect=all
   -pack=all
 !end""")
 
         jacksonDep.exists()
-        prj.text.contains("""!classpathentry lib/jackson-databind-2.8.0.jar
+        prjText.contains("""
+!classpathentry lib/jackson-databind-2.8.0.jar
   -optimize=autodetect
   -protect=all
   -pack=none
 !end""")
-        prj.text.contains("""!classpathentry lib/jackson-annotations-2.8.0.jar
+        prjText.contains("""
+!classpathentry lib/jackson-annotations-2.8.0.jar
   -optimize=autodetect
   -protect=all
 !end""")
-        prj.text.contains("""!classpathentry lib/jackson-core-2.8.0.jar
+        prjText.contains("""
+!classpathentry lib/jackson-core-2.8.0.jar
   -optimize=all
   -protect=all
 !end""")
 
         log4jDep.exists()
-        prj.text.contains("""!classpathentry libs/log4j-1.2.17.jar
+        prjText.contains("""
+!classpathentry libs/log4j-1.2.17.jar
   -optimize=autodetect
   -protect=nomatter
   -pack=none

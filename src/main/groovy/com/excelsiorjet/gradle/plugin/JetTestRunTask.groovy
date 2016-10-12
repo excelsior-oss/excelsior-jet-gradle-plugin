@@ -22,7 +22,6 @@
 package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.ExcelsiorJet
-import com.excelsiorjet.api.cmd.JetHome
 import com.excelsiorjet.api.tasks.JetProject
 import com.excelsiorjet.api.tasks.TestRunTask
 import org.gradle.api.tasks.TaskAction

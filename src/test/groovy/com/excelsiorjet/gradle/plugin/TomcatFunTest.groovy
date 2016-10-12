@@ -15,13 +15,17 @@ class TomcatFunTest extends BaseFunTest {
 
         new File(basedir, "build/jet/build/HelloTomcat_jetpdb/tmpres/ROOT/WEB-INF/lib/commons-io-1.3.2.jar").exists()
 
-        prjFile.text.contains("""!classloaderentry webapp webapps/ROOT:/WEB-INF/lib/commons-io-1.3.2.jar
+
+        def prjText = prjFile.text.replaceAll("\r\n", "\n")
+        prjText.contains("""
+!classloaderentry webapp webapps/ROOT:/WEB-INF/lib/commons-io-1.3.2.jar
   -optimize=autodetect
   -protect=nomatter
   -pack=all
 !end""")
 
-        prjFile.text.contains("""!classloaderentry webapp webapps/ROOT:/WEB-INF/classes
+        prjText.contains("""
+!classloaderentry webapp webapps/ROOT:/WEB-INF/classes
   -optimize=all
   -protect=nomatter
 !end""")
