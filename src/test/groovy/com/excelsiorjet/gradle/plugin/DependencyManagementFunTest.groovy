@@ -25,7 +25,8 @@ class DependencyManagementFunTest extends BaseFunTest {
 
         dep.exists()
 
-        def prjText = prj.text.replaceAll("\r\n", "\n")
+         //replace line separators to Unix as Groovy """ multiline strings produce Unix line separators
+        def prjText = toUnixLineSeparators(prj.text)
         prjText.contains("""
 !classpathentry lib/commons-io-1.3.2.jar
   -optimize=autodetect

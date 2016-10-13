@@ -16,7 +16,8 @@ class TomcatFunTest extends BaseFunTest {
         new File(basedir, "build/jet/build/HelloTomcat_jetpdb/tmpres/ROOT/WEB-INF/lib/commons-io-1.3.2.jar").exists()
 
 
-        def prjText = prjFile.text.replaceAll("\r\n", "\n")
+        //replace line separators to Unix as Groovy """ multiline strings produce Unix line separators
+        def prjText = toUnixLineSeparators(prjFile.text)
         prjText.contains("""
 !classloaderentry webapp webapps/ROOT:/WEB-INF/lib/commons-io-1.3.2.jar
   -optimize=autodetect

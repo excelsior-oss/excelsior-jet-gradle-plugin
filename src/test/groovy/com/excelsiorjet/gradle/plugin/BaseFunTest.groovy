@@ -42,6 +42,10 @@ abstract class BaseFunTest extends Specification {
         process.inputStream.text + process.errorStream.text
     }
 
+    public static String toUnixLineSeparators(String text) {
+        text.replaceAll("\r\n", "\n")
+    }
+
     protected abstract String testProjectDir()
 
     protected abstract String projectName()
