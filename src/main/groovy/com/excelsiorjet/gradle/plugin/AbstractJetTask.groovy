@@ -101,6 +101,9 @@ class AbstractJetTask extends DefaultTask {
             def module = it.moduleVersion.id.module
             return new ProjectDependency(module.group, module.name, it.moduleVersion.id.version, it.file, false)
         }
+        (configuration.collect() - configuration.getResolvedConfiguration().getResolvedArtifacts().collect()*.file).each {
+          allDependencies.add(new ProjectDependency(null, null, null, it as File, false))
+        }
         def duplicatesByName = allDependencies.groupBy { it.path.name }
         duplicatesByName.values().
                 findAll { it.size() > 1 && it.collect({ AbstractJetTask.hash(it.path) }).size() > 1 }.
