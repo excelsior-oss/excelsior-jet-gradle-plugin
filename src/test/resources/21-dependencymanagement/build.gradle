@@ -41,7 +41,7 @@ excelsiorJet {
             pack = 'none'
         }
         dependency {
-            path = new File(project.projectDir, "extDir")
+            path = new File(project.projectDir, "extDir2")
             packagePath = 'extDirCp'
             pack = 'none'
         }

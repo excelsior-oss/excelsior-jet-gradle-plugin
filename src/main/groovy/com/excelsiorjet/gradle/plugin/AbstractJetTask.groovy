@@ -105,7 +105,7 @@ class AbstractJetTask extends DefaultTask {
         duplicatesByName.values().
                 findAll { it.size() > 1 && it.collect({ AbstractJetTask.hash(it.path) }).size() > 1 }.
                 each {
-                    logger.warn(Txt.s("JetApi.DuplicateFileName", it.collect { it.idStr() }))
+                    logger.warn(Txt.s("JetApi.DuplicateFileName", it.collect { it.idStr(true) }))
                 }
         return duplicatesByName.values().collect { it.first() }
     }

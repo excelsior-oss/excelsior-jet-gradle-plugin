@@ -13,7 +13,7 @@ class DependencyManagementFunTest extends BaseFunTest {
         File jacksonDep = new File(basedir, "build/jet/build/lib/jackson-databind-2.8.0.jar")
         File log4jDep = new File(basedir, "build/jet/build/libs/log4j-1.2.17.jar")
         File extDirContent= new File(basedir, "build/jet/build/extDir/test.txt")
-        File extDirCpContent = new File(basedir, "build/jet/build/extDirCp/extDir/test.txt")
+        File extDirCpContent = new File(basedir, "build/jet/build/extDirCp/extDir2/test.txt")
 
         when:
         def result = runGradle('jetTestRun', 'jetBuild')
