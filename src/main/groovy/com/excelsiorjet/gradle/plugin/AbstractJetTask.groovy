@@ -91,6 +91,11 @@ class AbstractJetTask extends DefaultTask {
     }
 
     private List<ProjectDependency> getDependencies() {
+        ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
+        if (ext.getIgnoreProjectDependencies()) {
+            return Collections.emptyList();
+        }
+
         // due to bug in support of maven relocation in gradle, it's not merges the same artifact referenced by different names
         // https://issues.gradle.org/browse/GRADLE-2812
         // https://issues.gradle.org/browse/GRADLE-3301
