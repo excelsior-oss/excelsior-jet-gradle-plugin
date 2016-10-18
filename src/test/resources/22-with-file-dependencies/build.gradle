@@ -16,6 +16,12 @@ version = "1.0-SNAPSHOT"
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = "AppWithFileDeps"
+    dependencies {
+        dependency {
+            path = new File(project.projectDir, "libs/single/single-dep.jar")
+            pack = 'all'
+        }
+    }
 }
 
 repositories {

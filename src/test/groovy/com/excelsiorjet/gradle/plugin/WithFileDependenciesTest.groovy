@@ -2,7 +2,7 @@ package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
 
-class ClasspathTest extends BaseFunTest {
+class WithFileDependenciesTest extends BaseFunTest {
 
     def "jetBuild task builds simple application with files(..) and fileTree(..) dependencies"() {
         setup:
@@ -10,6 +10,7 @@ class ClasspathTest extends BaseFunTest {
         File depFiles = new File(basedir, "build/jet/build/AppWithFileDeps_jetpdb/tmpres/single-dep__2.jar")
         File depFileTreeFirst = new File(basedir, "build/jet/build/AppWithFileDeps_jetpdb/tmpres/first-multi-dep__3.jar")
         File depFileTreeSecond = new File(basedir, "build/jet/build/AppWithFileDeps_jetpdb/tmpres/second-multi-dep__4.jar")
+        File prj = new File(basedir, "build/jet/build/AppWithFileDeps.prj")
 
         when:
         def result = runGradle('jetBuild')
@@ -22,6 +23,13 @@ class ClasspathTest extends BaseFunTest {
         depFiles.exists()
         depFileTreeFirst.exists()
         depFileTreeSecond.exists()
+        def prjText = toUnixLineSeparators(prj.text)
+        prjText.contains("""
+!classpathentry lib/single-dep.jar
+  -optimize=autodetect
+  -protect=nomatter
+  -pack=all
+!end""")
 
         checkStdOutContains(appExeFile, "HelloWorld:SingleDep:FirstMultiDep:SecondMultiDep")
 
@@ -30,7 +38,7 @@ class ClasspathTest extends BaseFunTest {
 
     @Override
     protected String testProjectDir() {
-        return "21-with-file-dependencies"
+        return "22-with-file-dependencies"
     }
 
     @Override
