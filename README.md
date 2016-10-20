@@ -159,7 +159,6 @@ The profiles will be used by the Startup Optimizer and the Global Optimizer (see
 **Note:** During a Test Run, the application executes in a special profiling mode,
   so disregard its modest start-up time and performance.
 
-**New in 0.7.2:**
 Your application may require command line arguments to run. If that is the case, set the `runArgs` plugin parameter as follows:
 ```gradle
 runArgs = ["arg1", "arg2"]
@@ -203,118 +202,204 @@ Just as it works for the splash image, if you place the icon file at
 `<project.projectDir>/src/main/jetresources/icon.ico`, you won't need to specify it
 in the configuration explicitly.
 
-#### Dependencies Management
+#### Dependency-specific settings
 
-As mentioned [above](#build-process) the plugin automatically picks up and compiles runtime dependencies
+**New in 0.8.0:**
+
+As mentioned [above](#build-process), the plugin automatically picks up and compiles the runtime dependencies
 of your Gradle project.
-In addition, the plugin allows you to select how to compile your application at discretion of
-the dependencies. That is, for each dependency, you can enable/disable:
+In addition, the plugin enables you to specify certain processing rules separately
+for each dependency, or for groups of dependencies:
 
-- code protection for all classes
-- selective compilation of classes
-- packing resource files into executable
+- enforce code protection for all classes
+- enable selective optimization of classes
+- control packing of resource files into the resulting executable
+
 
 ##### Dependencies configuration
 
-If you need to set a certain property to a certain dependency add the following configuration 
+To set these properties for a particular dependency, add the following configuration 
 section:
 
 ```gradle
 dependencies {
-   dependency {
-       groupId = 'groupId'
-       artifactId = 'artifactId'
-       version = 'version'
-       protect = ''
-       optimize = ''
-       pack = ''
-   }
+    dependency {
+        groupId = 'groupId'
+        artifactId = 'artifactId'
+        version = 'version'
+        protect = ''         // all | not-required
+        optimize = ''        // all | auto-detect
+        pack = ''            // all | auto-detect | none
+    }
 }
 ```
 
-where `groupId`, `artifactId`, `version` describes the dependency in the same way as you describe the dependency in
-a respective global `dependencies` section of the Gradle project,
-and `protect`, `optimize`, `pack` are Excelsior JET specific properties for the dependency described below.
-You may omit `groupId` or/and `version` from the configuration, if you are sure that there is the only dependency with a certain
-`artifactId` in the project else the plugin will issue ambiguous dependency resolution error.
-You may also set the `groupId` parameter only to set the same properties to all dependencies sharing the same `groupId`
-at once.
-Finally, if you need some additional dependencies to appear in the application classpath that are not listed
-in the project explicitly (for example, you need to access some resources in a directory via `ResourceBundle.getResource()`)
-set the `path` parameter instead of `groupId/artifactId/version` pointing to a directory or jar/zip.
-You may also use `path` parameter for identifying project dependencies that are described with `files` or `fileTree` parameters.
+where `groupId`, `artifactId`, and `version` identify the dependency in the same way as in
+the respective global `dependencies` section of the Gradle project,
+and `protect`, `optimize`, and `pack` are Excelsior JET-specific properties for the dependency,
+described below.
+
+You may omit `groupId` and/or `version` from the configuration, if you are sure that there is
+exactly one dependency with the given `artifactId` in the project. The plugin will issue an
+ambiguous dependency resolution error if that is not the case.
+
+You may also set the `groupId` parameter only to set the same properties for all dependencies
+sharing the same `groupId` at once.
+
+Finally, if you need some additional dependencies that are not listed in the project explicitly
+to appear in the application classpath (for example, you need to access some resources in a directory via `ResourceBundle.getResource()`), add, for each of them, a `dependency` configuration
+with the `path` parameter pointing to the respective directory or jar/zip file,
+*instead of* `groupId`, `artifactId`, and/or `version`:
+
+```gradle
+dependencies {
+    dependency {
+       path = 'path'
+       protect = ''         // all | not-required
+       optimize = ''        // all | auto-detect
+       pack = ''            // all | auto-detect | none
+    }
+}
+```
+
+You may also use the `path` parameter to identify project dependencies that are described with
+`files` or `fileTree` parameters.
 
 ##### Code protection
 
 If you need to protect your classes from decompilers,
-make sure that the respective dependency have the `protect` property set to `all` value.
-If you do not need to protect classes for a certain dependency (f.i. it is a third-party library),
-set the `not-required` value. It may reduce compilation time and the size of the resulting executable in some cases.
+make sure that the respective dependencies have the `protect` property set to `all`.
+If you do not need to protect classes for a certain dependency (e.g. a third-party library),
+set it to the `not-required` value instead. The latter setting may reduce compilation time and the size of
+the resulting executable in some cases.
+
 
 ##### Selective optimization
 
-To optimize all classes and all methods of every class of a dependency for performance, set the `optimize` parameter
-to `all` value. The other option for the parameter is `auto-detect`.
+To optimize all classes and all methods of each class of a dependency for performance,
+set its `optimize` property to `all`. The other valid value of that property is `auto-detect`.
 It means that the Optimizer detects which classes from the dependency are used by the application
-and compiles the dependency selectively leaving a part of classes in the bytecode form or not optimized.
-It helps reduce compilation time and download size of the application.
-You may enable selective optimization for third-party dependencies, if your application uses
-a small part of their implementing classes. However, it is not recommended to choose the `auto-detect` option
-for your own classes, because, in general, the Excelsior JET Optimizer cannot detect an exact set of used classes due to
-possible access via Reflection API (though you can significantly help it to detect used classes performing
-the [Test Run](#performing-a-test-run) prior to the build).
+and compiles the dependency selectively, leaving the unused classes in bytecode or non-optimized form.
+That helps reduce the compilation time and download size of the application.
+
+You may want to enable selective optimization for the third-party dependencies of which your application
+uses only a fraction of their implementing classes. However, it is not recommended to choose the
+`auto-detect` value for the dependencies containing your own classes, because, in general,
+the Excelsior JET Optimizer cannot determine the exact set of used classes due to possible access
+via the Reflection API at run time. That said, you can help it significantly to detect such
+dynamic class usage by performing a [Test Run](#performing-a-test-run) prior to the build.
+
+
+##### Automatic dependency categorization
+
+**IMPORTANT:**
+
+As mentioned above, you may wish to set the `optimize` property to `auto-detect`
+and the `protect` property to `not-required` for third-party dependencies, and
+set both properties to `all` for the dependencies contaiting your own classes.
+By default, the plugin distinguishes between application classes and third-party library classes
+automatically using the following rule: it treats all dependencies sharing the `groupId` with the
+main artifact as application classes, and all other dependencies as third-party dependencies.
+
+Therefore, if some of your application classes reside in a dependency with a different `groupId`
+than your main artifact, make sure to set the `optimize` and `protect` properties for them
+explicitly, for instance:
+
+```gradle
+dependencies {
+    dependency {
+       groupId = 'my.company.project.group'
+       protect = 'all'
+       optimize = 'all'
+    }
+}
+```
+
 
 ##### isLibrary hint
 
-As mentioned above, it is recommended to set `optimize` parameter to `auto-detect` value
-and `protect` parameter to `not-required` value for third party dependencies  while
-it is better to set both parameters to `all` for your own classes.
-You may provide a hint to the plugin if a dependency is a third party library setting `isLibrary` parameter to `true`.
-This way the plugin will set `protect` to `not-required` and `optimize` to `auto-detect` automatically.
-Consequently if you set `isLibrary` to `false` both parameters will be set to `all`.
+Instead of setting the `protect` and `optimize` properties, you may provide a semantic hint
+to the future maintainers of the Gradle project that a particular dependency is a third party library
+by setting its `isLibrary` property to `true`. The plugin will then set `protect`
+to `not-required` and `optimize` to `auto-detect` automatically.
+Conversely, if you set `isLibrary` to `false`, both those properties will be set to `all`.
+The following configuration is therefore equivalent to the example in the
+[previous section](#automatic-dependency-categorization):
 
-By default, the plugin detects the hint automatically using the following strategy:
-it treats all dependencies sharing the same `groupId` with your main artifact as your application classes
-while all other dependencies are treated as third-party dependencies.
-So if some of your application classes reside in a dependency with a different `groupId` make sure to set `isLibrary`
-hint to `false` for such `groupId` to enable maximum protection and optimization level for it.
+```xml
+dependencies {
+    dependency {
+       groupId = 'my.company.project.group'
+       isLibrary = false
+    }
+}
+```
+
 
 ##### Resource packing
 
-Dependencies often contain resource files such as images, icons, media files, etc.
-By default, the JET Optimizer packs such files into the resulting executable.
-If selective optimization is enabled for a dependency and protection is also disabled,
-the classes not compiled are also packed into the executable and will be handled by the JIT compiler at run time
-on attempt to load them. As a result, original jar files are no longer needed for the running application.
-This is the default option for `pack` parameter named `auto-detect`.
+**Note:** This section only applies to dependencies that are jar or zip files.
 
-Some third-party components may require presence of the original class files at run time.
-For instance, third party security providers such as Bouncy Castle check the sizes of their class files during execution.
-In such cases, the class files serve as both program code and resources.
-Therefore, despite all the classes are pre-compiled, you have to make them available to the running application.
-Setting the `pack` parameter to `all` for such a dependency resolves the problem.
+Dependencies often contain resource files, such as images, icons, media files, etc.
+By default, the Excelsior JET Optimizer packs those files into the resulting executable.
+If protection is disabled and selective optimization is enabled for a dependency,
+the classes that were not compiled also get packed into the executable and will be
+handled by the JIT compiler at run time on an attempt to load them. As a result, the
+original jar files are no longer needed for the running application to work.
 
-You may also opt to not pack a dependency to the executable at all using `none` value for the `pack` parameter.
-This way the dependency will be copied to the final package as is instead.
-To control the placement of the dependency in the package use `packagePath` plugin parameter.
-By default, non-packed jar files are copied to `lib` subfolder of the package while directories
-(referenced by `path` parameter) are copied to the root of the package.
+The above describes the behavior for dependencies that have the `pack` property
+omitted or set to the default value of `auto-detect`. However, certain dependencies
+may require presence of the original class files at application run time.
+For instance, some third-party security providers, e.g. Bouncy Castle, check the sizes of
+their class files during execution. In such a dependency, class files serve as both program code
+*and* resources: even if all classes get pre-compiled,
+you still have to make them available to the running application.
+Setting the `pack` property of that dependency to `all` resolves the problem.
 
-Finally, if you are sure that a certain dependency does not contain any resources and all classes of it were compiled,
-you can disable copying of such a (non-packed) dependency to the package
-setting `disableCopyToPackage` parameter to `true`.
+You may also opt to not pack a particular dependency into the executable at all by
+setting its `pack` property to `none`. The dependency will then be copied
+to the final package as-is.
+To control its location in the package, use the `packagePath` parameter of
+the `dependency` configuration. By default, non-packed jar files are copied to
+the `lib` subfolder of the package, while directories
+(referenced by the `path` parameter) are copied to the root of the package.
+
+Finally, if you are sure that a certain dependency does not contain any resources
+*and* all its classes get compiled, you can disable copying of such a (non-packed)
+dependency to the package by setting its `disableCopyToPackage` parameter to `true`.
+
+Example of an additional dependency configuration:
+
+```gradle
+dependencies {
+   dependency {
+        path = new File(project.projectDir, "target/extra-resources")
+        packagePath = 'my-extra-files'
+   }
+}
+```
+
+Here we add the `extra-resources` directory to the application classpath, telling
+the plugin to place it under the `my-extra-files` directory of the package
+(thus `extra-resources` directory will appear in the `my-extra-files` directory
+of the final package).
+
+Note that the only valid value of the `pack` property for directories is `none`,
+so there is no need to set it in the respective `dependency` configuration.
+
 
 ##### Ignoring project dependencies
 
-If you build your main artifact as so called fat jar
-(using `com.github.johnrengelman.shadow` plugin for example) so all your project dependencies are packed
-into your main artifact then the most-likely you do not need separate dependencies to be compiled with Excelsior JET
-because all needed classes and resources are already inside of your main artifact.
-For such a case you may set the `ignoreProjectDependencies` plugin parameter to `true`
+If you build your main artifact as a so called fat jar (using the `com.github.johnrengelman.shadow`
+plugin, for example), you most likely do not need Excelsior JET
+to compile any of its dependencies, because the main artifact will contain all
+classes and resources of the application.
+In this case, you may set the `ignoreProjectDependencies` plugin parameter to `true`
 to disable compilation of project dependencies.
-This way you may set `protect/optimize/pack` properties for your main artifact only and for entries described with `path`
-parameter of `dependencies` section of the plugin.
-It gives you a complete freedom to specify what will be compiled by the plugin.
+Then you will only need to set the `protect/optimize/pack` properties for your main artifact
+and for the entries of the `dependencies` section of the plugin that are identified
+with the `path` parameter, if any.
+
 
 #### Customizing Package Content
 
@@ -583,7 +668,6 @@ As soon as the specified period elapses, profiling stops and the application is 
 so ensure that the timeout value is large enough to capture all actions the application normally carries out
 during startup. (It is safe to close the application manually if the profiling period proves to be excessively long.)
 
-**New in 0.7.2:**
 If your application requires command line arguments to run, set the `runArgs` plugin parameter
 in the same way as for a [Test Run](#performing-a-test-run).
 

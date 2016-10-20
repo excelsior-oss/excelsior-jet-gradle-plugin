@@ -469,8 +469,14 @@ class ExcelsiorJetExtension {
     String[] runArgs = []
 
     /**
-     * List of external dependencies (that which have path and do not have groupId, artifactId and version)
-     * and dependency settings (that which have no path, but have groupId or artifactId or version).
+     * List of settings of project dependencies.
+     *
+     * @see DependencySettings#optimize
+     * @see DependencySettings#protect
+     * @see DependencySettings#pack
+     * @see DependencySettings#isLibrary
+     * @see DependencySettings#path
+     * @see DependencySettings#packagePath
      */
     List<DependencySettings> dependencies = []
 
