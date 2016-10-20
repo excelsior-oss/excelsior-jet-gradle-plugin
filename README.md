@@ -254,7 +254,7 @@ with the `path` parameter pointing to the respective directory or jar/zip file,
 ```gradle
 dependencies {
     dependency {
-       path = 'path'
+       path = new File("path")
        protect = ''         // all | not-required
        optimize = ''        // all | auto-detect
        pack = ''            // all | auto-detect | none
@@ -1020,6 +1020,7 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 ```
 
 ## Release Notes
+
 Version 0.8.0 (??-Oct-2016)
 
 The release adds the capability to set Excelsior JET specific properties for project dependencies such as
