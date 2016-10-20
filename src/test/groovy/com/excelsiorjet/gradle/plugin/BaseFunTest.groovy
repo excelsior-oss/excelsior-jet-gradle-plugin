@@ -11,12 +11,14 @@ abstract class BaseFunTest extends Specification {
 
     File basedir = new File(getClass().getClassLoader().getResource(testProjectDir()).file)
     File appDir
+    File jetBuildDir
     File buildExeFile
     File appExeFile
     File zipFile
 
     void setup() {
         appDir = new File(basedir, "build/jet/app")
+        jetBuildDir = new File(basedir, "build/jet/build")
         buildExeFile = new File(basedir, "build/jet/build/${projectName()}$ext")
         appExeFile = new File(appDir, "${projectName()}$ext")
         zipFile = new File(basedir, "build/jet/${projectName()}-" + projectVersion() + ".zip")
@@ -38,6 +40,10 @@ abstract class BaseFunTest extends Specification {
     public static String cmdOutput(File exeFile) {
         def process = exeFile.absolutePath.execute()
         process.inputStream.text + process.errorStream.text
+    }
+
+    public static String toUnixLineSeparators(String text) {
+        text.replaceAll("\r\n", "\n")
     }
 
     protected abstract String testProjectDir()

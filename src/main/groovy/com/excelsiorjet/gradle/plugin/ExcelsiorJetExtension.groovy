@@ -22,6 +22,8 @@
 package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.tasks.ApplicationType
+import com.excelsiorjet.api.tasks.config.DependencySettings
+import com.excelsiorjet.api.tasks.config.DependencySettings
 import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
 import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
 import com.excelsiorjet.api.tasks.config.SlimDownConfig
@@ -465,4 +467,35 @@ class ExcelsiorJetExtension {
      * i.e. {@code -Djet.runArgs="arg1,Hello\, World"} will be passed to your application as {@code arg1 "Hello, World"})
      */
     String[] runArgs = []
+
+    /**
+     * List of settings of project dependencies.
+     *
+     * @see DependencySettings#optimize
+     * @see DependencySettings#protect
+     * @see DependencySettings#pack
+     * @see DependencySettings#isLibrary
+     * @see DependencySettings#path
+     * @see DependencySettings#packagePath
+     */
+    List<DependencySettings> dependencies = []
+
+    def dependencies(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = this
+        closure()
+    }
+
+    def dependency(Closure closure) {
+        def dep = new DependencySettings()
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = dep
+        closure()
+        dependencies.add(dep)
+    }
+
+    /**
+     * If set to to {@code true} project dependencies is ignored.
+     */
+    boolean ignoreProjectDependencies = false
 }

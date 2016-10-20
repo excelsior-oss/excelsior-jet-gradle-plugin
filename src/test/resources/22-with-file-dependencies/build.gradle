@@ -9,25 +9,17 @@ buildscript {
     }
 }
 
-apply plugin: "war"
+apply plugin: "java"
 group = "com.excelsior.it"
 version = "1.0-SNAPSHOT"
 
 apply plugin: 'excelsiorJet'
 excelsiorJet {
-    tomcat {
-        warDeployName = "ROOT"
-        hideConfig = false
-        genScripts = false
-    }
+    mainClass = "AppWithFileDeps"
     dependencies {
         dependency {
-            artifactId = 'commons-io'
+            path = new File(project.projectDir, "libs/single/single-dep.jar")
             pack = 'all'
-        }
-        dependency {
-            artifactId = "HelloTomcat"
-            protect = "not-required"
         }
     }
 }
@@ -37,6 +29,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly "javax.servlet:javax.servlet-api:3.0.1"
     compile "org.apache.commons:commons-io:1.3.2"
+    compile files('libs/single/single-dep.jar')
+    compile fileTree(dir: 'libs/multi', include: '*.jar')
 }
