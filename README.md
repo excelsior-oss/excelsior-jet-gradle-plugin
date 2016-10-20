@@ -57,7 +57,7 @@ you need to add the plugin dependency in the `buildscript{}` configuration of th
 
 ```gradle
 buildscript {
-    ext.jetPluginVersion = '0.7.2'
+    ext.jetPluginVersion = '0.8.0'
     repositories {
         mavenCentral()
     }
@@ -872,7 +872,7 @@ To enable native compilation of your Tomcat Web application, you need to add the
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.7.2'
+    def jetPluginVersion = '0.8.0'
     repositories {
         mavenCentral()
     }
@@ -1021,7 +1021,7 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
-Version 0.8.0 (??-Oct-2016)
+Version 0.8.0 (20-Oct-2016)
 
 The release adds the capability to set Excelsior JET specific properties for project dependencies such as
 code protection, selective optimization and resource packing.
