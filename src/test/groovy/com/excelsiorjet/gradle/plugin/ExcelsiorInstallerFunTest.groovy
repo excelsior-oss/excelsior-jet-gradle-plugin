@@ -1,12 +1,13 @@
 package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
+import spock.lang.IgnoreIf
 
 class ExcelsiorInstallerFunTest extends BaseFunTest {
 
+    @IgnoreIf({!excelsiorInstallerSupported})
     def "jetBuild task builds simple swing application and packs it with excelsior installer"() {
         setup:
-        boolean isOX = osName.contains("OS X");
         File installer = new File(basedir, "build/jet/HelloSwing-1.2.3-SNAPSHOT" + ext)
         File versionRes = new File(basedir, "build/jet/build/jetpdb/version.rc");
 
@@ -16,7 +17,7 @@ class ExcelsiorInstallerFunTest extends BaseFunTest {
         then:
         buildExeFile.exists()
         appExeFile.exists()
-        isOX || installer.exists();
+        installer.exists();
         !versionRes.exists() || versionRes.text.contains("1.2.3")
 
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS

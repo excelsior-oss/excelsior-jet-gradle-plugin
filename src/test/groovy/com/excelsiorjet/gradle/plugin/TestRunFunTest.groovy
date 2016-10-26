@@ -1,9 +1,11 @@
 package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
+import spock.lang.IgnoreIf
 
 class TestRunFunTest extends BaseFunTest implements HelloWorldProject {
 
+    @IgnoreIf({crossCompilation})
     def "executes test run for project"() {
         setup:
         File startupProfile = new File( basedir, "src/main/jetresources/HelloWorld.startup");
@@ -15,6 +17,8 @@ class TestRunFunTest extends BaseFunTest implements HelloWorldProject {
         then:
         startupProfile.exists()
         reorderFile.exists();
+        new File(basedir, "build/jet/build/custom.file").exists()
+        new File(basedir, "build/jet/build/subdir/subdir.file").exists()
 
         result.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS

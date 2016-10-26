@@ -1,7 +1,10 @@
 package com.excelsiorjet.gradle.plugin
 
+import spock.lang.IgnoreIf
+
 class OsxAppBundleFunTest extends BaseFunTest {
 
+    @IgnoreIf({!isOSX})
     def "test osx bundle configuration"() {
         setup:
         File infoPlist = new File(basedir, "build/jet/HelloSwing.app/Contents/Info.plist")
@@ -10,12 +13,10 @@ class OsxAppBundleFunTest extends BaseFunTest {
         runGradle("clean", "jetBuild")
 
         then:
-        if (osName.contains("OS X")) {
-            appExeFile.exists()
-            infoPlist.exists()
-            infoPlist.text.contains("CFBundleIconFile")
-            infoPlist.text.contains("com.excelsior")
-        }
+        appExeFile.exists()
+        infoPlist.exists()
+        infoPlist.text.contains("CFBundleIconFile")
+        infoPlist.text.contains("com.excelsior")
     }
 
     @Override

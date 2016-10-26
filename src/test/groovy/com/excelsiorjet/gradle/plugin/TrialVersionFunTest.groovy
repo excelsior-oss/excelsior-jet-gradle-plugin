@@ -10,7 +10,8 @@ class TrialVersionFunTest extends BaseFunTest implements HelloWorldProject {
         new File(basedir, "build/jet/build/HelloWorld_jetpdb/HelloWorld.rsp").text.contains("expire")
 
         appExeFile.exists()
-        cmdOutput(appExeFile).contains("App is expired")
+
+        crossCompilation || cmdOutput(appExeFile).contains("App is expired")
     }
 
     @Override

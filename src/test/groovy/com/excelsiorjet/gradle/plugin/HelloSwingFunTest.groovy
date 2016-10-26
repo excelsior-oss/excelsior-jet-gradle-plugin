@@ -5,9 +5,6 @@ import org.gradle.testkit.runner.TaskOutcome
 class HelloSwingFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple swing application"() {
-        setup:
-        boolean isWindows = osName.contains("Windows");
-
         when:
         def result = runGradle('jetBuild')
 

@@ -11,8 +11,10 @@ class MultiAppFunTest extends BaseFunTest implements HelloWorldProject {
         then:
         appExeFile.exists()
 
-        (appExeFile.absolutePath.execute().text.trim().equals("Hello World"))
-        ((appExeFile.absolutePath + " HelloWorld2").execute().text.trim().equals("Hello World2"))
+        if (!crossCompilation) {
+            (appExeFile.absolutePath.execute().text.trim().equals("Hello World"))
+            ((appExeFile.absolutePath + " HelloWorld2").execute().text.trim().equals("Hello World2"))
+        }
 
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }

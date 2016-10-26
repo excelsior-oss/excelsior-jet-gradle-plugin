@@ -1,9 +1,11 @@
 package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
+import spock.lang.IgnoreIf
 
 class SlimdownFunTest extends BaseFunTest implements HelloWorldProject {
 
+    @IgnoreIf({crossCompilation})
     def "test java runtime slimdown"() {
         setup:
         File jetRtFiles= new File(basedir, "build/jet/app/rt/jetrt")

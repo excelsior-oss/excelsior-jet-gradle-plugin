@@ -1,13 +1,18 @@
 package com.excelsiorjet.gradle.plugin
 
+import com.excelsiorjet.api.ExcelsiorJet
 import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification
 
 abstract class BaseFunTest extends Specification {
 
     protected static final String pluginVersion = System.getProperty("excelsiorJetPluginVersion")
-    protected static final String osName = System.properties['os.name']
-    protected static final String ext = osName.contains("Windows") ? ".exe" : ""
+    protected static final ExcelsiorJet excelsiorJet = new ExcelsiorJet(null);
+    protected static final boolean isWindows = excelsiorJet.targetOS.isWindows()
+    protected static final boolean isOSX = excelsiorJet.targetOS.isOSX()
+    protected static final boolean excelsiorInstallerSupported = excelsiorJet.excelsiorInstallerSupported
+    protected static final boolean crossCompilation = excelsiorJet.crossCompilation
+    protected static final String ext = excelsiorJet.targetOS.exeFileExtension
 
     File basedir = new File(getClass().getClassLoader().getResource(testProjectDir()).file)
     File appDir
@@ -34,7 +39,11 @@ abstract class BaseFunTest extends Specification {
     }
 
     protected static boolean checkStdOutContains(File exeFile, String str) {
-        cmdOutput(exeFile).contains(str)
+        if (!crossCompilation) {
+            cmdOutput(exeFile).contains(str)
+        } else {
+            true
+        }
     }
 
     public static String cmdOutput(File exeFile) {

@@ -1,9 +1,11 @@
 package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
+import spock.lang.IgnoreIf
 
 class RunArgsViaSysPropsFunTest extends BaseFunTest implements HelloWorldProject {
 
+    @IgnoreIf({crossCompilation})
     def "runArgs is passed to startup accelerator and test runs via sys props"() {
         when:
         System.properties["jet.runArgs"] = "arg1,arg2.1\\, arg2.2"
