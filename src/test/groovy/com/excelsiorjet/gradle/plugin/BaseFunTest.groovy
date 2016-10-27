@@ -34,6 +34,7 @@ abstract class BaseFunTest extends Specification {
     protected def runGradle(String... tasksToExecute) {
         def args = (tasksToExecute as List) + ("-DexcelsiorJetPluginVersion=" + pluginVersion)
         return GradleRunner.create()
+                .forwardOutput()
                 .withProjectDir(basedir)
                 .withArguments(args)
                 .withDebug(true)
