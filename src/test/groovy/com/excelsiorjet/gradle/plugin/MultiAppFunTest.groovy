@@ -11,8 +11,8 @@ class MultiAppFunTest extends BaseFunTest implements HelloWorldProject {
         then:
         appExeFile.exists()
 
-        checkStdOutContains(appExeFile, "Hello World")
-        checkStdOutContains(appExeFile, "Hello World2", "HelloWorld2")
+        checkStdOutContains("Hello World",  appExeFile)
+        checkStdOutContains("Hello World2", appExeFile, "HelloWorld2")
 
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }

@@ -40,7 +40,7 @@ abstract class BaseFunTest extends Specification {
                 .build()
     }
 
-    protected static boolean checkStdOutContains(File exeFile, String str, String... args) {
+    protected static boolean checkStdOutContains(String str, File exeFile, String... args) {
         if (!crossCompilation) {
             cmdOutput(exeFile, args).contains(str)
         } else {
