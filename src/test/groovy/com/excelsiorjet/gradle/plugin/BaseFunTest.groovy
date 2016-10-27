@@ -4,6 +4,8 @@ import com.excelsiorjet.api.ExcelsiorJet
 import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification
 
+import static org.codehaus.groovy.runtime.ProcessGroovyMethods.*
+
 abstract class BaseFunTest extends Specification {
 
     protected static final String pluginVersion = System.getProperty("excelsiorJetPluginVersion")
@@ -38,16 +40,16 @@ abstract class BaseFunTest extends Specification {
                 .build()
     }
 
-    protected static boolean checkStdOutContains(File exeFile, String str) {
+    protected static boolean checkStdOutContains(File exeFile, String str, String... args) {
         if (!crossCompilation) {
-            cmdOutput(exeFile).contains(str)
+            cmdOutput(exeFile, args).contains(str)
         } else {
             true
         }
     }
 
-    public static String cmdOutput(File exeFile) {
-        def process = exeFile.absolutePath.execute()
+    public static String cmdOutput(File exeFile, String... args) {
+        def process = execute([exeFile.absolutePath] + args.toList())
         process.inputStream.text + process.errorStream.text
     }
 
