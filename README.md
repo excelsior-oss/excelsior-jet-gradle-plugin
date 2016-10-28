@@ -57,7 +57,7 @@ you need to add the plugin dependency in the `buildscript{}` configuration of th
 
 ```gradle
 buildscript {
-    ext.jetPluginVersion = '0.8.0'
+    ext.jetPluginVersion = '0.8.1'
     repositories {
         mavenCentral()
     }
@@ -870,7 +870,7 @@ To enable native compilation of your Tomcat Web application, you need to add the
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.8.0'
+    def jetPluginVersion = '0.8.1'
     repositories {
         mavenCentral()
     }
@@ -1019,7 +1019,7 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
-Version 0.8.1 (??-Oct-2016)
+Version 0.8.1 (28-Oct-2016)
 
 The release supports [Excelsior JET Embedded 11.3 for Linux/ARM](https://www.excelsiorjet.com/embedded/).
 
