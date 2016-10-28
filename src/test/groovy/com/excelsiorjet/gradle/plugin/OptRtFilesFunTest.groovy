@@ -11,14 +11,18 @@ class OptRtFilesFunTest extends BaseFunTest implements HelloWorldProject {
         when:
         def result = runGradle('jetBuild')
         // should be in when, because requires directory created while run
-        File optRtDll = getOptRtDll()
 
         then:
         buildExeFile.exists()
         appExeFile.exists()
         zipFile.exists()
 
-        optRtDll.exists()
+        ["build/jet/app/rt/bin/jfxwebkit.dll",
+         "build/jet/app/rt/lib/libjfxwebkit.dylib",
+         "build/jet/app/rt/lib/amd64/libjfxwebkit.so",
+         "build/jet/app/rt/lib/i386/libjfxwebkit.so",
+         "build/jet/app/rt/lib/arm/libjfxwebkit.so"].any { new File(basedir, it).exists()}
+
         optRtJar.exists()
 
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
@@ -27,26 +31,6 @@ class OptRtFilesFunTest extends BaseFunTest implements HelloWorldProject {
     @Override
     protected String testProjectDir() {
         return "08-optrtfiles"
-    }
-
-    private File getOptRtDll() {
-        File optRtDll
-        if (osName.contains("Windows")) {
-            optRtDll = new File(basedir, "build/jet/app/rt/bin/jfxwebkit.dll");
-        } else if (osName.contains("OS X")) {
-            optRtDll = new File(basedir, "build/jet/app/rt/lib/libjfxwebkit.dylib");
-        } else if (osName.contains("Linux")) {
-            if (new File(basedir, "build/jet/app/rt/lib/amd64").exists()) {
-                optRtDll = new File(basedir, "build/jet/app/rt/lib/amd64/libjfxwebkit.so");
-            } else if (new File(basedir, "build/jet/app/rt/lib/i386").exists()) {
-                optRtDll = new File(basedir, "build/jet/app/rt/lib/i386/libjfxwebkit.so");
-            } else {
-                throw new IllegalArgumentException("Could not find arch-specific rt-library directory")
-            }
-        } else {
-            throw new IllegalArgumentException("Unknown OS: $osName")
-        }
-        return optRtDll
     }
 
 }

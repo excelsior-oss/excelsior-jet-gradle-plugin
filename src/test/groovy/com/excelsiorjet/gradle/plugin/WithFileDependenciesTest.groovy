@@ -29,7 +29,7 @@ class WithFileDependenciesTest extends BaseFunTest {
   -pack=all
 !end""")
 
-        checkStdOutContains(appExeFile, "HelloWorld:SingleDep:FirstMultiDep:SecondMultiDep")
+        checkStdOutContains("HelloWorld:SingleDep:FirstMultiDep:SecondMultiDep", appExeFile)
 
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }

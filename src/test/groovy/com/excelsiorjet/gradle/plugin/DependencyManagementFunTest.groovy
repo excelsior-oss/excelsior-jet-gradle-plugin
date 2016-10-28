@@ -16,7 +16,7 @@ class DependencyManagementFunTest extends BaseFunTest {
         File extDirCpContent = new File(basedir, "build/jet/build/extDirCp/extDir2/test.txt")
 
         when:
-        def result = runGradle('jetTestRun', 'jetBuild')
+        def result = runGradle('jetBuild')
 
         then:
         buildExeFile.exists()
@@ -71,7 +71,7 @@ class DependencyManagementFunTest extends BaseFunTest {
         extDirContent.exists()
         extDirCpContent.exists()
 
-        checkStdOutContains(appExeFile, "HelloWorld")
+        checkStdOutContains("HelloWorld", appExeFile)
 
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }

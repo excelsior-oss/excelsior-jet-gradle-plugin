@@ -19,7 +19,7 @@ class AppWithTransDepFunTest extends BaseFunTest {
         dep.exists()
         transDep.exists()
 
-        checkStdOutContains(appExeFile, "field1")
+        checkStdOutContains("field1", appExeFile)
 
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
     }

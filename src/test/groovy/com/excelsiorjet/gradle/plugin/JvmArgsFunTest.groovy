@@ -1,7 +1,10 @@
 package com.excelsiorjet.gradle.plugin
 
+import spock.lang.IgnoreIf
+
 class JvmArgsFunTest extends BaseFunTest implements HelloWorldProject {
 
+    @IgnoreIf({crossCompilation})
     def "test jvm args configuration"() {
         setup:
         def runOutBuildFile = new File(basedir, "build/jet/build/run.out")

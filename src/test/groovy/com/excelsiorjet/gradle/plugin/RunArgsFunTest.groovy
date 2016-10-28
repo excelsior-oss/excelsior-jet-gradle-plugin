@@ -1,9 +1,11 @@
 package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
+import spock.lang.IgnoreIf
 
 class RunArgsFunTest extends BaseFunTest implements HelloWorldProject {
 
+    @IgnoreIf({crossCompilation})
     def "runArgs is passed to startup accelerator and test runs"() {
         when:
         def result = runGradle('jetTestRun', 'jetBuild')

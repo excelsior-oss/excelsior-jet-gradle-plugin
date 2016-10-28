@@ -13,7 +13,7 @@ class FullStackTraceSplashFromManfiestChineseLocaleFunTest extends BaseFunTest i
         appExeFile.exists()
 
         //check lines in stack trace
-        checkStdOutContains(appExeFile, "Hello World")
+        checkStdOutContains("Hello World", appExeFile)
 
         //check very-aggressive inline
         new File(basedir, "build/jet/build/HelloWorld.prj").text.contains("-inlinetolimit=2000")

@@ -13,7 +13,7 @@ class NoStackTraceSplashFromFileRuntimeClassicFunTest extends BaseFunTest implem
         appExeFile.exists()
 
         //check Unknown in stack trace
-        checkStdOutContains(appExeFile, "Hello World")
+        checkStdOutContains("Hello World", appExeFile)
 
         //check tiny-methods only inline
         new File(basedir, "build/jet/build/HelloWorld.prj").text.contains("-inline-")
