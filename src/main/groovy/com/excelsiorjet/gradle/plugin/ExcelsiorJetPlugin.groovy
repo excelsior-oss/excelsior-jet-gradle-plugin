@@ -46,7 +46,7 @@ import org.gradle.api.logging.LogLevel
  */
 class ExcelsiorJetPlugin implements Plugin<Project> {
 
-    private ApplicationType appType
+    private boolean isWar
     private ExcelsiorJetExtension extension
 
     @Override
@@ -59,10 +59,10 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
         def archiveTaskName
         if (target.getPlugins().hasPlugin('war')) {
-            appType = ApplicationType.TOMCAT
+            isWar = true
             archiveTaskName = 'war'
         } else if (target.getPlugins().hasPlugin('java')) {
-            appType = ApplicationType.PLAIN
+            isWar = false
             archiveTaskName = 'jar'
         } else {
             throw new ProjectConfigurationException(Txt.s("ExcelsiorJetGradlePlugin.NoJarOrWarPluginsFound"), null)
@@ -89,11 +89,11 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             }
         }
         extension.conventionMapping.artifactName = { getArchiveName(project.tasks.getByPath(taskPath(project, "jar"))) }
-        if (appType == ApplicationType.PLAIN) {
+        if (!isWar) {
             extension.conventionMapping.mainJar = {
                 new File(project.tasks.getByPath(taskPath(project, "jar")).archivePath as String)
             }
-        } else if (appType == ApplicationType.TOMCAT) {
+        } else  {
             extension.conventionMapping.mainWar = {
                 new File(project.tasks.getByPath(taskPath(project, "war")).archivePath as String)
             }
@@ -114,7 +114,13 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             }
         }
 
-        extension.appType = appType
+        extension.conventionMapping.appType = {
+            if (isWar)  {
+                return ApplicationType.TOMCAT.toString()
+            } else {
+                return ApplicationType.PLAIN.toString();
+            }
+        }
     }
 
     private String setGroupId(Object project) {

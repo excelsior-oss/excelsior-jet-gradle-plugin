@@ -58,6 +58,10 @@ abstract class BaseFunTest extends Specification {
         text.replaceAll("\r\n", "\n")
     }
 
+    public static String mangleDllName(String name) {
+        excelsiorJet.targetOS.mangleDllName(name)
+    }
+
     protected abstract String testProjectDir()
 
     protected abstract String projectName()

@@ -41,19 +41,22 @@ class ExcelsiorJetExtension {
 
     public static final String EXTENSION_NAME = "excelsiorJet"
 
-    // appType is package private property in Java terms
-    @PackageScope
-    ApplicationType appType
-
-    @PackageScope
-    ApplicationType getAppType() {
-        return this.appType
-    }
-
-    @PackageScope
-    void setAppType(ApplicationType appType) {
-        this.appType = appType
-    }
+    /**
+     * Application type. Permitted values are:
+     * <dl>
+     * <dt>plain</dt>
+     * <dd>plain Java application, that runs standalone,
+     * default type if {@code java} plugin applied</dd>
+     * <dt>invocation-dynamic-library</dt>
+     * <dd>dynamic library callable from a non-Java environment</dd>
+     * <dt>windows-service</dt>
+     * <dd>Windows service (Windows only)</dd>
+     * <dt>tomcat</dt>
+     * <dd>servlet-based Java application, that runs within Tomcat servlet container,
+     * default type if {@code war} plugin applied</dd>
+     * </dl>
+     */
+    String appType;
 
     /**
      * Excelsior JET installation directory.
