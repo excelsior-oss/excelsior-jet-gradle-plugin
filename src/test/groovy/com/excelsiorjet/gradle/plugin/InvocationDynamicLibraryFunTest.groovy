@@ -2,7 +2,7 @@ package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
 
-class InvocationDynamicLibraryFunTest extends BaseFunTest implements HelloWorldProject {
+class InvocationDynamicLibraryFunTest extends BaseFunTest {
 
     def "jetBuild task builds invocation dynamic library"() {
         when:
@@ -24,4 +24,13 @@ class InvocationDynamicLibraryFunTest extends BaseFunTest implements HelloWorldP
         return "23-invocation-dynamic-library"
     }
 
+    @Override
+    protected String projectName() {
+        return "HelloDll"
+    }
+
+    @Override
+    protected String projectVersion() {
+        return "1.0-SNAPSHOT"
+    }
 }

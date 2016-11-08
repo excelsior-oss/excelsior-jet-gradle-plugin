@@ -29,6 +29,7 @@ import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
 import com.excelsiorjet.api.tasks.config.SlimDownConfig
 import com.excelsiorjet.api.tasks.config.TomcatConfig
 import com.excelsiorjet.api.tasks.config.TrialVersionConfig
+import com.excelsiorjet.api.tasks.config.WindowsServiceConfig
 import groovy.transform.PackageScope
 
 /**
@@ -309,6 +310,27 @@ class ExcelsiorJetExtension {
     def excelsiorInstaller(Closure closure) {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.delegate = excelsiorInstaller
+        closure()
+    }
+
+    /**
+     * Windows Service configuration parameters.
+     *
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#name
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#displayName
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#description
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#arguments
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#logOnType
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#allowDesktopInteraction
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#startupType
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#startServiceAfterInstall
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#dependencies
+     */
+    WindowsServiceConfig windowsService = new WindowsServiceConfig();
+
+    def windowsService(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = windowsService;
         closure()
     }
 

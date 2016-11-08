@@ -74,6 +74,7 @@ class AbstractJetTask extends DefaultTask {
                 .vendor(ext.getVendor())
                 .product(ext.getProduct())
                 .excelsiorInstallerConfiguration(ext.getExcelsiorInstaller())
+                .windowsServiceConfiguration(ext.getWindowsService())
                 .globalOptimizer(ext.getGlobalOptimizer())
                 .javaRuntimeSlimDown(ext.getJavaRuntimeSlimDown())
                 .trialVersion(ext.getTrialVersion())

@@ -14,6 +14,7 @@ abstract class BaseFunTest extends Specification {
     protected static final boolean isOSX = excelsiorJet.targetOS.isOSX()
     protected static final boolean excelsiorInstallerSupported = excelsiorJet.excelsiorInstallerSupported
     protected static final boolean crossCompilation = excelsiorJet.crossCompilation
+    protected static final boolean windowsServicesSupported = excelsiorJet.windowsServicesSupported
     protected static final String ext = excelsiorJet.targetOS.exeFileExtension
 
     File basedir = new File(getClass().getClassLoader().getResource(testProjectDir()).file)
