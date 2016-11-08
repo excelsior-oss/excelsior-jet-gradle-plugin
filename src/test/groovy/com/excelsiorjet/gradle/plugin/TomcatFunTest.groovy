@@ -5,13 +5,14 @@ class TomcatFunTest extends BaseFunTest {
     def "test tomcat configuration"() {
         given:
         def prjFile = new File(jetBuildDir, "HelloTomcat.prj")
+        File installer = new File(basedir, "build/jet/${projectName()}-" + projectVersion() + ext)
 
         when:
         runGradle("clean", "war", "jetBuild")
 
         then:
         new File(appDir, "bin/HelloTomcat$ext").exists()
-        zipFile.exists()
+        excelsiorInstallerSupported && installer.exists() || zipFile.exists()
 
         new File(basedir, "build/jet/build/HelloTomcat_jetpdb/tmpres/ROOT/WEB-INF/lib/commons-io-1.3.2.jar").exists()
 
