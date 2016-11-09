@@ -134,7 +134,7 @@ class AbstractJetTask extends DefaultTask {
 
     private void validateSettings() {
         ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
-        if (ext.appType == ApplicationType.TOMCAT.toString()) {
+        if (ext.getAppType() == ApplicationType.TOMCAT.toString()) {
             if (ext.getIgnoreProjectDependencies()) {
                 throw new JetTaskFailureException(s("JetApi.IgnoreProjectDependenciesShouldNotBeSetForTomcatApplications"));
             }
