@@ -33,11 +33,13 @@ and have all their dependencies explicitly listed in the JVM classpath at launch
 * **Tomcat Web applications** &mdash; `.war` files that can be deployed to the
   Apache Tomcat application server.
 
-* **Invocation Dynamic Libraries**, dynamic library (e.g. Windows DLL) callable
-  from applications written in another language
+* **Invocation Dynamic Libraries** (e.g. Windows DLLs) callable
+  from non-JVM languages via the Invocation API
 
-* **Windows Services**, is a special long-running process that may be launched
-   during operating system bootstrap (for Windows only)
+* **Windows Services**, special long-running processes that may be launched
+   during operating system bootstrap and use the
+   [Excelsior JET WinService API](https://github.com/excelsior-oss/excelsior-jet-winservice-api)
+   (Windows only)
 
 In other words, if your application can be launched using a command line
 of the following form:
@@ -49,8 +51,8 @@ java -cp [dependencies-list] [main class]
 and loads classes mostly from jars that are present
 in the `dependencies-list`, *or* if it is packaged into a `.war` file that can be deployed
 to a Tomcat application server instance, then you can use this plugin.
-Invocation Dynamic Libraries and Windows Services is essentially a special build mode of Plain Java SE applications
-to special executable types: dynamic libraries and windows services.
+Invocation Dynamic Libraries and Windows Services are essentially special build modes
+of Plain Java SE applications that yield different executable types: dynamic libraries or Windows services.
 
 Excelsior JET can also compile Eclipse RCP applications.
 The plugin does not yet support Eclipse RCP projects nor some advanced Excelsior JET features.
@@ -94,10 +96,9 @@ the `tomcatHome` parameter pointing to a *clean* Tomcat installation, a copy of 
 for the deployment of your Web application at build time.
 See [Building Tomcat Web Applications](#building-tomcat-web-applications) section below for more details.
 
-[Invocation Dynamic Library](#invocation-dynamic-libraries) does not need main class as well,
-
-and main class of [Windows Service](#windows-services) must extend a special class `com.excelsior.service.WinService`
-of [Excelsior JET WinService API](https://github.com/excelsior-oss/excelsior-jet-winservice-api).
+An [Invocation Dynamic Library](#invocation-dynamic-libraries) does not need a main class either,
+and the main class of a [Windows Service](#windows-services) application must extend a special class `com.excelsior.service.WinService`
+of the [Excelsior JET WinService API](https://github.com/excelsior-oss/excelsior-jet-winservice-api).
 
 ### Excelsior JET Installation Directory Lookup
 
@@ -976,12 +977,13 @@ you may set within the `tomcat{}` parameters section:
   However, if you are going to launch the created executable directly, you may set
   the `genScripts` parameter to `false`.
 
-* `<installWindowsService>` - If you opt `excelsior-installer` packaging for Tomcat on Windows then
-  by default, the installer registers the Tomcat executable as a Windows service.
+* `installWindowsService` - If you opt for `excelsior-installer` packaging for Tomcat on Windows,
+  the installer will register the Tomcat executable as a Windows service by default.
   You may set this parameter to `false` to disable that behavior.
-  Otherwise, you may configure Windows Service specific parameters for Tomcat service adding
-  `<windowsServiceConfiguration>` section as described [here](#windows-service-configuration).
-  The functionality is only available since 11.3 Excelsior JET version.
+  Otherwise, you may configure Windows Service-specific parameters for the Tomcat service by adding
+  a `windowsService` section as described [here](#windows-service-configuration).
+
+    **Note:** This functionality is only available in Excelsior JET 11.3 and above.
 
 #### Multiple Web applications and Tomcat installation configuration
 Excelsior JET can also compile multiple Web applications deployed onto a single Tomcat instance.
@@ -1016,7 +1018,8 @@ So it is recommended to use the standard Tomcat `shutdown` script for correct To
 of a Test Run. You may launch it from any standard Tomcat installation.
 
 ### Invocation Dynamic Libraries
-To create a dynamic library callable from applications written in another language instead of a runnable executable,
+
+To create a dynamic library callable from applications written in a non-JVM language instead of a runnable executable,
 you need to add the plugin dependency to the `buildscript` configuration of the `build.gradle` file, e.g.:
 
 ```gradle
@@ -1044,13 +1047,14 @@ Using Invocation DLLs is a bit tricky.
 Like any other JVM, Excelsior JET executes Java code in a special isolated context
 to correctly support exception handling, garbage collection, and so on.
 That is why Java methods cannot be directly invoked from a foreign environment.
-Instead, you have to use the standard Java 2 platform APIs, specifically the Invocation API and Java Native Interface (JNI).
+Instead, you have to use the standard Java SE platform APIs, specifically the Invocation API and Java Native Interface (JNI).
 See samples/Invocation in your JET installation directory for detailed examples.
 
 #### Test Run for Dynamic Libraries
-To test your application even if you are going to build it as a dynamic library, you may still set
-a "test" `main` class in the plugin configuration that will in turn call methods
-that are subject for usage from another language.
+
+To test an invocation dynamic library, you may set
+a "test" `mainClass` in the plugin configuration. The `main` method of that class
+should in turn call methods that are subject for usage from a non-JVM language.
 
 ### Windows Services
 
@@ -1068,17 +1072,17 @@ using which it can be installed to/removed from the system. A service can be ins
 (to be launched at system bootstrap) or manual (to be activated later by a user
 through the start button in the Windows Control Panel/Services).
 
-#### Adding dependency to Excelsior JET WinService API
+#### Adding dependency on the Excelsior JET WinService API
 
-Windows service program must register a callback routine (so called control handler)
+A Windows service program must register a callback routine (so called control handler)
 that is invoked by the system on service initialization, interruption, resume, etc.
 With Excelsior JET, you achieve this functionality by implementing a subclass of
-`com.excelsior.service.WinService` of Excelsior JET WinService API and specifying it as the main class of the plugin configuration.
+`com.excelsior.service.WinService` of the Excelsior JET WinService API and specifying it as the main class of the plugin configuration.
 The JET Runtime will instantiate that class on startup and translate calls to the callback routine into calls
 of its respective methods, collectively called handler methods. For more details, refer to the
-"Windows services" section of the Excelsior JET User's Guide.
+"Windows services" Chapter of the Excelsior JET User's Guide.
 
-To compile your implementation of `WinService` to Java bytecode you will need to reference Excelsior JET WinService API
+To compile your implementation of `WinService` to Java bytecode you will need to reference the Excelsior JET WinService API
 from your Gradle build script. For that, add the following dependency to your `build.gradle` file:
 
 ```gradle
@@ -1127,21 +1131,20 @@ excelsiorJet {
 
 Where:
 
-* `mainClass` - must extend `com.excelsior.service.WinService` of Excelsior WinService API.
+* `mainClass` - a class extending the `com.excelsior.service.WinService` class of the Excelsior JET WinService API.
 
 * `name` -  the system name of the service. It is used to install, remove and otherwise manage the service.
   It can also be used to recognize messages from this service in the system event log.
   This name is set during the creation of the service executable.
-  By default, `outputName` parameter is used for the name.
+  By default, the value of the `outputName` parameter is used as the system name of the service.
 
 * `displayName` - the descriptive name of the service.
   It is shown in the Event Viewer system tool and in the Services applet of the Windows Control Panel.
-  By default, `name` parameter of `windowsService{}` is used for the display name.
-
+  By default, the value of the `name` parameter of `windowsService{}` is used as the display name.
 
 * `description` - the user description of the service. It must not exceed 1000 characters.
 
-* `arguments` - the command line arguments passed to the service upon startup.
+* `arguments` - command line arguments that shall be passed to the service upon startup.
 
 * `logOnType` - specifies an account to be used by the service.
   Valid values are: `local-system-account` (default), `user-account`.
@@ -1151,7 +1154,8 @@ Where:
      and password necessary to run the service.
 
 * `allowDesktopInteraction` - specifies if the service needs to interact with the system desktop,
-  e.g. open/close other windows, etc. This option is only available under the `local-system-account`.
+  e.g. open/close other windows, etc. This option is only available is the service is installed
+  under the local system account.
 
 * `startupType` -  specifies how to start the service. Valid values are `automatic` (default), `manual`, `disabled`.
   - `automatic` - specifies that the service should start automatically when the system starts.
@@ -1160,18 +1164,18 @@ Where:
   - `disabled` - prevents the service from being started by the system, a user, or any dependent service.
 
 * `startServiceAfterInstall` -  specifies if the service should be started immediately after installation.
-   Available only for `excelsior-installer` `packaging` parameter.
+   Available only for the `excelsior-installer` `packaging` parameter.
 
 *  `dependencies` - list of other service names on which the service depends.
 
-The plugin will create the `install.bat`/`uninstall.bat` scripts in the `build/jet/app` to install/uninstall
-the service manually based on provided parameters above to test it.
-If you opt for `excelsior-installer` packaging type, the service will be installed automatically
-after the package installation.
+Based on the above parameters, the plugin will create the `install.bat`/`uninstall.bat` scripts
+in the `target/jet/app` directory to enable you to install and uninstall the service manually to test it. 
+If you opt for the `excelsior-installer` packaging type, the service will be registered automatically
+during package installation.
 
 **Note:** The plugin does not support creation of Excelsior Installer packages for Windows Services
-for Excelsior JET 11.0 version due to a missing respective functionality in `xpack` utility.
-However it works for Excelsior JET 11.3 and above.
+using Excelsior JET 11.0, as the respective functionality is missing in the `xpack` utility.
+It only works for Excelsior JET 11.3 and above.
 
 **Note:** You may build a multi-app executable runnable as both plain application and Windows service.
 For that set `appType` parameter to "windows-service" and `multiApp` parameter to `true`.
@@ -1181,9 +1185,10 @@ to add "-args" as first argument of your service `arguments` list.
 
 #### Test Run of Windows Services
 
-Unfortunately, the service cannot be installed to the system before its compilation, so basically a fully functional
-Test Run is not available for Windows Services. However it is recommended to add `public static void main(String args[])`
-method to your Windows Service main class to test your basic application functionality with Test Run.
+Unfortunately, a service cannot be resistered in the system before its compilation,
+so a fully functional Test Run is not available for Windows Services. However, it is recommended
+to add a `public static void main(String args[])` method to your Windows Service main class
+to test your basic application functionality with Test Run.
 
 ## Sample Project
 
