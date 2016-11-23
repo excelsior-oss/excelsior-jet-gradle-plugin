@@ -1039,7 +1039,7 @@ then apply and configure the `excelsiorJet` plugin as follows:
 ```gradle
 apply plugin: 'excelsiorJet'
 excelsiorJet {
-    appType = "invocation-dynamic-library"
+    appType = "dynamic-library"
 }
 ```
 

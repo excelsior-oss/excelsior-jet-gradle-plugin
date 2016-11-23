@@ -15,6 +15,6 @@ version = "1.0-SNAPSHOT"
 
 apply plugin: 'excelsiorJet'
 excelsiorJet {
-    appType = 'invocation-dynamic-library'
+    appType = 'dynamic-library'
     packaging = 'none'
 }
