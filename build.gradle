@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.4'
-    compile 'com.excelsiorjet:excelsior-jet-api:0.9.0-SNAPSHOT'
+    compile 'com.excelsiorjet:excelsior-jet-api:0.9.0'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
 
