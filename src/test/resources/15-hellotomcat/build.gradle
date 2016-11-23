@@ -20,6 +20,9 @@ excelsiorJet {
         hideConfig = false
         genScripts = false
     }
+    windowsService {
+        description = "Jet Compiled Tomcat"
+    }
     dependencies {
         dependency {
             artifactId = 'commons-io'
@@ -30,6 +33,7 @@ excelsiorJet {
             protect = "not-required"
         }
     }
+    packaging = "excelsior-installer"
 }
 
 repositories {

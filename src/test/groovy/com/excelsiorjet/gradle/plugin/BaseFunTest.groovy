@@ -14,6 +14,8 @@ abstract class BaseFunTest extends Specification {
     protected static final boolean isOSX = excelsiorJet.targetOS.isOSX()
     protected static final boolean excelsiorInstallerSupported = excelsiorJet.excelsiorInstallerSupported
     protected static final boolean crossCompilation = excelsiorJet.crossCompilation
+    protected static final boolean windowsServicesSupported = excelsiorJet.windowsServicesSupported
+    protected static final boolean windowsServicesInExcelsiorInstallerSupported = excelsiorJet.windowsServicesInExcelsiorInstallerSupported
     protected static final String ext = excelsiorJet.targetOS.exeFileExtension
 
     File basedir = new File(getClass().getClassLoader().getResource(testProjectDir()).file)
@@ -56,6 +58,10 @@ abstract class BaseFunTest extends Specification {
 
     public static String toUnixLineSeparators(String text) {
         text.replaceAll("\r\n", "\n")
+    }
+
+    public static String mangleDllName(String name) {
+        excelsiorJet.targetOS.mangleDllName(name)
     }
 
     protected abstract String testProjectDir()

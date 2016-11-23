@@ -30,6 +30,8 @@ import org.gradle.api.DefaultTask
 
 import java.security.MessageDigest
 
+import static com.excelsiorjet.api.util.Txt.s
+
 /**
  * Base class for ExcelsiorJet plugin tasks.
  *
@@ -42,7 +44,8 @@ class AbstractJetTask extends DefaultTask {
     protected JetProject createJetProject() {
         ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
         validateSettings()
-        def jetProject = new JetProject(project.name, ext.getGroupId(), ext.getVersion(), ext.appType, project.buildDir, ext.getJetResourcesDir())
+        def jetProject = new JetProject(project.name, ext.getGroupId(), ext.getVersion(),
+                JetProject.checkAndGetAppType(ext.appType),  project.buildDir, ext.getJetResourcesDir())
 
         // getters should be used to fallback into convention mapping magic, when field is not set
         jetProject.projectDependencies(getDependencies())
@@ -71,6 +74,7 @@ class AbstractJetTask extends DefaultTask {
                 .vendor(ext.getVendor())
                 .product(ext.getProduct())
                 .excelsiorInstallerConfiguration(ext.getExcelsiorInstaller())
+                .windowsServiceConfiguration(ext.getWindowsService())
                 .globalOptimizer(ext.getGlobalOptimizer())
                 .javaRuntimeSlimDown(ext.getJavaRuntimeSlimDown())
                 .trialVersion(ext.getTrialVersion())
@@ -130,7 +134,7 @@ class AbstractJetTask extends DefaultTask {
 
     private void validateSettings() {
         ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
-        if (ext.getAppType() == ApplicationType.TOMCAT) {
+        if (ext.getAppType() == ApplicationType.TOMCAT.toString()) {
             if (ext.getIgnoreProjectDependencies()) {
                 throw new JetTaskFailureException(s("JetApi.IgnoreProjectDependenciesShouldNotBeSetForTomcatApplications"));
             }

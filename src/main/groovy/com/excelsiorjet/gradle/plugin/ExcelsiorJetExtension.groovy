@@ -29,6 +29,7 @@ import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
 import com.excelsiorjet.api.tasks.config.SlimDownConfig
 import com.excelsiorjet.api.tasks.config.TomcatConfig
 import com.excelsiorjet.api.tasks.config.TrialVersionConfig
+import com.excelsiorjet.api.tasks.config.WindowsServiceConfig
 import groovy.transform.PackageScope
 
 /**
@@ -41,19 +42,22 @@ class ExcelsiorJetExtension {
 
     public static final String EXTENSION_NAME = "excelsiorJet"
 
-    // appType is package private property in Java terms
-    @PackageScope
-    ApplicationType appType
-
-    @PackageScope
-    ApplicationType getAppType() {
-        return this.appType
-    }
-
-    @PackageScope
-    void setAppType(ApplicationType appType) {
-        this.appType = appType
-    }
+    /**
+     * Application type. Permitted values are:
+     * <dl>
+     * <dt>plain</dt>
+     * <dd>plain Java application, that runs standalone,
+     * default type if {@code java} plugin applied</dd>
+     * <dt>invocation-dynamic-library</dt>
+     * <dd>dynamic library callable from a non-Java environment</dd>
+     * <dt>windows-service</dt>
+     * <dd>Windows service (Windows only)</dd>
+     * <dt>tomcat</dt>
+     * <dd>servlet-based Java application, that runs within Tomcat servlet container,
+     * default type if {@code war} plugin applied</dd>
+     * </dl>
+     */
+    String appType;
 
     /**
      * Excelsior JET installation directory.
@@ -306,6 +310,27 @@ class ExcelsiorJetExtension {
     def excelsiorInstaller(Closure closure) {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.delegate = excelsiorInstaller
+        closure()
+    }
+
+    /**
+     * Windows Service configuration parameters.
+     *
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#name
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#displayName
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#description
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#arguments
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#logOnType
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#allowDesktopInteraction
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#startupType
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#startServiceAfterInstall
+     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#dependencies
+     */
+    WindowsServiceConfig windowsService = new WindowsServiceConfig();
+
+    def windowsService(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = windowsService;
         closure()
     }
 

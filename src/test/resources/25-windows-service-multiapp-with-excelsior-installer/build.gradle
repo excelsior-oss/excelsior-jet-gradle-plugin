@@ -1,0 +1,39 @@
+buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+    }
+}
+
+apply plugin: "java"
+group = "com.excelsior.it"
+version = "1.0-SNAPSHOT"
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    appType = "windows-service"
+    mainClass = "SampleService"
+    multiApp = true
+    hideConsole = true
+    windowsService {
+        displayName = "Sample Service"
+        description = "Sample Service created with Excelsior JET"
+        arguments = ["-args", "arg", "arg with space", "arg3 with space"]
+        logOnType = "user-account"
+        startupType = "manual"
+        dependencies = ["Dhcp", "Dnscache"]
+    }
+    packaging = "excelsior-installer"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly "com.excelsiorjet:excelsior-jet-winservice-api:1.0.0"
+}
