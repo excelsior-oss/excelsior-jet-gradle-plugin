@@ -90,6 +90,7 @@ class AbstractJetTask extends DefaultTask {
                 .tomcatConfiguration(ext.getTomcat())
                 .runArgs(ext.getRunArgs())
                 .dependencies(ext.getDependencies())
+                .compactProfile(ext.getProfile())
 
         return jetProject
     }
