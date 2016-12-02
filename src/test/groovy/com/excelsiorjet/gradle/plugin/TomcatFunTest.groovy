@@ -1,7 +1,10 @@
 package com.excelsiorjet.gradle.plugin
 
+import spock.lang.IgnoreIf
+
 class TomcatFunTest extends BaseFunTest {
 
+    @IgnoreIf({!tomcatSupported})
     def "test tomcat configuration"() {
         given:
         def prjFile = new File(jetBuildDir, "HelloTomcat.prj")

@@ -16,6 +16,13 @@ abstract class BaseFunTest extends Specification {
     protected static final boolean crossCompilation = excelsiorJet.crossCompilation
     protected static final boolean windowsServicesSupported = excelsiorJet.windowsServicesSupported
     protected static final boolean windowsServicesInExcelsiorInstallerSupported = excelsiorJet.windowsServicesInExcelsiorInstallerSupported
+    protected static final boolean multiAppSupported = excelsiorJet.multiAppSupported
+    protected static final boolean startupProfileGenerationSupported = excelsiorJet.startupProfileGenerationSupported
+    protected static final boolean trialSupported = excelsiorJet.trialSupported
+    protected static final boolean dataProtectionSupported = excelsiorJet.dataProtectionSupported
+    protected static final boolean tomcatSupported = excelsiorJet.tomcatSupported
+    protected static final boolean compactProfilesSupported = excelsiorJet.compactProfilesSupported
+
     protected static final String ext = excelsiorJet.targetOS.exeFileExtension
 
     File basedir = new File(getClass().getClassLoader().getResource(testProjectDir()).file)

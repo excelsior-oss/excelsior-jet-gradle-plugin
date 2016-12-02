@@ -1,9 +1,11 @@
 package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
+import spock.lang.IgnoreIf
 
 class CompactProfilesFunTest extends BaseFunTest implements HelloWorldProject {
 
+    @IgnoreIf({!compactProfilesSupported})
     def "jetBuild task builds simple application packaging with compact3 profile"() {
         when:
         def libManagement = new File(basedir, "build/jet/app/rt/lib/management")

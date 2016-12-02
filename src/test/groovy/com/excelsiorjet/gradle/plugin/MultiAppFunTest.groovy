@@ -1,9 +1,11 @@
 package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
+import spock.lang.IgnoreIf
 
 class MultiAppFunTest extends BaseFunTest implements HelloWorldProject {
 
+    @IgnoreIf({!multiAppSupported})
     def "jetBuild task builds simple multiapp application"() {
         when:
         def result = runGradle('jetBuild')

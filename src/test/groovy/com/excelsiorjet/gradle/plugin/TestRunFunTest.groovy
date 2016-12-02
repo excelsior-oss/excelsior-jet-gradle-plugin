@@ -15,10 +15,12 @@ class TestRunFunTest extends BaseFunTest implements HelloWorldProject {
         def result = runGradle('jetTestRun', 'jetBuild')
 
         then:
-        startupProfile.exists()
-        reorderFile.exists();
-        new File(basedir, "build/jet/build/custom.file").exists()
-        new File(basedir, "build/jet/build/subdir/subdir.file").exists()
+        if (startupProfileGenerationSupported) {
+            startupProfile.exists()
+            reorderFile.exists();
+            new File(basedir, "build/jet/build/custom.file").exists()
+            new File(basedir, "build/jet/build/subdir/subdir.file").exists()
+        }
 
         result.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
