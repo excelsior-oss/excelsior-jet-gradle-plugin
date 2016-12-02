@@ -712,6 +712,21 @@ To enable the Global Optimizer, add the following configuration parameter:
 
 #### Optional Runtime Components Configurations
 
+##### Compact Profiles
+
+Java SE 8 defines three subsets of the standard Platform API called compact profiles.
+Excelsior JET enables you to deploy your application with one of those subsets.
+
+To specify a particular profile, use the `profile` plugin parameter:
+
+Valid values are: `auto` (default), `compact1`, `compact2`, `compact3`, `full`
+
+`profile = "auto"` forces Excelsior JET to detect which parts of the Java SE Platform API are referenced
+by the application and select the smallest compact profile that includes them all,
+or the entire Platform API (`full`) if there is no such profile.
+
+**Note:** This functionality is only available in Excelsior JET 11.3 and above.
+
 ##### Locales and charsets
 Additional locales and character encoding sets that may potentially be in use in the regions
 where you distribute your application can be added to the package with the following configuration:
@@ -761,6 +776,10 @@ classes implementing those APIs and the associated files, placing them in a sepa
 
 The detached package should be placed on a Web server so that the JET Runtime could download it
 if the deployed application attempts to use any of the detached components via JNI or the Reflection API.
+
+**Note:** This functionality is deprecated in Excelsior JET 11.3
+          in favor of the newly added [Compact Profiles](#compact-profiles) feature,
+          and will be removed in future versions.
 
 To enable Java Runtime Slim-Down, copy and paste the following plugin configuration:
 
@@ -1210,6 +1229,11 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
+Version 0.9.1 (??-Dec-2016)
+
+* Support for Compact Profiles
+* Not working Test Run for 7+ Tomcat versions fixed
+
 Version 0.9.0 (23-Nov-2016)
 
 Invocation dynamic libraries and Windows services support.
@@ -1271,7 +1295,7 @@ and placing it into a separate directory with required Excelsior JET runtime fil
 Even though we are going to base the plugin development on your feedback in the future, we have our own short-term plan as well.
 So the next few releases will add the following features:
 
-* Windows services support.
+* Excelsior JET 11.3 release features support
 * Multi-component support: building dependencies into separate native libraries
                            to reuse them across multiple Gradle project builds
                            so as to reduce overall compilation time

@@ -1,7 +1,10 @@
 package com.excelsiorjet.gradle.plugin
 
+import spock.lang.IgnoreIf
+
 class ProtectDataFunTest extends BaseFunTest implements HelloWorldProject {
 
+    @IgnoreIf({!dataProtectionSupported})
     def "test protect data configuration"() {
         when:
         runGradle("clean", "jetBuild")

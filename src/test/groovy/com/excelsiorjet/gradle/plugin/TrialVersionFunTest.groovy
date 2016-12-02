@@ -1,7 +1,10 @@
 package com.excelsiorjet.gradle.plugin
 
+import spock.lang.IgnoreIf
+
 class TrialVersionFunTest extends BaseFunTest implements HelloWorldProject {
 
+    @IgnoreIf({!trialSupported})
     def "test trial version configuration"() {
         when:
         runGradle("clean", "jetBuild")
