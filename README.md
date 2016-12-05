@@ -66,7 +66,7 @@ you need to add the plugin dependency in the `buildscript{}` configuration of th
 
 ```gradle
 buildscript {
-    ext.jetPluginVersion = '0.9.0'
+    ext.jetPluginVersion = '0.9.1'
     repositories {
         mavenCentral()
     }
@@ -900,7 +900,7 @@ To enable native compilation of your Tomcat Web application, you need to add the
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.9.0'
+    def jetPluginVersion = '0.9.1'
     repositories {
         mavenCentral()
     }
@@ -1043,7 +1043,7 @@ you need to add the plugin dependency to the `buildscript` configuration of the 
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.9.0'
+    def jetPluginVersion = '0.9.1'
     repositories {
         mavenCentral()
     }
@@ -1117,7 +1117,7 @@ of the `build.gradle` file, e.g.:
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.9.0'
+    def jetPluginVersion = '0.9.1'
     repositories {
         mavenCentral()
     }
@@ -1229,7 +1229,7 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
-Version 0.9.1 (??-Dec-2016)
+Version 0.9.1 (02-Dec-2016)
 
 * Support for Compact Profiles
 * Not working Test Run for 7+ Tomcat versions fixed
