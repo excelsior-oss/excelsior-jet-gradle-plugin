@@ -30,6 +30,7 @@ import com.excelsiorjet.api.tasks.config.SlimDownConfig
 import com.excelsiorjet.api.tasks.config.TomcatConfig
 import com.excelsiorjet.api.tasks.config.TrialVersionConfig
 import com.excelsiorjet.api.tasks.config.WindowsServiceConfig
+import com.excelsiorjet.api.tasks.config.WindowsVersionInfoConfig
 import groovy.transform.PackageScope
 
 /**
@@ -249,34 +250,42 @@ class ExcelsiorJetExtension {
     /**
      * (Windows) If set to {@code true}, a version-information resource will be added to the final executable.
      *
-     * @see #vendor vendor
-     * @see #product product
-     * @see #winVIVersion winVIVersion
-     * @see #winVICopyright winVICopyright
-     * @see #winVIDescription winVIDescription
+     * @see #windowsVersionInfo
+     * @see WindowsVersionInfoConfig#company
+     * @see WindowsVersionInfoConfig#product
+     * @see WindowsVersionInfoConfig#version
+     * @see WindowsVersionInfoConfig#copyright
+     * @see WindowsVersionInfoConfig#description
      */
     boolean addWindowsVersionInfo = true
 
     /**
-     * (Windows) Version number string for the version-information resource.
-     * (Both {@code ProductVersion} and {@code FileVersion} resource strings are set to the same value.)
-     * Must have {@code v1.v2.v3.v4} format where {@code vi} is a number.
-     * If not set, {@code project.version} is used. If the value does not meet the required format,
-     * it is coerced. For instance, "1.2.3-SNAPSHOT" becomes "1.2.3.0"
-     *
-     * @see #version version
+     * Windows version-information resource description.
      */
+    WindowsVersionInfoConfig windowsVersionInfo = new WindowsVersionInfoConfig()
+
+    def windowsVersionInfo(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = windowsVersionInfo;
+        closure()
+    }
+
+    /**
+     * Deprecated. Use {@link #windowsVersionInfo} parameter instead.
+     */
+    @Deprecated
     String winVIVersion
 
     /**
-     * (Windows) Legal copyright notice string for the version-information resource.
-     * By default, {@code "Copyright © [inceptionYear],[curYear] [vendor]"} is used.
+     * Deprecated. Use {@link #windowsVersionInfo} parameter instead.
      */
+    @Deprecated
     String winVICopyright
 
     /**
-     * (Windows) File description string for the version-information resource.
+     * Deprecated. Use {@link #windowsVersionInfo} parameter instead.
      */
+    @Deprecated
     String winVIDescription
 
     /**

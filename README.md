@@ -528,9 +528,10 @@ configuration:
 By default, the values of version-information resource strings are derived from project settings.
 The values of `product` and `vendor` configurations are used verbatim as
 `ProductName` and `CompanyName` respectively;
-other defaults can be changed using the following configuration parameters:
+other defaults can be changed using the 'windowsVersionInfo{}' configuration section,
+that has the following configuration parameters:
 
-  * `winVIVersion =`&nbsp;*`version-string`*
+  * `version =`&nbsp;*`version-string`*
 
     Version number (both `FileVersion` and `ProductVersion` strings are set to this same value)
 
@@ -538,11 +539,11 @@ other defaults can be changed using the following configuration parameters:
     The plugin would use heuristics to derive a correct version string from the specified value if the latter
     does not meet this requirement, or from `project.version` if this configuration is not present.
 
-  * `winVICopyright =`&nbsp;*`legal-copyright`*
+  * `copyright =`&nbsp;*`legal-copyright`*
 
     `LegalCopyright` string, with default value derived from other parameters
 
-  * `winVIDescription =`&nbsp;*`executable-description`*
+  * `description =`&nbsp;*`executable-description`*
 
     `FileDescription` string, default is `project.name`
 
@@ -1253,6 +1254,8 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 Version 0.9.2 (??-Dec-2016)
 
 * Support for Disk Footprint Reduction
+* Windows version-info resource configuration changed to meet other enclosed configurations style.
+  Old way to configure Windows version info is deprecated and will be removed in a future release.
 
 Version 0.9.1 (02-Dec-2016)
 
