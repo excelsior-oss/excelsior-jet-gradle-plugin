@@ -53,15 +53,21 @@ class JetBuildTask extends AbstractJetTask {
         ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
         if (ext.getWinVIVersion() != null) {
             logger.warn(s("JetBuildTask.WinVIDeprecated.Warning", "winVIVersion", "version"));
-            ext.windowsVersionInfo.version = ext.getWinVIVersion()
+            if (ext.windowsVersionInfo.version == null) {
+                ext.windowsVersionInfo.version = ext.getWinVIVersion()
+            }
         }
         if (ext.getWinVICopyright() != null) {
             logger.warn(s("JetBuildTask.WinVIDeprecated.Warning", "winVICopyright", "copyright"))
-            ext.windowsVersionInfo.copyright = ext.getWinVICopyright()
+            if (ext.windowsVersionInfo.copyright == null) {
+                ext.windowsVersionInfo.copyright = ext.getWinVICopyright()
+            }
         }
         if (ext.getWinVIDescription() != null) {
             logger.warn(s("JetBuildTask.WinVIDeprecated.Warning", "winVIDescription", "description"))
-            ext.windowsVersionInfo.description = ext.getWinVIDescription()
+            if (ext.windowsVersionInfo.description == null) {
+                ext.windowsVersionInfo.description = ext.getWinVIDescription()
+            }
         }
     }
 
