@@ -74,7 +74,7 @@ class AbstractJetTask extends DefaultTask {
                 .excelsiorInstallerConfiguration(ext.getExcelsiorInstaller())
                 .windowsServiceConfiguration(ext.getWindowsService())
                 .globalOptimizer(ext.getGlobalOptimizer())
-                .javaRuntimeSlimDown(ext.getJavaRuntimeSlimDown())
+                .runtimeConfiguration(ext.getRuntime())
                 .trialVersion(ext.getTrialVersion())
                 .osxBundleConfiguration(ext.getOsxBundle())
                 .multiApp(ext.getMultiApp())
@@ -82,14 +82,10 @@ class AbstractJetTask extends DefaultTask {
                 .profileStartupTimeout(ext.getProfileStartupTimeout())
                 .protectData(ext.getProtectData())
                 .cryptSeed(ext.getCryptSeed())
-                .optRtFiles(ext.getOptRtFiles())
-                .locales(ext.getLocales())
                 .compilerOptions(ext.getCompilerOptions())
                 .tomcatConfiguration(ext.getTomcat())
                 .runArgs(ext.getRunArgs())
                 .dependencies(ext.getDependencies())
-                .compactProfile(ext.getProfile())
-                .diskFootprintReduction(ext.getDiskFootprintReduction())
 
         return jetProject
     }

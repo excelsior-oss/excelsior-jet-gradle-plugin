@@ -711,14 +711,23 @@ To enable the Global Optimizer, add the following configuration parameter:
 
 **Note:** performing a Test Run is mandatory if the Global Optimizer is enabled.
 
-#### Optional Runtime Components Configurations
+#### Excelsior JET Runtime Configurations
+
+The plugin allows you to configure Excelsior JET runtime via `<runtime>` configuration section:
+
+```gradle
+runtime {
+}
+```
+
+that has in turn itself parameters described below.
 
 ##### Compact Profiles
 
 Java SE 8 defines three subsets of the standard Platform API called compact profiles.
 Excelsior JET enables you to deploy your application with one of those subsets.
 
-To specify a particular profile, use the `profile` plugin parameter:
+To specify a particular profile, use the `profile` of `runtime{}` section:
 
 Valid values are: `auto` (default), `compact1`, `compact2`, `compact3`, `full`
 
@@ -733,7 +742,9 @@ Additional locales and character encoding sets that may potentially be in use in
 where you distribute your application can be added to the package with the following configuration:
 
 ```gradle
-locales = ["Locale"`, "Locale2"]
+runtime {
+   locales = ["Locale"`, "Locale2"]
+}
 ```
 
 You may specify `["all"]` as the value of `locales` to add all locales and charsets at once or
@@ -750,7 +761,9 @@ By default, only the `European` locales are added.
 To include optional JET Runtime components in the package, use the following configuration:
 
 ```gradle
-optRtFiles = ["optRtFile1", "optRtFile2"]
+runtime {
+    components = ["optComponent1", "optComponent2"]
+}
 ```
 
 You may specify `["all"]` as the value of `optRtFiles` to add all components at once or
@@ -758,7 +771,8 @@ You may specify `["all"]` as the value of `optRtFiles` to add all components at 
 
 The available optional components are:
 
-`runtime_utilities`, `fonts`, `awt_natives`, `api_classes`, `jce`, `accessibility`, `javafx`, `javafx-webkit`, `nashorn`, `cldr`
+`runtime_utilities`, `fonts`, `awt_natives`, `api_classes`, `jce`, `jdk_tools`, `accessibility`, `javafx`, `javafx-webkit`,
+`javafx-swing`, `javafx-qtkit`, `nashorn`, `cldr`, `dnsns`, `zipfs`
 
 *Note:* by default, the plugin automatically includes the optional components which the compiler detected
    as used when building the executable(s).
@@ -769,7 +783,7 @@ The 32-bit versions of Excelsior JET are capable of reducing the disk footprint 
 compiled with the [Global Optimizer](#global-optimizer) enabled, by compressing the (supposedly) unused Java SE API
 classes.
 
-To enable disk footprint reduction, add the following configuration parameter:
+To enable disk footprint reduction, add the following configuration parameter of `runtime{}` section:
 
 `<diskFootprintReduction>` = *disk-footprint-reduction-mode*
 
@@ -784,7 +798,7 @@ The available modes are:
                   onto the heap and can be garbage collected later.
 * `high-disk` - compress as in the `high-memory` mode, decompress to the temp directory
 
-#### Java Runtime Slim-Down Configurations
+##### Java Runtime Slim-Down Configurations
 
 The 32-bit versions of Excelsior JET feature Java Runtime Slim-Down, a unique
 Java application deployment model delivering a significant reduction
@@ -806,8 +820,10 @@ if the deployed application attempts to use any of the detached components via J
 To enable Java Runtime Slim-Down, copy and paste the following plugin configuration:
 
 ```gradle
-javaRuntimeSlimDown {
-    detachedBaseURL = ''
+runtime {
+    slimDown {
+        detachedBaseURL = ''
+    }
 }
 ```
 
@@ -817,7 +833,7 @@ and specify the base URL of the location where you plan to place the detached pa
 By default, the plugin automatically detects which Java SE APIs your application does not use
 and detaches the respective JET Runtime components from the installation package.
 Alternatively, you may enforce detaching of particular components using the following parameter
-under the `javaRuntimeSlimDown` configuration section:
+under the `slimDown` configuration section:
 
 `detachComponents =`&nbsp;*`comma-separated list of APIs`*
 
@@ -825,7 +841,7 @@ Available detachable components: `corba, management, xml, jndi, jdbc, awt/java2d
 
 At the end of the build process, the plugin places the detached package in the `jet` subdirectory
 of the Gradle target build directory. You may configure its name with the `detachedPackage` parameter
-of the `javaRuntimeSlimDown` section (by default the name is `artifactName.pkl`).
+of the `slimDown` section (by default the name is `artifactName.pkl`).
 
 Do not forget to upload the detached package to the location specified in `detachedBaseURL`
 above before deploying your application to end-users.
@@ -1253,7 +1269,11 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 Version 0.9.2 (??-Dec-2016)
 
-* Support for Disk Footprint Reduction
+* `runtime{}` configuration section introduced and related parameters moved to it:
+   `locales`, `profile`, `optRtFiles` renamed to `components`, `javaRuntimeSlimDown` renamed to `slimDown`.
+   Old configuration parameters are deprecated and will be removed in a future release.
+   Support for Disk Footprint Reduction added to `runtime{}` section via `diskFootprintReduction` parameter.
+
 * Windows version-info resource configuration changed to meet other enclosed configurations style.
   Old way to configure Windows version info is deprecated and will be removed in a future release.
 

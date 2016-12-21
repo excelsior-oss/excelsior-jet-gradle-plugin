@@ -16,5 +16,7 @@ version = "1.0-SNAPSHOT"
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = 'HelloWorld'
-    optRtFiles = ['javafx-webkit', 'nashorn']
+    runtime {
+        components = ['javafx-webkit', 'nashorn']
+    }
 }
