@@ -301,20 +301,28 @@ via the Reflection API at run time. That said, you can help it significantly to 
 dynamic class usage by performing a [Test Run](#performing-a-test-run) prior to the build.
 
 
-##### Automatic dependency categorization
+##### Optimization presets
 
-**IMPORTANT:**
+If you do not configure above settings for the dependencies all classes
+from the application's dependencies are compiled into an executable.
+It is so called `typical` optimization preset.
 
-As mentioned above, you may wish to set the `optimize` property to `auto-detect`
+However, as mentioned above, to reduce compilation time,
+you may wish to set the `optimize` property to `auto-detect`
 and the `protect` property to `not-required` for third-party dependencies, and
-set both properties to `all` for the dependencies contaiting your own classes.
-By default, the plugin distinguishes between application classes and third-party library classes
-automatically using the following rule: it treats all dependencies sharing the `groupId` with the
+set both properties to `all` for the dependencies containing your own classes.
+You may let the plugin to do that automatically choosing the `smart` optimization preset in
+the plugin configuration:
+
+`optimizationPreset = 'smart'`
+
+If you enable the `smart` mode, the plugin distinguishes between application classes and third-party library classes
+using the following heuristic: it treats all dependencies sharing the `groupId` with the
 main artifact as application classes, and all other dependencies as third-party dependencies.
 
 Therefore, if some of your application classes reside in a dependency with a different `groupId`
 than your main artifact, make sure to set the `optimize` and `protect` properties for them
-explicitly, for instance:
+explicitly when you enable the `smart` mode, for instance:
 
 ```gradle
 dependencies {
@@ -326,18 +334,14 @@ dependencies {
 }
 ```
 
-
-##### isLibrary hint
-
 Instead of setting the `protect` and `optimize` properties, you may provide a semantic hint
 to the future maintainers of the Gradle project that a particular dependency is a third party library
 by setting its `isLibrary` property to `true`. The plugin will then set `protect`
-to `not-required` and `optimize` to `auto-detect` automatically.
+to `not-required` and `optimize` to `auto-detect` when the `smart` mode is enabled.
 Conversely, if you set `isLibrary` to `false`, both those properties will be set to `all`.
-The following configuration is therefore equivalent to the example in the
-[previous section](#automatic-dependency-categorization):
+The following configuration is therefore equivalent to the abvove example:
 
-```xml
+```gradle
 dependencies {
     dependency {
        groupId = 'my.company.project.group'
@@ -1287,6 +1291,10 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 ```
 
 ## Release Notes
+
+Version 0.9.4 (??-Jan-2017)
+
+* `typical` and `smart` optimization presets introduced.
 
 Version 0.9.3 (19-Jan-2017)
 

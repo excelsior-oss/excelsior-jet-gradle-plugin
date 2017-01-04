@@ -22,6 +22,7 @@
 package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.tasks.ApplicationType
+import com.excelsiorjet.api.tasks.OptimizationPreset
 import com.excelsiorjet.api.tasks.config.DependencySettings
 import com.excelsiorjet.api.tasks.config.DependencySettings
 import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
@@ -523,6 +524,40 @@ class ExcelsiorJetExtension {
      * i.e. {@code -Djet.runArgs="arg1,Hello\, World"} will be passed to your application as {@code arg1 "Hello, World"})
      */
     String[] runArgs = []
+
+    /**
+     * Optimization presets define default optimization mode for application dependencies.
+     * There are two optimization presets available: {@code typical} and {@code smart}.
+     *
+     * <dl>
+     * <dt>typical</dt>
+     * <dd>
+     * Default compilation mode in which all classes from the application's dependencies are compiled into an executable by default.
+     * </dd>
+     * <dt>smart</dt>
+     * <dd>
+     * The Smart mode relies on a simple observation: an application using a Java API actually requires only a part
+     * the API's classes so there is no need to native compile the entire API implementation.
+     * The Smart mode detects which of your dependencies are libraries and tells the JET Optimizer
+     * to optimize only used classes from them. The remaining classes are kept in the bytecode form and handled
+     * by the JIT compiler, if the application tries to load them at run time.
+     * The Smart modes provides better compilation time and smaller executable in compare with the Typical mode but
+     * if some classes that it leaves in bytecode form will be JIT-compiled it may negatively affect
+     * the performance of your application.
+     * If you choose smart preset then performing the Test Run with a 32-bit Excelsior JET
+     * is highly recommended: Test Run of 32-bit Excelsior JET versions logs application classes
+     * that were accessed at runtime and the AOT compiler that has the results of the Test Run
+     * will compile those classes thus they will not be handled by JIT compiler at runtime.
+     * </dd>
+     *
+     * Note: in compare with similar presets of the JET Control Panal, the Smart mode of the Excelsior JET Maven and
+     * Gradle plugins do NOT enable the Global Optimizer.
+     *
+     * @see #dependencies
+     * @see DependencySettings
+     * @see #globalOptimizer
+     */
+    String optimizationPreset = OptimizationPreset.TYPICAL.toString()
 
     /**
      * List of settings of project dependencies.
