@@ -432,6 +432,27 @@ By default, the plugin assumes that the extra package files reside
 in the `src/main/jetresources/packagefiles` subdirectory of your project,
 but you may dynamically generate the contents of that directory by means of other Gradle plugins.
 
+If you only need to add a few additional package files,
+it may be more convenient to specify them separately then to prepare `packageFilesDir` directory.
+You may do it using `packageFiles{}` configuration section:
+
+```gradle
+packageFiles {
+    packageFile {
+        path = new File(project.projectDir, "my.file")
+        packagePath = "somePackageFolder1"
+    }
+    packageFile {
+        path = new File(project.projectDir, "my.file2")
+        packagePath = "somePackageFolder2"
+    }
+    ...
+}
+```
+
+where `path` is path to the file or folder on a host system and `packagePath` is location of the file/folder
+within the package (root folder if the parameter is omitted).
+
 #### Excelsior Installer Configurations
 
 The plugin supports the creation of Excelsior Installer setups -

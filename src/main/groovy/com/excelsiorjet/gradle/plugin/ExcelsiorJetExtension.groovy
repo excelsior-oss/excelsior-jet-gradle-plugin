@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Excelsior LLC.
+ * Copyright (c) 2016-2017 Excelsior LLC.
  *
  *  This file is part of Excelsior JET Gradle Plugin.
  *
@@ -21,8 +21,9 @@
 */
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.tasks.ApplicationType
-import com.excelsiorjet.api.tasks.OptimizationPreset
+import com.excelsiorjet.api.tasks.config.PackageFile
+import com.excelsiorjet.api.tasks.config.enums.ApplicationType
+import com.excelsiorjet.api.tasks.config.enums.OptimizationPreset
 import com.excelsiorjet.api.tasks.config.DependencySettings
 import com.excelsiorjet.api.tasks.config.DependencySettings
 import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
@@ -155,8 +156,30 @@ class ExcelsiorJetExtension {
      * {@link #jetResourcesDir} of your project, but you may also dynamically generate the contents
      * of the package files directory by means of other Gragle plugins.
      * </p>
+     *
+     * @see #packageFiles
      */
     File packageFilesDir
+
+    /**
+     * If you only need to add a few additional package files,
+     * it may be more convenient to specify them separately then to prepare {@link #packageFilesDir} directory.
+     */
+    List<PackageFile> packageFiles = []
+
+    def packageFiles(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = this
+        closure()
+    }
+
+    def packageFile(Closure closure) {
+        def pFile = new PackageFile();
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = pFile
+        closure()
+        packageFiles.add(pFile)
+    }
 
     /**
      * Directory containing Excelsior JET specific resource files such as application icons, installer splash,  etc.
