@@ -25,6 +25,13 @@ import com.excelsiorjet.api.ExcelsiorJet
 import com.excelsiorjet.api.tasks.JetProject
 import org.gradle.api.tasks.TaskAction
 
+import static com.excelsiorjet.api.log.Log.logger
+import static com.excelsiorjet.api.log.Log.logger
+import static com.excelsiorjet.api.log.Log.logger
+import static com.excelsiorjet.api.util.Txt.s
+import static com.excelsiorjet.api.util.Txt.s
+import static com.excelsiorjet.api.util.Txt.s
+
 /**
  * Main task for building Java (JVM) applications with Excelsior JET.
  *
@@ -38,8 +45,30 @@ class JetBuildTask extends AbstractJetTask {
     def jetBuild() {
         ExcelsiorJet excelsiorJet = new ExcelsiorJet(jetHome)
         JetProject jetProject = createJetProject()
+        checkDeprecated()
         new com.excelsiorjet.api.tasks.JetBuildTask(excelsiorJet, jetProject).execute()
     }
 
+    private void checkDeprecated() {
+        ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
+        if (ext.getWinVIVersion() != null) {
+            logger.warn(s("JetBuildTask.WinVIDeprecated.Warning", "winVIVersion", "version"));
+            if (ext.windowsVersionInfo.version == null) {
+                ext.windowsVersionInfo.version = ext.getWinVIVersion()
+            }
+        }
+        if (ext.getWinVICopyright() != null) {
+            logger.warn(s("JetBuildTask.WinVIDeprecated.Warning", "winVICopyright", "copyright"))
+            if (ext.windowsVersionInfo.copyright == null) {
+                ext.windowsVersionInfo.copyright = ext.getWinVICopyright()
+            }
+        }
+        if (ext.getWinVIDescription() != null) {
+            logger.warn(s("JetBuildTask.WinVIDeprecated.Warning", "winVIDescription", "description"))
+            if (ext.windowsVersionInfo.description == null) {
+                ext.windowsVersionInfo.description = ext.getWinVIDescription()
+            }
+        }
+    }
 
 }
