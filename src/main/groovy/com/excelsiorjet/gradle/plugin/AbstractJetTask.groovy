@@ -91,6 +91,7 @@ class AbstractJetTask extends DefaultTask {
                 .runArgs(ext.getRunArgs())
                 .dependencies(ext.getDependencies())
                 .compactProfile(ext.getProfile())
+                .diskFootprintReduction(ext.getDiskFootprintReduction())
 
         return jetProject
     }
