@@ -15,8 +15,10 @@ version = "1.0-SNAPSHOT"
 
 apply plugin: 'excelsiorJet'
 excelsiorJet {
-    mainClass = 'HelloWorld'
+    mainClass = "HelloWorld"
+    packaging = "none"
     runtime {
-        components = ['javafx-webkit', 'nashorn']
+        flavor = "classic"
+        location = "hidden/runtime"
     }
 }

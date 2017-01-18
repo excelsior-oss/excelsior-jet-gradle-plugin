@@ -5,17 +5,16 @@ import spock.lang.IgnoreIf
 
 class SlimdownFunTest extends BaseFunTest implements HelloWorldProject {
 
-    @IgnoreIf({crossCompilation})
+    @IgnoreIf({!slimDownSupported})
     def "test java runtime slimdown"() {
         setup:
-        File jetRtFiles= new File(basedir, "build/jet/app/rt/jetrt")
         File rt0Jar = new File(basedir, "build/jet/app/rt/lib/rt-0.jar")
 
         when:
         def result = runGradle('clean', 'jetTestRun', 'jetBuild')
 
         then:
-        (jetRtFiles.listFiles().length > 1 || rt0Jar.exists())
+        rt0Jar.exists()
 
         result.task(":clean").outcome == TaskOutcome.SUCCESS || result.task(":clean").outcome == TaskOutcome.UP_TO_DATE
         result.task(":jetTestRun").outcome == TaskOutcome.SUCCESS

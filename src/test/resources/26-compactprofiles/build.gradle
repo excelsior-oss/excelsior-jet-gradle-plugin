@@ -16,6 +16,8 @@ version = "1.0-SNAPSHOT"
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = "HelloWorld"
-    profile   = "compact3"
+    runtime {
+        profile   = "compact3"
+    }
     packaging = "none"
 }

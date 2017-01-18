@@ -17,5 +17,7 @@ apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = 'HelloWorld'
     globalOptimizer = true
-    diskFootprintReduction = 'high-disk'
+    runtime {
+        diskFootprintReduction = 'high-disk'
+    }
 }

@@ -26,6 +26,7 @@ import com.excelsiorjet.api.tasks.config.DependencySettings
 import com.excelsiorjet.api.tasks.config.DependencySettings
 import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
 import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
+import com.excelsiorjet.api.tasks.config.RuntimeConfig
 import com.excelsiorjet.api.tasks.config.SlimDownConfig
 import com.excelsiorjet.api.tasks.config.TomcatConfig
 import com.excelsiorjet.api.tasks.config.TrialVersionConfig
@@ -325,15 +326,15 @@ class ExcelsiorJetExtension {
     /**
      * Windows Service configuration parameters.
      *
-     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#name
-     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#displayName
-     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#description
-     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#arguments
-     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#logOnType
-     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#allowDesktopInteraction
-     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#startupType
-     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#startServiceAfterInstall
-     * @see com.excelsiorjet.api.tasks.config.WindowsServiceConfig#dependencies
+     * @see WindowsServiceConfig#name
+     * @see WindowsServiceConfig#displayName
+     * @see WindowsServiceConfig#description
+     * @see WindowsServiceConfig#arguments
+     * @see WindowsServiceConfig#logOnType
+     * @see WindowsServiceConfig#allowDesktopInteraction
+     * @see WindowsServiceConfig#startupType
+     * @see WindowsServiceConfig#startServiceAfterInstall
+     * @see WindowsServiceConfig#dependencies
      */
     WindowsServiceConfig windowsService = new WindowsServiceConfig();
 
@@ -355,40 +356,55 @@ class ExcelsiorJetExtension {
     boolean globalOptimizer
 
     /**
-     * (32-bit only)
-     * Reduce the disk footprint of the application by including the supposedly unused Java SE API
-     * classes in the resulting package in a compressed form.
-     * Valid values are: {@code none},  {@code medium} (default),  {@code high-memory},  {@code high-disk}.
-     * <p>
-     * The feature is only available if {@link #globalOptimizer} is enabled.
-     * In this mode, the Java SE classes that were not compiled into the resulting executable are placed
-     * into the resulting package in bytecode form, possibly compressed depending on the mode:
-     * </p>
-     * <dl>
-     * <dt>none</dt>
-     * <dd>Disable compression</dd>
-     * <dt>medium</dt>
-     * <dd>Use a simple compression algorithm that has minimal run time overheads and permits
-     * selective decompression.</dd>
-     * <dt>high-memory</dt>
-     * <dd>Compress all unused Java SE API classes as a whole. This results in more significant disk
-     * footprint reduction compared to than medium compression. However, if one of the compressed classes
-     * is needed at run time, the entire bundle must be decompressed to retrieve it.
-     * In the {@code high-memory} reduction mode the bundle is decompressed 
-     * onto the heap and can be garbage collected later.</dd>
-     * <dt>high-disk</dt>
-     * <dd>Same as {@code high-memory}, but decompress to the temp directory.</dd>
-     * </dl>
+     * Runtime configuration parameters.
+     *
+     * @see RuntimeConfig#kind
+     * @see RuntimeConfig#profile
+     * @see RuntimeConfig#components
+     * @see RuntimeConfig#locales
+     * @see RuntimeConfig#diskFootprintReduction
+     * @see RuntimeConfig#location
      */
-    String diskFootprintReduction
+    RuntimeConfig runtime = {
+        def config = new RuntimeConfig()
+        //init embedded configuration
+        config.slimDown = new SlimDownConfig()
+        config.metaClass.slimDown = {
+            it.resolveStrategy = Closure.DELEGATE_FIRST
+            it.delegate = it.slimDown
+            it()
+        }
+        config
+    }.call()
+
+    def runtime(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = runtime
+        closure()
+    }
 
     /**
-     * (32-bit only) Java Runtime Slim-Down configuration parameters.
-     *
-     * @see SlimDownConfig#detachedBaseURL
-     * @see SlimDownConfig#detachComponents
-     * @see SlimDownConfig#detachedPackage
+     * Deprecated. Use {@link RuntimeConfig#profile} of {@link #runtime} parameter instead.
      */
+    @Deprecated
+    String profile
+
+    /**
+     * Deprecated. Use {@link RuntimeConfig#components} of {@link #runtime} parameter instead.
+     */
+    @Deprecated
+    String[] optRtFiles = []
+
+    /**
+     * Deprecated. Use {@link RuntimeConfig#locales} of {@link #runtime} parameter instead.
+     */
+    @Deprecated
+    String[] locales = []
+
+    /**
+     * Deprecated. Use {@link RuntimeConfig#slimDown} of {@link #runtime} parameter instead.
+     */
+    @Deprecated
     SlimDownConfig javaRuntimeSlimDown = new SlimDownConfig()
 
     def javaRuntimeSlimDown(Closure closure) {
@@ -396,19 +412,6 @@ class ExcelsiorJetExtension {
         closure.delegate = javaRuntimeSlimDown
         closure()
     }
-
-    /**
-     * Java SE 8 defines three subsets of the standard Platform API called compact profiles.
-     * Excelsior JET enables you to deploy your application with one of those subsets.
-     * You may set this parameter to specify a particular profile.
-     * Valid values are: {@code auto} (default),  {@code compact1},  {@code compact2},  {@code compact3}, {@code full}
-     *  <p>
-     * {@code auto} value (default) forces Excelsior JET to detect which parts of the Java SE Platform API
-     * are referenced by the application and select the smallest compact profile that includes them all,
-     * or the entire Platform API if there is no such profile.
-     * </p>
-     */
-    String profile
 
     /**
      * Trial version configuration parameters.
@@ -424,6 +427,7 @@ class ExcelsiorJetExtension {
         closure.delegate = trialVersion
         closure()
     }
+
     /**
      * OS X Application Bundle configuration parameters.
      *
@@ -481,30 +485,6 @@ class ExcelsiorJetExtension {
      * @see #protectData
      */
     String cryptSeed
-
-    /**
-     * Add optional JET Runtime components to the package.
-     * By default, only the {@code jce} component (Java Crypto Extension) is added.
-     * You may pass a special value {@code all} to include all available optional components at once
-     * or {@code none} to not include any of them.
-     * Available optional components:
-     * {@code runtime_utilities}, {@code fonts}, {@code awt_natives}, {@code api_classes}, {@code jce},
-     * {@code accessibility}, {@code javafx}, {@code javafx-webkit}, {@code nashorn}, {@code cldr}
-     */
-    String[] optRtFiles = []
-
-    /**
-     * Add locales and charsets.
-     * By default, only the {@code European} locales are added.
-     * You may pass a special value {@code all} to include all available locales at once
-     * or {@code none} to not include any of them.
-     * Available locales and charsets:
-     *    {@code European}, {@code Indonesian}, {@code Malay}, {@code Hebrew}, {@code Arabic},
-     *    {@code Chinese}, {@code Japanese}, {@code Korean}, {@code Thai}, {@code Vietnamese}, {@code Hindi},
-     *    {@code Extended_Chinese}, {@code Extended_Japanese}, {@code Extended_Korean}, {@code Extended_Thai},
-     *    {@code Extended_IBM}, {@code Extended_Macintosh}, {@code Latin_3}
-     */
-    String[] locales = []
 
     /**
      * Additional compiler options and equations.

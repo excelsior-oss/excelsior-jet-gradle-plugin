@@ -23,13 +23,10 @@ package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.ExcelsiorJet
 import com.excelsiorjet.api.tasks.JetProject
+import com.excelsiorjet.api.util.Utils
 import org.gradle.api.tasks.TaskAction
 
 import static com.excelsiorjet.api.log.Log.logger
-import static com.excelsiorjet.api.log.Log.logger
-import static com.excelsiorjet.api.log.Log.logger
-import static com.excelsiorjet.api.util.Txt.s
-import static com.excelsiorjet.api.util.Txt.s
 import static com.excelsiorjet.api.util.Txt.s
 
 /**
@@ -52,7 +49,7 @@ class JetBuildTask extends AbstractJetTask {
     private void checkDeprecated() {
         ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
         if (ext.getWinVIVersion() != null) {
-            logger.warn(s("JetBuildTask.WinVIDeprecated.Warning", "winVIVersion", "version"));
+            logger.warn(s("JetBuildTask.WinVIDeprecated.Warning", "winVIVersion", "version"))
             if (ext.windowsVersionInfo.version == null) {
                 ext.windowsVersionInfo.version = ext.getWinVIVersion()
             }
@@ -67,6 +64,30 @@ class JetBuildTask extends AbstractJetTask {
             logger.warn(s("JetBuildTask.WinVIDeprecated.Warning", "winVIDescription", "description"))
             if (ext.windowsVersionInfo.description == null) {
                 ext.windowsVersionInfo.description = ext.getWinVIDescription()
+            }
+        }
+        if (!Utils.isEmpty(ext.getOptRtFiles())) {
+            logger.warn(s("JetBuildTask.RTSettingDeprecated.Warning", "optRtFiles", "components ="))
+            if (Utils.isEmpty(ext.runtime.components)) {
+                ext.runtime.components = ext.getOptRtFiles()
+            }
+        }
+        if (!Utils.isEmpty(ext.getLocales())) {
+            logger.warn(s("JetBuildTask.RTSettingDeprecated.Warning", "locales", "locales ="))
+            if (Utils.isEmpty(ext.runtime.locales)) {
+                ext.runtime.locales = ext.getLocales()
+            }
+        }
+        if (ext.getJavaRuntimeSlimDown().isEnabled()) {
+            logger.warn(s("JetBuildTask.RTSettingDeprecated.Warning", "javaRuntimeSlimDown", "slimDown {\n    }"))
+            if (!ext.runtime.slimDown.isEnabled()) {
+                ext.runtime.slimDown = ext.getJavaRuntimeSlimDown()
+            }
+        }
+        if (ext.getProfile() != null) {
+            logger.warn(s("JetBuildTask.RTSettingDeprecated.Warning", "profile", "profile ="))
+            if (ext.runtime.profile == null) {
+                ext.runtime.profile = ext.getProfile()
             }
         }
     }
