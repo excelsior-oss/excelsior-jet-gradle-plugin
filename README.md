@@ -66,7 +66,7 @@ you need to add the plugin dependency in the `buildscript{}` configuration of th
 
 ```gradle
 buildscript {
-    ext.jetPluginVersion = '0.9.1'
+    ext.jetPluginVersion = '0.9.3'
     repositories {
         mavenCentral()
     }
@@ -959,7 +959,7 @@ To enable native compilation of your Tomcat Web application, you need to add the
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.9.1'
+    def jetPluginVersion = '0.9.3'
     repositories {
         mavenCentral()
     }
@@ -1102,7 +1102,7 @@ you need to add the plugin dependency to the `buildscript` configuration of the 
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.9.1'
+    def jetPluginVersion = '0.9.3'
     repositories {
         mavenCentral()
     }
@@ -1176,7 +1176,7 @@ of the `build.gradle` file, e.g.:
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.9.1'
+    def jetPluginVersion = '0.9.3'
     repositories {
         mavenCentral()
     }
@@ -1288,7 +1288,7 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
-Version 0.9.3 (??-Jan-2017)
+Version 0.9.3 (19-Jan-2017)
 
 * `runtime{}` configuration section introduced and related parameters moved to it:
    `locales`, `profile`, `optRtFiles` (renamed to `components`), `javaRuntimeSlimDown` (renamed to `slimDown`).
