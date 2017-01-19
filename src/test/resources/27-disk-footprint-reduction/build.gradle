@@ -16,7 +16,8 @@ version = "1.0-SNAPSHOT"
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = 'HelloWorld'
+    globalOptimizer = true
     runtime {
-        components = ['javafx-webkit', 'nashorn']
+        diskFootprintReduction = 'high-disk'
     }
 }

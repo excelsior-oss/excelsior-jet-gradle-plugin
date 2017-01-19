@@ -15,8 +15,12 @@ version = "1.0-SNAPSHOT"
 
 apply plugin: 'excelsiorJet'
 excelsiorJet {
-    mainClass = 'HelloWorld'
-    runtime {
-        components = ['javafx-webkit', 'nashorn']
+    mainClass = "HelloWorld"
+    windowsVersionInfo {
+        company = "MyCompany"
+        product = "MyProduct"
+        version = "4.3.2.1"
+        copyright = "MyCopyright"
+        description = "My description"
     }
 }

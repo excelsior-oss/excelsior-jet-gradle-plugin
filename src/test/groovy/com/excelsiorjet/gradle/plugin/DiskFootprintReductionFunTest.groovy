@@ -3,10 +3,10 @@ package com.excelsiorjet.gradle.plugin
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.IgnoreIf
 
-class SlimdownFunTest extends BaseFunTest implements HelloWorldProject {
+class DiskFootprintReductionFunTest extends BaseFunTest implements HelloWorldProject {
 
-    @IgnoreIf({!slimDownSupported})
-    def "test java runtime slimdown"() {
+    @IgnoreIf({!diskFootprintReductionSupported})
+    def "test disk footprint reduction"() {
         setup:
         File rt0Jar = new File(basedir, "build/jet/app/rt/lib/rt-0.jar")
 
@@ -23,7 +23,7 @@ class SlimdownFunTest extends BaseFunTest implements HelloWorldProject {
 
     @Override
     protected String testProjectDir() {
-        return "09-slimdown"
+        return "27-disk-footprint-reduction"
     }
 
 }
