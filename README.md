@@ -1288,7 +1288,7 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
-Version 0.9.2 (??-Jan-2017)
+Version 0.9.3 (??-Jan-2017)
 
 * `runtime{}` configuration section introduced and related parameters moved to it:
    `locales`, `profile`, `optRtFiles` (renamed to `components`), `javaRuntimeSlimDown` (renamed to `slimDown`).
