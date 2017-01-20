@@ -1,0 +1,66 @@
+buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+    }
+}
+
+apply plugin: "java"
+group = "com.excelsior.it"
+version = "1.0-SNAPSHOT"
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    mainClass = 'HelloWorld'
+    packaging = 'excelsior-installer'
+    excelsiorInstaller {
+        cleanupAfterUninstall = true
+        installationDirectory {
+            type = "current-directory"
+        }
+        registryKey = "excelsior/maven/tests"
+        shortcuts {
+            shortcut {
+                location = "program-folder"
+                target = "README.txt"
+                name =  "Read me first"
+                icon {
+                    path = new File (project.projectDir, "resources/readme.ico")
+                }
+            }
+        }
+        noDefaultPostInstallActions = true
+        postInstallCheckboxes {
+            postInstallCheckbox {
+                type = "run"
+                target = "run.bat"
+                workingDirectory = "workDir"
+                arguments = ["arg"]
+            }
+            postInstallCheckbox {
+                type = "open"
+                target = "README.txt"
+            }
+            postInstallCheckbox {
+                type = "restart"
+                checked = false
+            }
+        }
+        fileAssociations {
+            fileAssociation {
+                extension = "abc"
+                target = "HelloWorld.exe"
+                description = "ABC Files"
+                targetDescription = "Super Duper Program"
+                icon {
+                    packagePath = "file.ico"
+                }
+            }
+        }
+        welcomeImage = new File(project.projectDir, "resources/big.bmp")
+    }
+}

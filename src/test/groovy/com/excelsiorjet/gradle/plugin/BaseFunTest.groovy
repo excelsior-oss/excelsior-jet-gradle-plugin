@@ -27,6 +27,7 @@ abstract class BaseFunTest extends Specification {
     protected static final boolean slimDownSupported = excelsiorJet.slimDownSupported
     protected static final boolean changeRTLocationAvailable = excelsiorJet.changeRTLocationAvailable
     protected static final boolean since11_3 = excelsiorJet.since11_3()
+    protected static final boolean advancedExcelsiorInstallerFeaturesSupported = excelsiorJet.advancedExcelsiorInstallerFeaturesSupported
 
     protected static final String ext = excelsiorJet.targetOS.exeFileExtension
 

@@ -21,7 +21,10 @@
 */
 package com.excelsiorjet.gradle.plugin
 
+import com.excelsiorjet.api.tasks.config.FileAssociation
 import com.excelsiorjet.api.tasks.config.PackageFile
+import com.excelsiorjet.api.tasks.config.PostInstallCheckbox
+import com.excelsiorjet.api.tasks.config.Shortcut
 import com.excelsiorjet.api.tasks.config.enums.ApplicationType
 import com.excelsiorjet.api.tasks.config.enums.OptimizationPreset
 import com.excelsiorjet.api.tasks.config.DependencySettings
@@ -342,20 +345,74 @@ class ExcelsiorJetExtension {
     ExcelsiorInstallerConfig excelsiorInstaller = {
         def config = new ExcelsiorInstallerConfig()
         //init embedded configurations
-        config.metaClass.afterInstallRunnable = {
-            it.resolveStrategy = Closure.DELEGATE_FIRST
-            it.delegate = it.afterInstallRunnable
-            it()
+        config.metaClass.afterInstallRunnable = {Closure closure ->
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = config.afterInstallRunnable
+            closure()
         }
-        config.metaClass.installationDirectory = {
-            it.resolveStrategy = Closure.DELEGATE_FIRST
-            it.delegate = it.installationDirectory
-            it()
+        config.metaClass.installationDirectory = {Closure closure ->
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = config.installationDirectory
+            closure()
         }
-        config.metaClass.uninstallCallback = {
-            it.resolveStrategy = Closure.DELEGATE_FIRST
-            it.delegate = it.uninstallCallback
-            it()
+        config.metaClass.uninstallCallback = {Closure closure ->
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = config.uninstallCallback
+            closure()
+        }
+
+        config.shortcuts = new ArrayList()
+        config.metaClass.shortcuts = {Closure closure ->
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = config
+            closure()
+        }
+        config.metaClass.shortcut = {Closure closure ->
+            def shortcut = new Shortcut()
+            shortcut.icon = new PackageFile()
+            shortcut.metaClass.icon = { Closure iconClosure ->
+                iconClosure.resolveStrategy = Closure.DELEGATE_FIRST
+                iconClosure.delegate = shortcut.icon
+                iconClosure()
+            }
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = shortcut
+            closure()
+            config.shortcuts.add(shortcut)
+        }
+
+        config.postInstallCheckboxes = new ArrayList<>();
+        config.metaClass.postInstallCheckboxes = {Closure closure ->
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = config
+            closure()
+        }
+        config.metaClass.postInstallCheckbox = {Closure closure ->
+            def postInstallCheckbox = new PostInstallCheckbox();
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = postInstallCheckbox
+            closure()
+            config.postInstallCheckboxes.add(postInstallCheckbox)
+        }
+
+        config.fileAssociations = new ArrayList()
+        config.metaClass.fileAssociations = {Closure closure ->
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = config
+            closure()
+        }
+        config.metaClass.fileAssociation = {Closure closure ->
+            def fileAssociation = new FileAssociation()
+            fileAssociation.icon = new PackageFile()
+            fileAssociation.metaClass.icon = { Closure iconClosure ->
+                iconClosure.resolveStrategy = Closure.DELEGATE_FIRST
+                iconClosure.delegate = fileAssociation.icon
+                iconClosure()
+            }
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = fileAssociation
+            closure()
+            config.fileAssociations.add(fileAssociation)
         }
         config
     }.call()
@@ -412,10 +469,10 @@ class ExcelsiorJetExtension {
         def config = new RuntimeConfig()
         //init embedded configuration
         config.slimDown = new SlimDownConfig()
-        config.metaClass.slimDown = {
-            it.resolveStrategy = Closure.DELEGATE_FIRST
-            it.delegate = it.slimDown
-            it()
+        config.metaClass.slimDown = {Closure closure ->
+            closure.resolveStrategy = Closure.DELEGATE_FIRST
+            closure.delegate = config.slimDown
+            closure()
         }
         config
     }.call()
