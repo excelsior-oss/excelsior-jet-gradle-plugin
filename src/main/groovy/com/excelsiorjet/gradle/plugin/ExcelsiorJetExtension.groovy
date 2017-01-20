@@ -339,7 +339,26 @@ class ExcelsiorJetExtension {
      * @see ExcelsiorInstallerConfig#eulaEncoding
      * @see ExcelsiorInstallerConfig#installerSplash
      */
-    ExcelsiorInstallerConfig excelsiorInstaller = new ExcelsiorInstallerConfig()
+    ExcelsiorInstallerConfig excelsiorInstaller = {
+        def config = new ExcelsiorInstallerConfig()
+        //init embedded configurations
+        config.metaClass.afterInstallRunnable = {
+            it.resolveStrategy = Closure.DELEGATE_FIRST
+            it.delegate = it.afterInstallRunnable
+            it()
+        }
+        config.metaClass.installationDirectory = {
+            it.resolveStrategy = Closure.DELEGATE_FIRST
+            it.delegate = it.installationDirectory
+            it()
+        }
+        config.metaClass.uninstallCallback = {
+            it.resolveStrategy = Closure.DELEGATE_FIRST
+            it.delegate = it.uninstallCallback
+            it()
+        }
+        config
+    }.call()
 
     def excelsiorInstaller(Closure closure) {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
