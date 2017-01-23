@@ -1,0 +1,32 @@
+buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+    }
+}
+
+apply plugin: "war"
+group = "com.excelsior.it"
+version = "1.0-SNAPSHOT"
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    optimizationPreset = "smart"
+    tomcat {
+        warDeployName = "ROOT"
+        allowUserToChangeTomcatPort = true
+    }
+    packaging = "excelsior-installer"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly "javax.servlet:javax.servlet-api:3.0.1"
+}
