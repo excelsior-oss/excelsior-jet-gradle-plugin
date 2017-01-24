@@ -54,10 +54,28 @@ to a Tomcat application server instance, then you can use this plugin.
 Invocation Dynamic Libraries and Windows Services are essentially special build modes
 of Plain Java SE applications that yield different executable types: dynamic libraries or Windows services.
 
-Excelsior JET can also compile Eclipse RCP applications.
-The plugin does not yet support Eclipse RCP projects nor some advanced Excelsior JET features.
-We plan to cover all that functionality in the future, but if you need the plugin to support
-a particular feature sooner rather than later, you can help us prioritize the roadmap
+#### Missing Functionality
+
+The current plugin version supports almost all features of Excelsior JET that you can find
+in Excelsior JET UIs (Jet Control Panel and JetPackII). Missing functionality in compare with Excelsior JET UIs:
+
+* The plugin does not yet support Eclipse RCP projects. The problem here is that there is no official Gradle plugin
+  for building Eclipse RCP applications and even [Eclipse Tycho Maven Plugin](https://eclipse.org/tycho/)
+  that allows to export Eclipse RCP applications from Maven is still in incubation phase.
+  Once it appears a standard way for Eclipse RCP developers to build Eclipse RCP applications form Gradle
+  and there will be enough demand to support Eclipse RCP applications in the Excelsior JET Gradle plugin we will support it.
+
+* Support for updates. We are not satisfied how we support updates in the JetPackII and think to revise the process
+  for creating updates. Once it becomes clear how the process should look like, we will support it in the plugin for sure.
+  If this functionality is show-stopper for you to switch to the plugin,
+  please [let us know](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/issues).
+
+* Customization of Excelsior Installer wizard texts.
+  Custom texts should be supplied in all languages that Excelsior Installer supports,
+  and we have not found an easy-to-use way to configure that from the plugin.
+
+If you find that some other functionality is also missed or you need the plugin to support
+an additional feature sooner rather than later, you can help us prioritize the roadmap
 by creating a feature request [here](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/issues).
 
 ### Usage
@@ -495,6 +513,169 @@ that has the following configuration parameters:
 * `eulaEncoding = `&nbsp;*`eula-file-encoding`* - default is `autodetect`. Supported encodings are `US-ASCII` (plain text), `UTF16-LE`
 
 * `installerSplash = `&nbsp;*`installer-splash-screen-image`* - default is `<project.projectDir>/src/main/jetresources/installerSplash.bmp`
+
+The below parameters are available only since Excelsior JET 11.3:
+
+* `language = `&nbsp;*setup-language* - available languages: `autodetect` (default), `english`, `french`, `german`, 
+                                        `japanese`, `russian`, `polish`, `spanish`, `italian`, `brazilian`.
+* `cleanupAfterUninstall = true` - remove all files from the installation folder on uninstall
+
+*  After install runnable configuration section in the form:
+
+    ```gradle
+    afterInstallRunnable {
+        target = ""
+        arguments = []
+    }
+    ```
+
+    where `target` is a location of the after install runnable within the package,
+`arguments` is command line arguments that shall be passed to the target.
+
+* `compressionLevel = `&nbsp;*setup-compression-level* - available values: `fast`, `medium`, `high`
+
+* Installation directory configuration section in the form:
+
+    ```gradle
+    installationDirectory {
+        type = ""
+        path = ""
+        fixed =
+    }
+    ```
+
+   where:
+   * `type` is `program-files` (default on Windows, Windows only),
+      `system-drive` (Windows only, default for Tomcat web applications on Windows),
+      `absolute-path`,  `current-directory` (default on Linux), `user-home` (Linux only)
+   * `path` - default installation directory
+   * `fixed` - prohibits changes of the installation directory, if set to `true`
+
+* `registryKey = `&nbsp;*registry-key* - Windows registry key for installation.
+
+* List of Windows installation shortcuts (f.i. Windows "Start menu" shortcuts) in the form:
+
+    ```gradle
+    shortcuts {
+        shortcut {
+            location = ""
+            target = ""
+            name = ""
+            icon {
+                path = new File("")
+                packagePath = ""
+            }
+            workingDirectory = ""
+            arguments = []
+        }
+    }
+    ```
+
+    where:
+    * `location` - `program-folder`, `desktop`, `start-menu` or `startup`
+    * `target` - location of the shortcut target within the package
+    * `name` - name of the shortcut. By default, short name of the target is used
+    * `icon` - the location of the shortcut icon. If the icon is not set for the shortcut the default icon will be used
+               (f.i. the icon associated with the executable target).
+               If `packageFilesDir` or `packageFiles` add an icon to the package, you need to configure
+               `packagePath` parameter of `icon` locating the icon in the package, else set `path` parameter
+               locating the icon on the host system and `packagePath` specifying a folder within the package where
+               the icon should be placed (root folder by default).
+    * `workingDirectory` - pathname of the working directory of the shortcut target within the package.
+                           If it is not set, the the directory containing target will be used.
+    * `arguments` - command line arguments that shall be passed to the target
+
+* `noDefaultPostInstallActions = true` -
+     if you do not want to add the default action, prompting the user to run your main executable after installation.
+
+* Windows post install actions that will be shown to the user as a set of checkboxes in the end of installation:
+
+    ```gradle
+    postInstallCheckboxes {
+        postInstallCheckbox {
+            type = ""
+            target = ""
+            workingDirectory = ""
+            arguments = []
+            checked =
+        }
+    }
+    ```
+
+    where:
+    * `type` - `run` (default), `open` or `restart`
+    * `target` - location of the target within the package (not valid for `restart`)
+    * `workingDirectory` - pathname of the working directory of the target within the package.
+                           If it is not set, the the directory containing target will be used.
+                           Valid for `run` type only.
+    * `arguments` - command line arguments that shall be passed to the target.
+                    Valid for `run` type only.
+    * `checked` - whether the checkbox should be checked by default
+
+* List of Windows file associations in the form:
+
+    ```gradle
+    fileAssociations {
+        fileAssociation {
+            extension = ""
+            target = ""
+            description = ""
+            targetDescription = ""
+            icon {
+                path = ""
+                packagePath = ""
+            }
+            arguments = []
+            checked =
+        }
+    }
+    ```
+
+    where:
+    * `extension` - file name extension without the leading dot
+    * `target` - location within the package of the executable program being associated with extension
+    * `description` - description of the file type. For example, the description of .mp3 files is "MP3 Format Sound".
+    * `targetDescription` -  string to be used in the prompt displayed by the Excelsior Installer wizard:
+                             "Associate *.extension files with targetDescription".
+    * `icon` - the location of the association icon. If the icon is not set the default icon will be used
+               (f.i. the icon associated with the executable target).
+               If `packageFilesDir` or `packageFiles` add an icon to the package, you need to configure
+               `packagePath` parameter of `icon` locating the icon in the package, else set `path` parameter
+               locating the icon on the host system and `packagePath` specifying a folder within the package where
+               the icon should be placed (root folder by default).
+    * `arguments` - command line arguments that shall be passed to the target
+    * `checked` - initial state of the respective checkbox "Associate *.extension files with target-desc"
+                  in the Excelsior Installer wizard. Default value is `true`.
+
+* `installCallback = `&nbsp;*dynamic-library* - install callback dynamic library.
+  Default is `<project.projectDir>/src/main/jetresources/install.dll|libinstall.so`
+
+* Uninstall callback dynamic library:
+
+    ```gradle
+    uninstallCallback {
+        path = new File("")
+        packagePath = ""
+    }
+    ```
+
+    If `packageFilesDir` or `packageFiles` add a library to the package, you need to configure
+`packagePath` parameter of `uninstallCallback` locating the library in the package, else set `path` parameter
+locating the library on the host system and `packagePath` specifying a folder within the package where
+the library should be placed (root folder by default). Default value for `path` is
+`<project.projectDir>/src/main/jetresources/uninstall.dll|libuninstall.so`
+
+* `welcomeImage = `&nbsp;*welcome-image* - (Windows) image to display on the first screen of
+  the installation wizard. Recommended size: 177*314px.
+  Default is `<project.projectDir>/src/main/jetresources/welcomeImage.bmp`.
+
+* `installerImage = `&nbsp;*installer-image* - (Windows) image to display in the upper-right corner
+  on subsequent Excelsior Installer screens. Recommended size: 109*59px.
+  Default is `<project.projectDir>/src/main/jetresources/installerImage.bmp`.
+
+* `uninstallerImage = `&nbsp;*uninstaller-image* - (Windows) Image to display on the first screen
+  of the uninstall wizard. Recommended size: 177*314px.
+  Default is `<project.projectDir>/src/main/jetresources/uninstallerImage.bmp`.
 
 #### Creating OS X application bundles and installers
 
@@ -1081,11 +1262,17 @@ you may set within the `tomcat{}` parameters section:
   However, if you are going to launch the created executable directly, you may set
   the `genScripts` parameter to `false`.
 
-* `installWindowsService` - If you opt for `excelsior-installer` packaging for Tomcat on Windows,
+* `installWindowsService` - if you opt for `excelsior-installer` packaging for Tomcat on Windows,
   the installer will register the Tomcat executable as a Windows service by default.
   You may set this parameter to `false` to disable that behavior.
   Otherwise, you may configure Windows Service-specific parameters for the Tomcat service by adding
   a `windowsService` section as described [here](#windows-service-configuration).
+
+    **Note:** This functionality is only available in Excelsior JET 11.3 and above.
+
+* `allowUserToChangeTomcatPort` - if you opt for `excelsior-installer` packaging for Tomcat on Windows,
+  you may have the Excelsior Installer wizard prompt the user to specify the Tomcat HTTP port during installation
+  setting this parameter to `true`.
 
     **Note:** This functionality is only available in Excelsior JET 11.3 and above.
 
@@ -1313,6 +1500,34 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 ```
 
 ## Release Notes
+
+Version 1.0.0 (??-Feb-2017)
+
+This release covers all of the compiler options that are available in the JET Control Panel UI,
+and all options of the `xpack` utility as of Excelsior JET 11.3 release except options for creating updates.
+So we believe that starting with this release you should be able to employ all Excelsior JET features that are available
+in Excelsior JET UIs (Jet Control Panel, JetPackII). So we consider this release as first non-beta plugin release.
+If you notice that some of functionality that is available in Excelsior JET UIs is still missing in the plugin,
+please create a feature request [here](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/issues).
+In compare with the previous releases the following functionality added to the plugin:
+
+* `packageFiles` parameter introduced to add separate files/folders to the package
+* `excelsiorInstaller` configuration section has extended with the following parameters:
+  - `language` - to set installation wizard language
+  - `cleanupAfterUninstall` - to remove all files on uninstall
+  - `afterInstallRunnable` - to run an executable after installation
+  - `compressionLevel` - to control aggressiveness of installer compression
+  - `installationDirectory` - to change installation directory defaults
+  - `registryKey` - to customize registry key used for installation on Windows
+  - `shortcuts` - to add shortcuts to Windows Start menu, Desktop, etc.
+  - `noDefaultPostInstallActions` - to not add the default action after installation
+  - `postInstallCheckboxes` - to configure post install actions
+  - `fileAssociations` - to set file associations
+  - `installCallback` - to set install callback dynamic library
+  - `uninstallCallback` - to set uninstall callback dynamic library
+  - `welcomeImage`, `installerImage`, `uninstallerImage` - to customize (un)installer appearance
+* `allowUserToChangeTomcatPort` parameter added to `tomcat` configuration section to allow the user to change Tomcat
+   port after installation
 
 Version 0.9.4 (24-Jan-2017)
 
