@@ -22,6 +22,7 @@
 package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.tasks.ApplicationType
+import com.excelsiorjet.api.tasks.OptimizationPreset
 import com.excelsiorjet.api.tasks.config.DependencySettings
 import com.excelsiorjet.api.tasks.config.DependencySettings
 import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
@@ -523,6 +524,36 @@ class ExcelsiorJetExtension {
      * i.e. {@code -Djet.runArgs="arg1,Hello\, World"} will be passed to your application as {@code arg1 "Hello, World"})
      */
     String[] runArgs = []
+
+    /**
+     * Optimization presets define the default optimization mode for application dependencies.
+     * There are two optimization presets available: {@code typical} and {@code smart}.
+     *
+     * <dl>
+     * <dt>{@code typical} (default)</dt>
+     * <dd>
+     * Compile all classes from all dependencies to optimized native code.
+     * </dd>
+     * <dt>{@code smart}</dt>
+     * <dd>
+     * Use heuristics to determine which of the project dependencies are libraries and
+     * compile them selectively, leaving the supposedly unused classes in bytecode form.
+     * </dd>
+     * </dl>
+     * <p>
+     * For details, refer to the Excelsior JET User's Guide, Chapter "JET Control Panel",
+     * section "Step 3: Selecing a compilation mode / Classpath Grid / Selective Optimization".
+     * </p>
+     * <p>
+     * <strong>Note:</strong> Unlike the identically named preset of the JET Control Panal,
+     * selecting the {@code smart} preset does NOT automatically enable the Global Optimizer.
+     * </p>
+     *
+     * @see #dependencies
+     * @see DependencySettings
+     * @see #globalOptimizer
+     */
+    String optimizationPreset = OptimizationPreset.TYPICAL.toString()
 
     /**
      * List of settings of project dependencies.

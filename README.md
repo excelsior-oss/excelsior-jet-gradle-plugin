@@ -215,7 +215,7 @@ Just as it works for the splash image, if you place the icon file at
 `<project.projectDir>/src/main/jetresources/icon.ico`, you won't need to specify it
 in the configuration explicitly.
 
-#### Dependency-specific settings
+#### Dependency-specific Settings
 
 As mentioned [above](#build-process), the plugin automatically picks up and compiles the runtime dependencies
 of your Gradle project.
@@ -227,7 +227,7 @@ for each dependency, or for groups of dependencies:
 - control packing of resource files into the resulting executable
 
 
-##### Dependencies configuration
+##### Dependencies Configuration
 
 To set these properties for a particular dependency, add the following configuration 
 section:
@@ -276,16 +276,16 @@ dependencies {
 You may also use the `path` parameter to identify project dependencies that are described with
 `files` or `fileTree` parameters.
 
-##### Code protection
+##### Code Protection
 
 If you need to protect your classes from decompilers,
 make sure that the respective dependencies have the `protect` property set to `all`.
 If you do not need to protect classes for a certain dependency (e.g. a third-party library),
-set it to the `not-required` value instead. The latter setting may reduce compilation time and the size of
+set it to the `not-required` value instead. The latter setting may reduce the compilation time and the size of
 the resulting executable in some cases.
 
 
-##### Selective optimization
+##### Selective Optimization
 
 To optimize all classes and all methods of each class of a dependency for performance,
 set its `optimize` property to `all`. The other valid value of that property is `auto-detect`.
@@ -301,20 +301,29 @@ via the Reflection API at run time. That said, you can help it significantly to 
 dynamic class usage by performing a [Test Run](#performing-a-test-run) prior to the build.
 
 
-##### Automatic dependency categorization
+##### Optimization Presets
 
-**IMPORTANT:**
+If you do not configure the above settings for any dependencies, all classes from
+all dependencids will be compiled to native code.
+That is a so called `typical` optimization preset.
 
-As mentioned above, you may wish to set the `optimize` property to `auto-detect`
+However, as mentioned above, you may wish to set the `optimize` property to `auto-detect`
 and the `protect` property to `not-required` for third-party dependencies, and
-set both properties to `all` for the dependencies contaiting your own classes.
-By default, the plugin distinguishes between application classes and third-party library classes
-automatically using the following rule: it treats all dependencies sharing the `groupId` with the
-main artifact as application classes, and all other dependencies as third-party dependencies.
+set both properties to `all` for the dependencies containing your own classes,
+so as to reduce the compilation time and executable size.
+You may also let the plugin do that automatically by choosing the `smart` optimization
+preset in the plugin configuration:
+
+`optimizationPreset = 'smart'`
+
+When the `smart` preset is enabled, the plugin distinguishes between application classes
+and third-party library classes using the following heuristic: it treats all dependencies
+sharing the `groupId` with the main artifact as application classes, and all other dependencies
+as third-party dependencies.
 
 Therefore, if some of your application classes reside in a dependency with a different `groupId`
 than your main artifact, make sure to set the `optimize` and `protect` properties for them
-explicitly, for instance:
+explicitly when you enable the `smart` mode, for instance:
 
 ```gradle
 dependencies {
@@ -326,18 +335,14 @@ dependencies {
 }
 ```
 
-
-##### isLibrary hint
-
 Instead of setting the `protect` and `optimize` properties, you may provide a semantic hint
 to the future maintainers of the Gradle project that a particular dependency is a third party library
 by setting its `isLibrary` property to `true`. The plugin will then set `protect`
-to `not-required` and `optimize` to `auto-detect` automatically.
+to `not-required` and `optimize` to `auto-detect` when the `smart` optimization preset is enabled.
 Conversely, if you set `isLibrary` to `false`, both those properties will be set to `all`.
-The following configuration is therefore equivalent to the example in the
-[previous section](#automatic-dependency-categorization):
+The following configuration is therefore equivalent to the above example:
 
-```xml
+```gradle
 dependencies {
     dependency {
        groupId = 'my.company.project.group'
@@ -347,7 +352,7 @@ dependencies {
 ```
 
 
-##### Resource packing
+##### Resource Packing
 
 **Note:** This section only applies to dependencies that are jar or zip files.
 
@@ -1287,6 +1292,10 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 ```
 
 ## Release Notes
+
+Version 0.9.4 (??-Jan-2017)
+
+* `typical` and `smart` optimization presets introduced.
 
 Version 0.9.3 (19-Jan-2017)
 

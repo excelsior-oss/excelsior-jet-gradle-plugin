@@ -6,6 +6,7 @@ class AppWithDepFunTest extends BaseFunTest {
 
     def "jetBuild task builds simple application with dependency"() {
         setup:
+        File prj = new File(basedir, "build/jet/build/AppWithDep.prj")
         File dep = new File(basedir, "build/jet/build/AppWithDep_jetpdb/tmpres/commons-io-1.3.2__1.jar")
 
         when:
@@ -16,6 +17,12 @@ class AppWithDepFunTest extends BaseFunTest {
         appExeFile.exists()
         zipFile.exists()
         dep.exists()
+        def prjText = toUnixLineSeparators(prj.text)
+        prjText.contains("""
+!classpathentry lib/commons-io-1.3.2.jar
+  -optimize=all
+  -protect=all
+!end""")
 
         checkStdOutContains("HelloWorld", appExeFile)
 

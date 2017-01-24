@@ -23,6 +23,7 @@ excelsiorJet {
     windowsService {
         description = "Jet Compiled Tomcat"
     }
+    optimizationPreset = "smart"
     dependencies {
         dependency {
             artifactId = 'commons-io'
