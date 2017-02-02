@@ -21,7 +21,7 @@
 */
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.tasks.config.enums.ApplicationType
+import com.excelsiorjet.api.tasks.config.ApplicationType
 import com.excelsiorjet.api.tasks.JetProject
 import com.excelsiorjet.api.util.Txt
 import org.gradle.api.Plugin

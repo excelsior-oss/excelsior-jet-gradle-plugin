@@ -21,20 +21,20 @@
 */
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.tasks.config.FileAssociation
+import com.excelsiorjet.api.tasks.config.excelsiorinstaller.FileAssociation
 import com.excelsiorjet.api.tasks.config.PackageFile
-import com.excelsiorjet.api.tasks.config.PostInstallCheckbox
-import com.excelsiorjet.api.tasks.config.Shortcut
-import com.excelsiorjet.api.tasks.config.enums.OptimizationPreset
-import com.excelsiorjet.api.tasks.config.DependencySettings
-import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
+import com.excelsiorjet.api.tasks.config.excelsiorinstaller.PostInstallCheckbox
+import com.excelsiorjet.api.tasks.config.excelsiorinstaller.Shortcut
+import com.excelsiorjet.api.tasks.config.dependencies.OptimizationPreset
+import com.excelsiorjet.api.tasks.config.dependencies.DependencySettings
+import com.excelsiorjet.api.tasks.config.excelsiorinstaller.ExcelsiorInstallerConfig
 import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
-import com.excelsiorjet.api.tasks.config.RuntimeConfig
-import com.excelsiorjet.api.tasks.config.SlimDownConfig
+import com.excelsiorjet.api.tasks.config.runtime.RuntimeConfig
+import com.excelsiorjet.api.tasks.config.runtime.SlimDownConfig
 import com.excelsiorjet.api.tasks.config.TomcatConfig
-import com.excelsiorjet.api.tasks.config.TrialVersionConfig
-import com.excelsiorjet.api.tasks.config.WindowsServiceConfig
-import com.excelsiorjet.api.tasks.config.WindowsVersionInfoConfig
+import com.excelsiorjet.api.tasks.config.compiler.TrialVersionConfig
+import com.excelsiorjet.api.tasks.config.windowsservice.WindowsServiceConfig
+import com.excelsiorjet.api.tasks.config.compiler.WindowsVersionInfoConfig
 
 /**
  * Gradle Extension class for Excelsior JET Gradle Plugin.
@@ -167,6 +167,22 @@ class ExcelsiorJetExtension {
      */
     List<PackageFile> packageFiles = []
 
+    /**
+     * Used to build Gradle sub DSLs for sub configurations like excelsiorInstaller().
+     * The method calls the given closure with the given delegate telling Groovy resolve properties
+     * from the delegate first. For example, if we have the following Gradle sub configuration of excelsiorJet{}:
+     * <pre><code>
+     *    excelsiorInstaller {
+     *      language = "English"
+     *    }
+     * </code></pre>
+     *
+     * we should first create ExcelsiorInstallerConfig instance and supply it as delegate argument of applyClosure.
+     * Then the "language" property will be set for the ExcelsiorInstallerConfig instance during above closure execution.
+     *
+     * @param closure closure to apply
+     * @param delegate object which properties will be set during closure execution.
+     */
     static def applyClosure(Closure closure, Object delegate) {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.delegate = delegate
