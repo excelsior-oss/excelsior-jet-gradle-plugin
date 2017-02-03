@@ -17,11 +17,11 @@ apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = 'HelloWorld'
     packageFiles {
-        packageFile {
+        file {
             path = new File(project.projectDir, "packagefiles/custom.file")
             packagePath = "customFiles"
         }
-        packageFile {
+        folder {
             path = new File(project.projectDir, "packagefiles/subdir")
             packagePath = "customFiles"
         }

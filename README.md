@@ -459,12 +459,12 @@ You can do that using the `packageFiles{}` configuration section:
 
 ```gradle
 packageFiles {
-    packageFile {
+    file {
         path = new File(project.projectDir, "my.file")
         packagePath = "somePackageFolder1"
     }
-    packageFile {
-        path = new File(project.projectDir, "my.file2")
+    folder {
+        path = new File(project.projectDir, "my.folder")
         packagePath = "somePackageFolder2"
     }
     ...

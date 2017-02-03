@@ -22,13 +22,14 @@
 package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.tasks.config.excelsiorinstaller.FileAssociation
-import com.excelsiorjet.api.tasks.config.PackageFile
+import com.excelsiorjet.api.tasks.config.packagefile.PackageFile
 import com.excelsiorjet.api.tasks.config.excelsiorinstaller.PostInstallCheckbox
 import com.excelsiorjet.api.tasks.config.excelsiorinstaller.Shortcut
 import com.excelsiorjet.api.tasks.config.dependencies.OptimizationPreset
 import com.excelsiorjet.api.tasks.config.dependencies.DependencySettings
 import com.excelsiorjet.api.tasks.config.excelsiorinstaller.ExcelsiorInstallerConfig
 import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
+import com.excelsiorjet.api.tasks.config.packagefile.PackageFileType
 import com.excelsiorjet.api.tasks.config.runtime.RuntimeConfig
 import com.excelsiorjet.api.tasks.config.runtime.SlimDownConfig
 import com.excelsiorjet.api.tasks.config.TomcatConfig
@@ -194,11 +195,22 @@ class ExcelsiorJetExtension {
     }
 
     def packageFile(Closure closure) {
-        def pFile = new PackageFile()
+        def pFile = new PackageFile(PackageFileType.AUTO)
         applyClosure(closure, pFile)
         packageFiles.add(pFile)
     }
 
+    def file(Closure closure) {
+        def pFile = new PackageFile(PackageFileType.FILE)
+        applyClosure(closure, pFile)
+        packageFiles.add(pFile)
+    }
+
+    def folder(Closure closure) {
+        def pFile = new PackageFile(PackageFileType.FOLDER)
+        applyClosure(closure, pFile)
+        packageFiles.add(pFile)
+    }
     /**
      * Directory containing Excelsior JET specific resource files such as application icons, installer splash,  etc.
      * It is recommended to place the directory in the source root directory.
@@ -374,7 +386,7 @@ class ExcelsiorJetExtension {
         }
         config.metaClass.shortcut = {Closure closure ->
             def shortcut = new Shortcut()
-            shortcut.icon = new PackageFile()
+            shortcut.icon = new PackageFile(PackageFileType.FILE)
             shortcut.metaClass.icon = {Closure iconClosure ->
                 applyClosure(iconClosure, shortcut.icon)
             }
@@ -398,7 +410,7 @@ class ExcelsiorJetExtension {
         }
         config.metaClass.fileAssociation = {Closure closure ->
             def fileAssociation = new FileAssociation()
-            fileAssociation.icon = new PackageFile()
+            fileAssociation.icon = new PackageFile(PackageFileType.FILE)
             fileAssociation.metaClass.icon = {Closure iconClosure ->
                 applyClosure(iconClosure, fileAssociation.icon)
             }
