@@ -249,7 +249,7 @@ for each dependency, or for groups of dependencies:
 ##### Dependencies Configuration
 
 To set these properties for a particular dependency, add the following configuration 
-section:
+to the plugin configuration section:
 
 ```gradle
 dependencies {
