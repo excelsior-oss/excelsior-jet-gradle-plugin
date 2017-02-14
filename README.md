@@ -521,7 +521,7 @@ that has the following configuration parameters:
 
 The following parameters are only available for Excelsior JET 11.3 and above:
 
-* `language = `&nbsp;*setup-language* - force the installer to display its messages in a particular lannguage.
+* `language = `&nbsp;*setup-language* - force the installer to display its messages in a particular language.
     Available languages: `autodetect` (default), `english`, `french`, `german`, 
     `japanese`, `russian`, `polish`, `spanish`, `italian`, and `brazilian`.
 
@@ -582,9 +582,9 @@ The following parameters are only available for Excelsior JET 11.3 and above:
 
     where:
     * `location` - either `program-folder`, `desktop`, `start-menu`, or `startup`
-    
+
     * `target` - location of the shortcut target within the package
-    
+
     * `name` - shortcut name. If not set, the filename of the target will be used, without extension
     
     * `icon` - location of the shortcut icon. If no icon is set for the shortcut, the default icon will be used.
@@ -650,14 +650,14 @@ The following parameters are only available for Excelsior JET 11.3 and above:
 
     where:
     * `extension` - file name extension *without the leading dot*
-    
+
     * `target` - location within the package of the executable program being associated with `extension`
-    
+
     * `description` - description of the file type. For example, the description of .mp3 files is "MP3 Format Sound".
-    
+
     * `targetDescription` -  string to be used in the prompt displayed by the Excelsior Installer wizard:
                              "Associate *.extension files with targetDescription".
-                             
+
     * `icon` - the location of the association icon. If not set, the default icon will be used
                (e.g. the icon associated with the executable target).
 
@@ -668,7 +668,7 @@ The following parameters are only available for Excelsior JET 11.3 and above:
         in which that icon file should be placed (root folder by default).
 
     * `arguments` - command-line arguments that shall be passed to the target
-    
+
     * `checked` - initial state of the respective checkbox "Associate *.extension files with targetDescription"
                   in the Excelsior Installer wizard. Default value is `true`.
 
@@ -1535,7 +1535,7 @@ This release covers all Excelsior JET features accessible through the JET Contro
 and all options of the `xpack` utility as of Excelsior JET 11.3 release, except for three things
 that we do not plan to implement in the near future, for different reasons:
 creation of update packages, Eclipse RCP applications support, and internationalization
-of Excelsior Installer messages. 
+of Excelsior Installer messages.
 If you are using any other Excelsior JET functionality that the plugin does not support,
 please create a feature request [here](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/issues).
 Otherwise, think of this version as of 1.0 Release Candidate 1.
