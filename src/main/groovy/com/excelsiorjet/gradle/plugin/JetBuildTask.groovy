@@ -78,9 +78,9 @@ class JetBuildTask extends AbstractJetTask {
                 ext.runtime.locales = ext.getLocales()
             }
         }
-        if (ext.getJavaRuntimeSlimDown().isEnabled()) {
+        if (ext.getJavaRuntimeSlimDown().isDefined()) {
             logger.warn(s("JetBuildTask.RTSettingDeprecated.Warning", "javaRuntimeSlimDown", "slimDown {\n    }"))
-            if (!ext.runtime.slimDown.isEnabled()) {
+            if (!ext.runtime.slimDown.isDefined()) {
                 ext.runtime.slimDown = ext.getJavaRuntimeSlimDown()
             }
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Excelsior LLC.
+ * Copyright (c) 2016-2017 Excelsior LLC.
  *
  *  This file is part of Excelsior JET Gradle Plugin.
  *
@@ -21,19 +21,21 @@
 */
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.tasks.ApplicationType
-import com.excelsiorjet.api.tasks.OptimizationPreset
-import com.excelsiorjet.api.tasks.config.DependencySettings
-import com.excelsiorjet.api.tasks.config.DependencySettings
-import com.excelsiorjet.api.tasks.config.ExcelsiorInstallerConfig
+import com.excelsiorjet.api.tasks.config.excelsiorinstaller.FileAssociation
+import com.excelsiorjet.api.tasks.config.packagefile.PackageFile
+import com.excelsiorjet.api.tasks.config.excelsiorinstaller.PostInstallCheckbox
+import com.excelsiorjet.api.tasks.config.excelsiorinstaller.Shortcut
+import com.excelsiorjet.api.tasks.config.dependencies.OptimizationPreset
+import com.excelsiorjet.api.tasks.config.dependencies.DependencySettings
+import com.excelsiorjet.api.tasks.config.excelsiorinstaller.ExcelsiorInstallerConfig
 import com.excelsiorjet.api.tasks.config.OSXAppBundleConfig
-import com.excelsiorjet.api.tasks.config.RuntimeConfig
-import com.excelsiorjet.api.tasks.config.SlimDownConfig
+import com.excelsiorjet.api.tasks.config.packagefile.PackageFileType
+import com.excelsiorjet.api.tasks.config.runtime.RuntimeConfig
+import com.excelsiorjet.api.tasks.config.runtime.SlimDownConfig
 import com.excelsiorjet.api.tasks.config.TomcatConfig
-import com.excelsiorjet.api.tasks.config.TrialVersionConfig
-import com.excelsiorjet.api.tasks.config.WindowsServiceConfig
-import com.excelsiorjet.api.tasks.config.WindowsVersionInfoConfig
-import groovy.transform.PackageScope
+import com.excelsiorjet.api.tasks.config.compiler.TrialVersionConfig
+import com.excelsiorjet.api.tasks.config.windowsservice.WindowsServiceConfig
+import com.excelsiorjet.api.tasks.config.compiler.WindowsVersionInfoConfig
 
 /**
  * Gradle Extension class for Excelsior JET Gradle Plugin.
@@ -155,9 +157,60 @@ class ExcelsiorJetExtension {
      * {@link #jetResourcesDir} of your project, but you may also dynamically generate the contents
      * of the package files directory by means of other Gragle plugins.
      * </p>
+     *
+     * @see #packageFiles
      */
     File packageFilesDir
 
+    /**
+     * If you only need to add a few additional package files,
+     * it may be more convenient to specify them separately then to prepare {@link #packageFilesDir} directory.
+     */
+    List<PackageFile> packageFiles = []
+
+    /**
+     * Used to build Gradle sub DSLs for sub configurations like excelsiorInstaller().
+     * The method calls the given closure with the given delegate telling Groovy resolve properties
+     * from the delegate first. For example, if we have the following Gradle sub configuration of excelsiorJet{}:
+     * <pre><code>
+     *    excelsiorInstaller {
+     *      language = "English"
+     *    }
+     * </code></pre>
+     *
+     * we should first create ExcelsiorInstallerConfig instance and supply it as delegate argument of applyClosure.
+     * Then the "language" property will be set for the ExcelsiorInstallerConfig instance during above closure execution.
+     *
+     * @param closure closure to apply
+     * @param delegate object which properties will be set during closure execution.
+     */
+    static def applyClosure(Closure closure, Object delegate) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = delegate
+        closure()
+    }
+
+    def packageFiles(Closure closure) {
+        applyClosure(closure, this)
+    }
+
+    def packageFile(Closure closure) {
+        def pFile = new PackageFile(PackageFileType.AUTO)
+        applyClosure(closure, pFile)
+        packageFiles.add(pFile)
+    }
+
+    def file(Closure closure) {
+        def pFile = new PackageFile(PackageFileType.FILE)
+        applyClosure(closure, pFile)
+        packageFiles.add(pFile)
+    }
+
+    def folder(Closure closure) {
+        def pFile = new PackageFile(PackageFileType.FOLDER)
+        applyClosure(closure, pFile)
+        packageFiles.add(pFile)
+    }
     /**
      * Directory containing Excelsior JET specific resource files such as application icons, installer splash,  etc.
      * It is recommended to place the directory in the source root directory.
@@ -267,9 +320,7 @@ class ExcelsiorJetExtension {
     WindowsVersionInfoConfig windowsVersionInfo = new WindowsVersionInfoConfig()
 
     def windowsVersionInfo(Closure closure) {
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = windowsVersionInfo;
-        closure()
+        applyClosure(closure, windowsVersionInfo)
     }
 
     /**
@@ -316,12 +367,61 @@ class ExcelsiorJetExtension {
      * @see ExcelsiorInstallerConfig#eulaEncoding
      * @see ExcelsiorInstallerConfig#installerSplash
      */
-    ExcelsiorInstallerConfig excelsiorInstaller = new ExcelsiorInstallerConfig()
+    ExcelsiorInstallerConfig excelsiorInstaller = {
+        def config = new ExcelsiorInstallerConfig()
+        //init embedded configurations
+        config.metaClass.afterInstallRunnable = {Closure closure ->
+            applyClosure(closure, config.afterInstallRunnable)
+        }
+        config.metaClass.installationDirectory = {Closure closure ->
+            applyClosure(closure, config.installationDirectory)
+        }
+        config.metaClass.uninstallCallback = {Closure closure ->
+            applyClosure(closure, config.uninstallCallback)
+        }
+
+        config.shortcuts = new ArrayList()
+        config.metaClass.shortcuts = {Closure closure ->
+            applyClosure(closure, config)
+        }
+        config.metaClass.shortcut = {Closure closure ->
+            def shortcut = new Shortcut()
+            shortcut.icon = new PackageFile(PackageFileType.FILE)
+            shortcut.metaClass.icon = {Closure iconClosure ->
+                applyClosure(iconClosure, shortcut.icon)
+            }
+            applyClosure(closure, shortcut)
+            config.shortcuts.add(shortcut)
+        }
+
+        config.postInstallCheckboxes = new ArrayList<>();
+        config.metaClass.postInstallCheckboxes = {Closure closure ->
+            applyClosure(closure, config)
+        }
+        config.metaClass.postInstallCheckbox = {Closure closure ->
+            def postInstallCheckbox = new PostInstallCheckbox();
+            applyClosure(closure, postInstallCheckbox)
+            config.postInstallCheckboxes.add(postInstallCheckbox)
+        }
+
+        config.fileAssociations = new ArrayList()
+        config.metaClass.fileAssociations = {Closure closure ->
+            applyClosure(closure, config)
+        }
+        config.metaClass.fileAssociation = {Closure closure ->
+            def fileAssociation = new FileAssociation()
+            fileAssociation.icon = new PackageFile(PackageFileType.FILE)
+            fileAssociation.metaClass.icon = {Closure iconClosure ->
+                applyClosure(iconClosure, fileAssociation.icon)
+            }
+            applyClosure(closure, fileAssociation)
+            config.fileAssociations.add(fileAssociation)
+        }
+        config
+    }.call()
 
     def excelsiorInstaller(Closure closure) {
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = excelsiorInstaller
-        closure()
+        applyClosure(closure, excelsiorInstaller)
     }
 
     /**
@@ -340,9 +440,7 @@ class ExcelsiorJetExtension {
     WindowsServiceConfig windowsService = new WindowsServiceConfig();
 
     def windowsService(Closure closure) {
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = windowsService;
-        closure()
+        applyClosure(closure, windowsService)
     }
 
     /**
@@ -370,18 +468,14 @@ class ExcelsiorJetExtension {
         def config = new RuntimeConfig()
         //init embedded configuration
         config.slimDown = new SlimDownConfig()
-        config.metaClass.slimDown = {
-            it.resolveStrategy = Closure.DELEGATE_FIRST
-            it.delegate = it.slimDown
-            it()
+        config.metaClass.slimDown = {Closure closure ->
+            applyClosure(closure, config.slimDown)
         }
         config
     }.call()
 
     def runtime(Closure closure) {
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = runtime
-        closure()
+        applyClosure(closure, runtime)
     }
 
     /**
@@ -409,9 +503,7 @@ class ExcelsiorJetExtension {
     SlimDownConfig javaRuntimeSlimDown = new SlimDownConfig()
 
     def javaRuntimeSlimDown(Closure closure) {
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = javaRuntimeSlimDown
-        closure()
+        applyClosure(closure, javaRuntimeSlimDown)
     }
 
     /**
@@ -424,9 +516,7 @@ class ExcelsiorJetExtension {
     TrialVersionConfig trialVersion = new TrialVersionConfig()
 
     def trialVersion(Closure closure) {
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = trialVersion
-        closure()
+        applyClosure(closure, trialVersion)
     }
 
     /**
@@ -443,9 +533,7 @@ class ExcelsiorJetExtension {
     OSXAppBundleConfig osxBundle = new OSXAppBundleConfig()
 
     def osxBundle(Closure closure) {
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = osxBundle
-        closure()
+        applyClosure(closure, osxBundle)
     }
 
     /**
@@ -512,9 +600,7 @@ class ExcelsiorJetExtension {
     TomcatConfig tomcat = new TomcatConfig()
 
     def tomcat(Closure closure) {
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = tomcat
-        closure()
+        applyClosure(closure, tomcat)
     }
 
     /**
@@ -568,16 +654,12 @@ class ExcelsiorJetExtension {
     List<DependencySettings> dependencies = []
 
     def dependencies(Closure closure) {
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = this
-        closure()
+        applyClosure(closure, this)
     }
 
     def dependency(Closure closure) {
         def dep = new DependencySettings()
-        closure.resolveStrategy = Closure.DELEGATE_FIRST
-        closure.delegate = dep
-        closure()
+        applyClosure(closure, dep)
         dependencies.add(dep)
     }
 

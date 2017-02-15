@@ -2,9 +2,9 @@ package com.excelsiorjet.gradle.plugin
 
 import org.gradle.testkit.runner.TaskOutcome
 
-class CustomResourcesFunTest extends BaseFunTest implements HelloWorldProject {
+class PackageFilesFunTest extends BaseFunTest implements HelloWorldProject {
 
-    def "test custom resources"() {
+    def "test package files"() {
         when:
         def result = (!crossCompilation) ? runGradle('jetTestRun', 'jetBuild') : runGradle('jetBuild')
 
@@ -17,8 +17,8 @@ class CustomResourcesFunTest extends BaseFunTest implements HelloWorldProject {
             new File(basedir, "build/jet/build/customfiles/custom.file").exists()
             new File(basedir, "build/jet/build/customfiles/subdir/subdir.file").exists()
         }
-        new File(basedir, "build/jet/app/custom.file").exists()
-        new File(basedir, "build/jet/app/subdir/subdir.file").exists()
+        new File(basedir, "build/jet/app/customfiles/custom.file").exists()
+        new File(basedir, "build/jet/app/customfiles/subdir/subdir.file").exists()
 
         if (!crossCompilation) {
             result.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
@@ -28,7 +28,7 @@ class CustomResourcesFunTest extends BaseFunTest implements HelloWorldProject {
 
     @Override
     protected String testProjectDir() {
-        return "10-customresources"
+        return "31-package-files"
     }
 
 }

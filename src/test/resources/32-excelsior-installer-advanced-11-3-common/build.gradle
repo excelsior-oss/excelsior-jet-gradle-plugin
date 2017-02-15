@@ -1,0 +1,42 @@
+buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+    }
+}
+
+apply plugin: "java"
+group = "com.excelsior.it"
+version = "1.0-SNAPSHOT"
+
+def isWindows = System.properties['os.name'].toLowerCase().contains('windows')
+def exeExtension = isWindows ? ".exe" : ""
+def dllPrefix = isWindows ? "": "lib"
+def dllExtension = isWindows? ".dll" : ".so"
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    mainClass = 'HelloWorld'
+    packaging = 'excelsior-installer'
+    excelsiorInstaller {
+        language = "german"
+        cleanupAfterUninstall = true
+        compressionLevel = "fast"
+        afterInstallRunnable {
+            target = "HelloWorld${exeExtension}"
+            arguments = ["arg", "arg with space"]
+        }
+        installationDirectory {
+            type = "current-directory"
+            path = "/mavenPluginTestEI"
+            fixed = true
+        }
+        uninstallCallback {
+            path = new File(project.projectDir, "${dllPrefix}uninstall${dllExtension}")
+        } 
+    }
+}

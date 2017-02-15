@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Excelsior LLC.
+ * Copyright (c) 2016-2017 Excelsior LLC.
  *
  *  This file is part of Excelsior JET Gradle Plugin.
  *
@@ -21,7 +21,7 @@
 */
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.tasks.ApplicationType
+import com.excelsiorjet.api.tasks.config.ApplicationType
 import com.excelsiorjet.api.tasks.JetProject
 import com.excelsiorjet.api.util.Txt
 import org.gradle.api.Plugin
