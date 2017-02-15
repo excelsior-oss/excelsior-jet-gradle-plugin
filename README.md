@@ -86,7 +86,7 @@ the plugin dependency to the `buildscript{}` configuration of the `build.gradle`
 
 ```gradle
 buildscript {
-    ext.jetPluginVersion = '0.9.4'
+    ext.jetPluginVersion = '0.9.5'
     repositories {
         mavenCentral()
     }
@@ -323,7 +323,7 @@ dynamic class usage by performing a [Test Run](#performing-a-test-run) prior to 
 ##### Optimization Presets
 
 If you do not configure the above settings for any dependencies, all classes from
-all dependencids will be compiled to native code.
+all dependencies will be compiled to native code.
 That is a so called `typical` optimization preset.
 
 However, as mentioned above, you may wish to set the `optimize` property to `auto-detect`
@@ -1192,7 +1192,7 @@ To enable native compilation of your Tomcat Web application, you need to add the
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.9.4'
+    def jetPluginVersion = '0.9.5'
     repositories {
         mavenCentral()
     }
@@ -1343,7 +1343,7 @@ you need to add the plugin dependency to the `buildscript` configuration of the 
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.9.4'
+    def jetPluginVersion = '0.9.5'
     repositories {
         mavenCentral()
     }
@@ -1417,7 +1417,7 @@ of the `build.gradle` file, e.g.:
 
 ```gradle
 buildscript {
-    def jetPluginVersion = '0.9.4'
+    def jetPluginVersion = '0.9.5'
     repositories {
         mavenCentral()
     }
@@ -1529,7 +1529,7 @@ or clone [the project](https://github.com/excelsior-oss/libgdx-demo-pax-britanni
 
 ## Release Notes
 
-Version 0.9.5 aka 1.0 Release Candidate (??-Feb-2017)
+Version 0.9.5 aka 1.0 Release Candidate (15-Feb-2017)
 
 This release covers all Excelsior JET features accessible through the JET Control Panel GUI,
 and all options of the `xpack` utility as of Excelsior JET 11.3 release, except for three things
