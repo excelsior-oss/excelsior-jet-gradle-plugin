@@ -599,6 +599,7 @@ The following parameters are only available for Excelsior JET 11.3 and above:
     ```
 
     where:
+    
     * `location` - either `program-folder`, `desktop`, `start-menu`, or `startup`
 
     * `target` - location of the shortcut target within the package
@@ -615,6 +616,7 @@ The following parameters are only available for Excelsior JET 11.3 and above:
 
     * `workingDirectory` - pathname of the working directory of the shortcut target within the package.
                            If not set, the directory containing the target will be used.
+                           
     * `arguments` - command-line arguments that shall be passed to the target
 
 * `noDefaultPostInstallActions = true` -
@@ -637,6 +639,7 @@ The following parameters are only available for Excelsior JET 11.3 and above:
     ```
 
     where:
+    
     * `type` - `run` (default), `open`, or `restart`
     * `target` - location of the target within the package (not valid for `restart`)
     * `workingDirectory` - pathname of the working directory of the target within the package.
@@ -667,6 +670,7 @@ The following parameters are only available for Excelsior JET 11.3 and above:
     ```
 
     where:
+    
     * `extension` - file name extension *without the leading dot*
 
     * `target` - location within the package of the executable program being associated with `extension`
@@ -1023,6 +1027,7 @@ runtime {
 
 You may specify `["all"]` as the value of `locales` to add all locales and charsets at once or
 `["none"]` to not include any of them.
+
 The available sets of locales and encodings are:
 
 `European`, `Indonesian`, `Malay`, `Hebrew`, `Arabic`, `Chinese`, `Japanese`, `Korean`, `Thai`,
@@ -1529,10 +1534,10 @@ using Excelsior JET 11.0, as the respective functionality is missing in the `xpa
 It only works for Excelsior JET 11.3 and above.
 
 **Note:** You may build a multi-app executable runnable as both plain application and Windows service.
-For that, set the `appType` parameter to `windows-service` and `multiApp` to `true`. 
-Please note that in this case `arguments` will have the syntax of multi-app executables,  
-so to pass arguments to your service and not to the Excelsior JET JVM,                    
-add `"-args"` (without the quotes) as the first argument.                                 
+For that, set the `appType` parameter to `windows-service` and `multiApp` to `true`.
+Please note that in this case `arguments` will have the syntax of multi-app executables,
+so to pass arguments to your service and not to the Excelsior JET JVM,
+add `"-args"` (without the quotes) as the first argument.
 
 #### Test Run of Windows Services
 
