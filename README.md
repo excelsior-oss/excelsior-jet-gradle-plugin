@@ -447,6 +447,12 @@ and for the entries of the `dependencies{}` section of the plugin that are ident
 with the `path` parameter, if any.
 
 
+##### Tomcat web application dependencies
+
+You may configure Tomcat web application dependencies as described above, except that
+`path`, `packagePath`, and `disableCopyToPackage` parameters are not available for them.
+
+
 #### Customizing Package Content
 
 By default, the final package contains just the resulting executable and the necessary Excelsior JET Runtime files.
@@ -1475,7 +1481,8 @@ excelsiorJet {
 
 Where:
 
-* `mainClass` - a class extending the `com.excelsior.service.WinService` class of the Excelsior JET WinService API.
+* `mainClass` - a class extending the `com.excelsior.service.WinService` class
+  of the Excelsior JET WinService API.
 
 * `name` -  the system name of the service. It is used to install, remove and otherwise manage the service.
   It can also be used to recognize messages from this service in the system event log.
