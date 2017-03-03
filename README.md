@@ -60,10 +60,10 @@ The current plugin version supports almost all features accessible through the E
 (JET Control Panel and JetPackII). The only bits of functionality that are missing are as follows:
 
 * Eclipse RCP support.
-  The problem here is that there is no official Gradle plugin
+    The problem here is that there is no official Gradle plugin
   for building Eclipse RCP applications. Even the [Eclipse Tycho Maven Plugin](https://eclipse.org/tycho/)
   that enables exporting Eclipse RCP applications from Maven is still in incubation phase.
-  If a standard way to build Eclipse RCP applications from Gradle ever appears,
+    If a standard way to build Eclipse RCP applications from Gradle ever appears,
   *and* there will be enough demand, we will support it in the Excelsior JET Gradle plugin.
 
 * Application update packaging - because we plan to overhaul that feature completely in the mid-term future.
@@ -79,6 +79,7 @@ The current plugin version supports almost all features accessible through the E
 If you find that some other functionality is also missing, or you need the plugin to support
 an additional feature sooner rather than later, you can help us prioritize the roadmap
 by creating a feature request [here](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/issues).
+
 
 ### Usage
 
@@ -97,15 +98,19 @@ buildscript {
     }
 }
 ```
+
 then apply and configure the `excelsiorJet` plugin, using the name of your main class
 as the value of the `mainClass` parameter<sup>\*</sup>:
+
 ```gradle
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = ''
 }
 ```
+
 and use the following command line to build the application:
+
 ```
 gradlew jetBuild
 ```
@@ -129,9 +134,11 @@ You have three ways to specify the Excelsior JET installation directory explicit
 
   - add the `jetHome` parameter to the `excelsiorJet{}` plugin extension
   - pass the `jet.home` system property on the Gradle command line as follows:
+
     ```
     gradlew jetBuild -Djet.home=[JET-Home]
     ```
+
   - or set the `JET_HOME` O/S environment variable
 
 If none of above is set, the plugin searches for an Excelsior JET installation along the `PATH`.
@@ -169,10 +176,10 @@ using a JIT compiler before pre-compiling it to native code. This so-called Test
 helps Excelsior JET:
 
 * verify that your application can be executed successfully on the Excelsior JET JVM.
-Usually, if the Test Run completes normally, the natively compiled application also works well.
+  Usually, if the Test Run completes normally, the natively compiled application also works well.
 * detect the optional parts of Excelsior JET Runtime that are used by your application.
-For instance, JavaFX Webkit is not included in the resulting package by default
-due to its size, but if the application used it during a Test Run, it gets included automatically.
+  For instance, JavaFX Webkit is not included in the resulting package by default
+  due to its size, but if the application used it during a Test Run, it gets included automatically.
 * collect profile information to optimize your app more effectively
 
 To perform a Test Run, execute the following Gradle command:
@@ -198,9 +205,11 @@ The profiles will be used by the Startup Optimizer and the Global Optimizer (see
 
 Your application may require command-line arguments to run. If that is the case,
 set the `runArgs` plugin parameter as follows:
+
 ```gradle
 runArgs = ["arg1", "arg2"]
 ```
+
 You may also pass the arguments via the `jet.runArgs` system property as a comma-separated string.
 (Use "`\`" to escape commas within arguments: `-Djet.runArgs="arg1,Hello\, World"` will be passed
 to your application as `arg1 "Hello, World"`.)
@@ -236,7 +245,7 @@ There are also two useful Windows-specific configuration parameters:
 
 `hideConsole = true` – hide console
 
-`icon = `*`icon-file`*  – set executable icon (in Windows .ico format)
+`icon = `*`icon-file`* – set executable icon (in Windows .ico format)
 
 Just as it works for the splash image, if you place the icon file at
 `<project.projectDir>/src/main/jetresources/icon.ico`, you won't need to specify it
@@ -244,7 +253,7 @@ in the configuration explicitly.
 
 #### Dependency-specific Settings
 
-As mentioned [above](#build-process), the plugin automatically picks up and compiles the runtime dependencies
+As mentioned [above](#build-process), the plugin automatically picks up and compiles the run time dependencies
 of your Gradle project.
 In addition, the plugin enables you to specify certain processing rules separately
 for each dependency, or for groups of dependencies:
@@ -253,10 +262,9 @@ for each dependency, or for groups of dependencies:
 - enable selective optimization of classes
 - control packing of resource files into the resulting executable
 
-
 ##### Dependencies Configuration
 
-To set these properties for a particular dependency, add the following configuration 
+To set these properties for a particular dependency, add the following configuration
 to the plugin configuration section:
 
 ```gradle
@@ -331,6 +339,7 @@ dynamic class usage by performing a [Test Run](#performing-a-test-run) prior to 
 
 ##### Optimization Presets
 
+
 If you do not configure the above settings for any dependencies, all classes from
 all dependencies will be compiled to native code.
 That is a so called `typical` optimization preset.
@@ -379,7 +388,6 @@ dependencies {
     }
 }
 ```
-
 
 ##### Resource Packing
 
@@ -467,7 +475,7 @@ The contents of the directory will be copied recursively to the final package.
 By default, the plugin assumes that the extra package files reside
 in the `src/main/jetresources/packagefiles` subdirectory of your project,
 but you may dynamically generate the contents of that directory by means
-of other Gradle plugins.
+of other Gradle plugins .
 
 **New in 0.9.5:**
 
@@ -512,7 +520,7 @@ to create Excelsior Installer setups on Windows and Linux and an application bun
 
 Excelsior Installer setup, in turn, has the following configurations:
 
-* `product = `*` product-name`* - default is `<project.name>`
+* `product = `*`product-name`* - default is `<project.name>`
 
 * `vendor = `*`vendor-name`* -  default is `<project.group>`
 
@@ -540,10 +548,10 @@ that has the following configuration parameters:
 The following parameters are only available for Excelsior JET 11.3 and above:
 
 * `language = `*`setup-language`* - force the installer to display its messages in a particular language.
-    Available languages: `autodetect` (default), `english`, `french`, `german`, 
+    Available languages: `autodetect` (default), `english`, `french`, `german`,
     `japanese`, `russian`, `polish`, `spanish`, `italian`, and `brazilian`.
 
-* `cleanupAfterUninstall = true` - remove all files from the installation folder on uninstall
+* `cleanupAfterUninstall = true` -  remove all files from the installation folder on uninstall
 
 *  After-install runnable configuration sections of the form:
 
@@ -599,13 +607,13 @@ The following parameters are only available for Excelsior JET 11.3 and above:
     ```
 
     where:
-    
+
     * `location` - either `program-folder`, `desktop`, `start-menu`, or `startup`
 
     * `target` - location of the shortcut target within the package
 
     * `name` - shortcut name. If not set, the filename of the target will be used, without extension
-    
+
     * `icon` - location of the shortcut icon. If no icon is set for the shortcut, the default icon will be used.
 
         If the package already contains the desired icon file, configure the `packagePath` parameter
@@ -615,8 +623,8 @@ The following parameters are only available for Excelsior JET 11.3 and above:
         in which that icon file should be placed (root folder by default).
 
     * `workingDirectory` - pathname of the working directory of the shortcut target within the package.
-                           If not set, the directory containing the target will be used.
-                           
+                             If not set, the directory containing the target will be used.
+
     * `arguments` - command-line arguments that shall be passed to the target
 
 * `noDefaultPostInstallActions = true` -
@@ -639,14 +647,14 @@ The following parameters are only available for Excelsior JET 11.3 and above:
     ```
 
     where:
-    
+
     * `type` - `run` (default), `open`, or `restart`
     * `target` - location of the target within the package (not valid for `restart`)
     * `workingDirectory` - pathname of the working directory of the target within the package.
-                           If not set, the directory containing the target will be used.
-                           Valid for the `run` type only.
+                             If not set, the directory containing the target will be used.
+                             Valid for the `run` type only.
     * `arguments` - command-line arguments that shall be passed to the target.
-                    Valid for the `run` type only.
+                      Valid for the `run` type only.
     * `checked` - whether the checkbox should be checked by default (`true` or `false`)
 
 * List of Windows file associations in the form:
@@ -670,7 +678,7 @@ The following parameters are only available for Excelsior JET 11.3 and above:
     ```
 
     where:
-    
+
     * `extension` - file name extension *without the leading dot*
 
     * `target` - location within the package of the executable program being associated with `extension`
@@ -678,9 +686,9 @@ The following parameters are only available for Excelsior JET 11.3 and above:
     * `description` - description of the file type. For example, the description of .mp3 files is "MP3 Format Sound".
 
     * `targetDescription` -  string to be used in the prompt displayed by the Excelsior Installer wizard:
-                             "Associate *.extension files with `targetDescription`".
+                               "Associate *.extension files with `targetDescription`".
 
-    * `icon` - the location of the association icon. If not set, the default icon will be used
+    * `icon` - the location of the association icon.  If not set, the default icon will be used
                (e.g. the icon associated with the executable target).
 
         If the package already contains the desired icon file, configure the `packagePath` parameter
@@ -692,7 +700,7 @@ The following parameters are only available for Excelsior JET 11.3 and above:
     * `arguments` - command-line arguments that shall be passed to the target
 
     * `checked` - initial state of the respective checkbox "Associate *.extension files with `targetDescription`"
-                  in the Excelsior Installer wizard. Default value is `true`.
+                    in the Excelsior Installer wizard. Default value is `true`.
 
 * `installCallback = `*`dynamic-library`* - install callback dynamic library.
   Default is `<project.projectDir>/src/main/jetresources/install.dll|libinstall.so`
@@ -766,7 +774,7 @@ certificate name for signing the resulting OS X Installer Package (`.pkg` file) 
 
 If you do not want to expose above parameters via `build.gradle`, you may pass them as system properties
 to the `gradlew` command instead, using the arguments `-Dosx.developer.id` and `-Dosx.publisher.id` respectively.
- 
+
 **Troubleshooting:** If you would like to test the created installer file on the same OS X system on which
 it was built, you need to first remove the OS X application bundle created by the plugin and located
 next to the installer. Otherwise, the installer will overwrite that existing OS X application bundle
@@ -896,7 +904,7 @@ All in all, the JET Runtime recognizes the following standard JVM arguments:
 `-Xmx` - set maximum heap size
 
 > **Note:** Setting maximum heap size to zero (default) enables adaptive heap sizing.
-> Refer to the *"Memory Management"* section of the *"Application Considerations"* chapter 
+> Refer to the *"Memory Management"* section of the *"Application Considerations"* chapter
 > of the Excelsior JET User's Guide
 > and [Knowledge Base Article #25](http://www.excelsiorjet.com/kb/25/)
 > for more information.
@@ -951,7 +959,7 @@ important advantages over the default compilation mode:
   thus reducing the size of the installation package and the disk footprint of the compiled application
 * global optimizations improve application performance and reduce the startup time and memory usage
 
-By default, Excelsior JET uses the *dynamic link model*. It only compiles application classes, 
+By default, Excelsior JET uses the *dynamic link model*. It only compiles application classes,
 linking them into an executable that depends on dynamic libraries containing precompiled
 Java SE platform classes. These dynamic libraries, found in the JET Runtime, have to be
 distributed together with the executable.
@@ -994,7 +1002,7 @@ Considerations"*, section *"Runtime Selection"*.
 
 ##### Changing Default Runtime Location
 
-By default, Excelsior JET places its runtime files required for the 
+By default, Excelsior JET places its runtime files required for the
 generated executable to work in a folder named `"rt"` located next to that executable.
 You may change that default location with the `location` parameter of the `runtime{}` section.
 
@@ -1048,6 +1056,7 @@ runtime {
 
 You may specify `["all"]` as the value of `components` to add all components at once or
 `["none"]` to not include any of them.
+
 
 The available optional components are:
 
@@ -1128,10 +1137,10 @@ of the `slimDown{}` section
 Do not forget to upload the detached package to the location specified
 in `detachedBaseURL` above before deploying your application to end-users.
 
-**Note:** Enabling Java Runtime Slim-Down automatically enables the Global Optimizer, 
+**Note:** Enabling Java Runtime Slim-Down automatically enables the Global Optimizer,
           so performing a Test Run is mandatory for Java Runtime Slim-Down as well.
 
-**Fixed issue:** Java Runtime Slim-Down did not work with the `excelsior-installer` packaging type 
+**Fixed issue:** Java Runtime Slim-Down did not work with the `excelsior-installer` packaging type
                  due to a bug in Excelsior JET. This issue is fixed in Excelsior JET 11 Maintenance Pack 2.
 
 #### Creating Trial Versions
@@ -1162,7 +1171,7 @@ package will also expire, displaying the same message to the user.
 
 One common usage scenario of this functionality is setting the hard expiration date further into the future,
 while using some other mechanism to enforce a (shorter) trial period.
-Typically, you would set the hard expiration date somewhat beyond the planned release 
+Typically, you would set the hard expiration date somewhat beyond the planned release
 date of the next version of your application. This way, you would ensure that nobody uses
 an outdated trial copy for evaluation.
 
@@ -1193,7 +1202,6 @@ These options will be appended to the Excelsior JET project file generated by th
 with other project parameters.
 
 ### Building Tomcat Web Applications
-
 The plugin enables you to compile Apache Tomcat together with your Web applications down
 to a native binary using Excelsior JET. Compared to running your
 application on a conventional JVM, this has the following benefits:
@@ -1215,6 +1223,7 @@ Excelsior JET 11 supports Apache Tomcat 5.0.x (starting from version 5.0.1), 5.5
 and 7.0.x up to version 7.0.62. Excelsior JET 11.3 adds support for Tomcat 8.0 and Tomcat 7.0.63+ versions.
 
 #### Usage
+
 The plugin will treat your Gradle project as a Tomcat Web application project if the `war` plugin is applied **before** the `excelsiorJet` plugin.
 To enable native compilation of your Tomcat Web application, you need to add the plugin dependency to the `buildscript` configuration of the `build.gradle` file, e.g.:
 
@@ -1240,6 +1249,7 @@ excelsiorJet {
     }
 }
 ```
+
 
 and then set the `tomcatHome` parameter, which has to point to the *master* Tomcat installation &mdash; basically,
 a clean Tomcat instance that was never launched.
@@ -1327,10 +1337,10 @@ you may set within the `tomcat{}` section:
 
 **New in 0.9.5:**
 
-* `allowUserToChangeTomcatPort` - if you opt for `excelsior-installer` packaging for Tomcat on Windows,
+* `allowUserToChangeTomcatPort` -  if you opt for `excelsior-installer` packaging for Tomcat on Windows,
   you may have the Excelsior Installer wizard prompt the user to specify the Tomcat HTTP port during installation
   setting this parameter to `true`.
-  
+
     **Note:** This functionality is only available in Excelsior JET 11.3 and above.
 
 #### Multiple Web applications and Tomcat installation configuration
@@ -1525,7 +1535,7 @@ Where:
 *  `dependencies` - list of other service names on which the service depends.
 
 Based on the above parameters, the plugin will create the `install.bat`/`uninstall.bat` scripts
-in the `target/jet/app` directory to enable you to install and uninstall the service manually to test it. 
+in the `target/jet/app` directory to enable you to install and uninstall the service manually to test it.
 If you opt for the `excelsior-installer` packaging type, the service will be registered automatically
 during package installation.
 
@@ -1596,7 +1606,7 @@ Compared with the previous releases, the following functionality was added to th
     - `uninstallCallback` - to set uninstall callback dynamic library
     - `welcomeImage`, `installerImage`, `uninstallerImage` - to customize (un)installer appearance
 * `allowUserToChangeTomcatPort` parameter added to the `tomcat{}` configuration section
-   to allow the user to change the Tomcat port at install time
+  to allow the user to change the Tomcat port at install time
 
 Version 0.9.4 (24-Jan-2017)
 
@@ -1614,6 +1624,7 @@ Version 0.9.3 (19-Jan-2017)
 
 * Windows version-info resource configuration changed to meet other enclosed configurations style.
   Old way to configure Windows version info is deprecated and will be removed in a future release.
+
 
 Version 0.9.1 (02-Dec-2016)
 
