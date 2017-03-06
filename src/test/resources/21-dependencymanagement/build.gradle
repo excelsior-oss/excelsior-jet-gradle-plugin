@@ -44,7 +44,6 @@ excelsiorJet {
         dependency {
             path = new File(project.projectDir, "extDir2")
             packagePath = 'extDirCp'
-            pack = 'none'
         }
         // xpack will halts with error if not packed resource would not be disabled
         dependency {
