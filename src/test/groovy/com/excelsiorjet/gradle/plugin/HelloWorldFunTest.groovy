@@ -6,6 +6,7 @@ class HelloWorldFunTest extends BaseFunTest implements HelloWorldProject {
 
     def "jetBuild task builds simple application"() {
         when:
+        def zipFile = new File(basedir, "build/jet/${projectName()}"  + ".zip")
         def result = runGradle('jetBuild')
 
         then:

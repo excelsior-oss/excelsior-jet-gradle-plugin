@@ -312,7 +312,7 @@ class ExcelsiorJetExtension {
      * @see WindowsVersionInfoConfig#copyright
      * @see WindowsVersionInfoConfig#description
      */
-    boolean addWindowsVersionInfo = true
+    Boolean addWindowsVersionInfo
 
     /**
      * Windows version-information resource description.
