@@ -39,50 +39,52 @@ The current version of the plugin supports four types of applications:
 Assuming that a copy of Excelsior JET is accessible via the operating system `PATH`,
 here is what you need to do to use it in your Gradle project:
 
-1. Unless you want to create a Windows Service, skip to Step 4.
+### Configuring
 
-2.  Add a dependency on the Excelsior JET WinService API to your Gradle project,
-    e.g. by copying and pasting the following snippet to the `dependencies{}`
-    section of your `build.gradle` file:
+First, add the plugin dependency in the `buildscript{}` configuration of the `build.gradle` file
+and apply the `excelsiorJet` plugin:
 
-    <pre>dependencies {
-        compileOnly "com.excelsiorjet:excelsior-jet-winservice-api:1.0.0"
-    }</pre>
-
-3.  Implement a subclass of `com.excelsior.service.WinService` as described in the
-    [Excelsior JET WinService API documentation](https://www.excelsiorjet.com/docs/WinService/javadoc/).
-
-
-4.  Add the plugin dependency in the `buildscript{}` configuration of the `build.gradle` file
-    and apply the `excelsiorJet` plugin:
-
-        buildscript {
-            ext.jetPluginVersion = '0.9.5'
-            repositories {
-                mavenCentral()
-            }
-            dependencies {
-                classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$jetPluginVersion"
-            }
+    buildscript {
+        ext.jetPluginVersion = '0.9.5'
+        repositories {
+            mavenCentral()
         }
+        dependencies {
+            classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$jetPluginVersion"
+        }
+    }
 
-        apply plugin: 'excelsiorJet'
+    apply plugin: 'excelsiorJet'
 
-5.  Depending on the type of your application,
-    configure the `excelsiorJet{}` section as follows:
+then proceed depending on the type of your application:
 
-    **Plain Java SE Application:**
+  * [Plain Java SE Application](#plain-java-se-application)
+  * [Tomcat Web Application](#tomcat-web-application)
+  * [Invocation Library](#invocation-library)
+  * [Windows Service](#windows-service)
 
+#### Plain Java SE Application
+
+
+1.  Configure the `excelsiorJet{}` section as follows:
 
         excelsiorJet {
             mainClass = ''
         }
 
-    Set the value of the `mainClass` parameter to the
+2.  Set the value of the `mainClass` parameter to the
     name of the main class of your application.
 
-    **Tomcat Web Application:**
+3.  Optionally, conduct a Test Run:
 
+        gradlew jetTestRun
+
+4.  [Build the project](#building)
+
+#### Tomcat Web Application
+
+
+1.  Configure the `excelsiorJet{}` section as follows:
 
         excelsiorJet {
             tomcat {
@@ -90,11 +92,20 @@ here is what you need to do to use it in your Gradle project:
             }
         }
 
-    Set the `tomcatHome` parameter to point to the
-    _master_ Tomcat installation — basically, a clean Tomcat instance that was never launched, and
+2.  Set the `tomcatHome` parameter to point to the
+    _master_ Tomcat installation — basically, a clean Tomcat instance that was never launched.
 
-    **Invocation Library:**
+3.  Optionally, conduct a Test Run:
 
+        gradlew jetTestRun
+
+4.  [Build the project](#building)
+
+
+#### Invocation Library
+
+
+1.  Configure the `excelsiorJet{}` section as follows:
 
         excelsiorJet {
             appType = "dynamic-library"
@@ -105,12 +116,29 @@ here is what you need to do to use it in your Gradle project:
     [section](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/wiki/Invocation-Dynamic-Libraries)
     of the plugin documentation.
 
-    **Windows Service: **
+2.  [Build the project](#building)
 
+
+#### Windows Service
+
+1.  Implement a class extending `com.excelsior.service.WinService`,
+    as described in the [Excelsior JET WinService API documentation](https://www.excelsiorjet.com/docs/WinService/javadoc/).
+
+2.  Add a dependency on the Excelsior JET WinService API to your Gradle project.
+    Copy and paste the following snippet to the `dependencies{}`
+    section of your `build.gradle` file:
+
+
+        <pre>dependencies {
+            compileOnly "com.excelsiorjet:excelsior-jet-winservice-api:1.0.0"
+        }</pre>
+
+
+3.  Configure the `excelsiorJet{}` section as follows:
 
         excelsiorJet {
             appType = "windows-service"
-            mainClass = "service-main" // <--- Your WinService implementation
+            mainClass = "" // <--- Your WinService implementation
             windowsService{
                 name = ""
                 displayName = ""
@@ -124,19 +152,27 @@ here is what you need to do to use it in your Gradle project:
             }
         }
 
-
-    where `service-main` is the name of the class that you implemented on Step 3.
+4.  Set `mainClass` to the name of the class implemented on Step 1.
     For descriptions of all other parameters, refer to
     [plugin documentation](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/wiki/Windows-Services).
 
-    For more information about Windows services support in Excelsior JET,
-    refer to to the "Windows Services" Chapter of the
+    You may find complete information on Windows services support in Excelsior JET
+    in the "Windows Services" Chapter of the
     [Excelsior JET for Windows User's Guide.](https://www.excelsiorjet.com/docs/jet/jetw)
 
+5.  [Build the project](#building)
 
-6.  Use the following command line to build the application:
+### Building
+
+Use the following command line to build the project:
 
         gradlew jetBuild
+
+At the end of a successful build, the plugin will place your natively compiled
+Java application/library and the required pieces of Excelsior JET Runtime:
+
+  * in the `jet/app` subdirectory of your project
+  * in a zip archive named `<artifactName>.zip`.
 
 Refer to [plugin documentation](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/wiki) for further instructions.
 
