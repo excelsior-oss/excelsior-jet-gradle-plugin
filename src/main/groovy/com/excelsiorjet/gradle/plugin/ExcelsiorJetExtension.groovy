@@ -271,6 +271,14 @@ class ExcelsiorJetExtension {
     String inlineExpansion;
 
     /**
+     * Allocate Java objects on the stack which life-time is proved to be method frame bound.
+     * By default, the parameter is set to {@code true}.
+     * This optimization may however result in higher consumption of stack memory by application's threads.
+     * You may wish to disable the optimization, if you run thousands of threads simultaneously.
+     */
+    boolean stackAllocation = true
+
+    /**
      * The target location for application execution profiles gathered during Test Run.
      * By default, they are placed into the {@link #jetResourcesDir} directory.
      * It is recommended to commit the collected profiles (.usg, .startup) to VCS to enable the plugin
