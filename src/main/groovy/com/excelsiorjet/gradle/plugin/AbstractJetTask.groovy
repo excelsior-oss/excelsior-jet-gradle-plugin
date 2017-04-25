@@ -47,9 +47,6 @@ class AbstractJetTask extends DefaultTask {
         def jetProject = new JetProject(project.name, ext.getGroupId(), ext.getVersion(),
                 JetProject.checkAndGetAppType(ext.appType),  project.buildDir, ext.getJetResourcesDir())
 
-        boolean addWindowsVersionInfo = (ext.getAddWindowsVersionInfo() == null) ? !ext.getGroupId().isEmpty() :
-                ext.getAddWindowsVersionInfo();
-
         // getters should be used to fallback into convention mapping magic, when field is not set
         jetProject.projectDependencies(getDependencies())
                 .excelsiorJetPackaging(ext.getPackaging())
@@ -70,7 +67,7 @@ class AbstractJetTask extends DefaultTask {
                 .execProfilesDir(ext.getExecProfilesDir())
                 .execProfilesName(ext.getExecProfilesName())
                 .jvmArgs(ext.getJvmArgs())
-                .addWindowsVersionInfo(addWindowsVersionInfo)
+                .addWindowsVersionInfo(ext.getAddWindowsVersionInfo())
                 .windowsVersionInfoConfiguration(ext.getWindowsVersionInfo())
                 .inceptionYear(ext.getInceptionYear())
                 .vendor(ext.getVendor())
