@@ -271,6 +271,16 @@ class ExcelsiorJetExtension {
     String inlineExpansion;
 
     /**
+     * Allocate on the stack the Java objects that do not escape the scope
+     * of the allocating method. By default, the parameter is set to {@code true}.
+     *
+     * This optimization may increase the consumption of stack memory 
+     * by application threads, so you may wish to disable it if your application runs 
+     * thousands of threads simultaneously.
+     */
+    boolean stackAllocation = true
+
+    /**
      * The target location for application execution profiles gathered during Test Run.
      * By default, they are placed into the {@link #jetResourcesDir} directory.
      * It is recommended to commit the collected profiles (.usg, .startup) to VCS to enable the plugin
@@ -312,7 +322,7 @@ class ExcelsiorJetExtension {
      * @see WindowsVersionInfoConfig#copyright
      * @see WindowsVersionInfoConfig#description
      */
-    boolean addWindowsVersionInfo = true
+    Boolean addWindowsVersionInfo
 
     /**
      * Windows version-information resource description.

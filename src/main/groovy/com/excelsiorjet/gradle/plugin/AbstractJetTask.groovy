@@ -63,6 +63,7 @@ class AbstractJetTask extends DefaultTask {
                 .icon(ext.getIcon())
                 .splash(ext.getSplash())
                 .inlineExpansion(ext.getInlineExpansion())
+                .stackAllocation(ext.getStackAllocation())
                 .stackTraceSupport(ext.getStackTraceSupport())
                 .execProfilesDir(ext.getExecProfilesDir())
                 .execProfilesName(ext.getExecProfilesName())

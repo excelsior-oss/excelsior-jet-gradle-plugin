@@ -145,9 +145,9 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             project.logger.warn(Txt.s("ExcelsiorJetGradlePlugin.ProjectGroupIsGuessed", guessedGroup))
             extension.groupId = guessedGroup
         } else {
-            throw new ProjectConfigurationException(Txt.s("ExcelsiorJetGradlePlugin.ProjectGroupIsNotSet"), null)
+            extension.groupId = ""
         }
-        return guessedGroup
+        return extension.groupId
     }
 
     private static String getArchiveName(Task jarTask) {
