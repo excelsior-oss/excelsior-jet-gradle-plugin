@@ -19,11 +19,11 @@ excelsiorJet {
     packageFiles {
         file {
             path = new File(project.projectDir, "packagefiles/custom.file")
-            packagePath = "customFiles"
+            packagePath = "customfiles"
         }
         folder {
             path = new File(project.projectDir, "packagefiles/subdir")
-            packagePath = "customFiles"
+            packagePath = "customfiles"
         }
     }
 }
