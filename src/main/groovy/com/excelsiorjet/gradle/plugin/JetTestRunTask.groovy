@@ -63,7 +63,7 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author Aleksey Zhidkov
  */
-class JetTestRunTask extends AbstractJetTask {
+class JetTestRunTask extends ParentJetTask {
 
     @TaskAction
     def jetBuild() {

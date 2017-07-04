@@ -43,6 +43,7 @@ import org.gradle.api.logging.LogLevel
  * </ul>
  *
  * @author Aleksey Zhidkov
+ * @author Nikita Lipsky
  */
 class ExcelsiorJetPlugin implements Plugin<Project> {
 
@@ -73,6 +74,12 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
         def jetBuild = target.tasks.create("jetBuild", JetBuildTask)
         jetBuild.dependsOn(taskPath(target, archiveTaskName), taskPath(target, "test"))
+
+        def jetProfile = target.tasks.create("jetProfile", JetProfileTask)
+        jetProfile.dependsOn(taskPath(target, archiveTaskName), taskPath(target, "test"))
+
+        def jetRun = target.tasks.create("jetRun", JetRunTask)
+        jetRun.dependsOn(taskPath(target, archiveTaskName), taskPath(target, "test"))
 
         addJetBuildConventions(target)
 

@@ -21,6 +21,7 @@
 */
 package com.excelsiorjet.gradle.plugin
 
+import com.excelsiorjet.api.tasks.config.compiler.ExecProfilesConfig
 import com.excelsiorjet.api.tasks.config.excelsiorinstaller.FileAssociation
 import com.excelsiorjet.api.tasks.config.packagefile.PackageFile
 import com.excelsiorjet.api.tasks.config.excelsiorinstaller.PostInstallCheckbox
@@ -42,6 +43,7 @@ import com.excelsiorjet.api.tasks.config.compiler.WindowsVersionInfoConfig
  * Declares configuration parameters for all plugin tasks.
  *
  * @author Aleksey Zhidkov
+ * @author Nikita Lipsky
  */
 class ExcelsiorJetExtension {
 
@@ -129,6 +131,21 @@ class ExcelsiorJetExtension {
      * </p>
      */
     File jetOutputDir
+
+    /**
+     * Excelsior project build dir.
+     *
+     * The value is set to "build" subdirectory of {@link #jetOutputDir}.
+     */
+    File jetBuildDir
+
+    /**
+     * Target directory where the plugin places the executable, the required Excelsior JET Runtime files and
+     * package files you configured with {@link #packageFiles} and {@link #packageFilesDir}.
+     *
+     * The value is set to "app" subdirectory of {@link #jetOutputDir}.
+     */
+    File jetAppDir
 
     /**
      * The main application jar.
@@ -280,22 +297,29 @@ class ExcelsiorJetExtension {
      */
     boolean stackAllocation = true
 
-    /**
-     * The target location for application execution profiles gathered during Test Run.
-     * By default, they are placed into the {@link #jetResourcesDir} directory.
-     * It is recommended to commit the collected profiles (.usg, .startup) to VCS to enable the plugin
-     * to re-use them during subsequent builds without performing a Test Run.
-     *
-     * @see JetTestRunTask
-     */
+    @Deprecated
     File execProfilesDir
 
-    /**
-     * The base file name of execution profiles. By default, ${project.artifactId} is used.
-     *
-     * Default value is ${project.artifactId}
-     */
+    @Deprecated
     String execProfilesName
+
+    /**
+     * Execution profiles configuration parameters.
+     * You can configure the filesystem location and base name of all application execution profiles,
+     * whether they can be collected locally, i.e. on the machine where the build takes place,
+     * and the maximum profile age when they are considered outdated.
+     *
+     * @see ExecProfilesConfig#outputDir
+     * @see ExecProfilesConfig#outputName
+     * @see ExecProfilesConfig#profileLocally
+     * @see ExecProfilesConfig#daysToWarnAboutOutdatedProfiles
+     * @see ExecProfilesConfig#checkExistence
+     */
+    ExecProfilesConfig execProfiles = new ExecProfilesConfig();
+
+    def execProfiles(Closure closure) {
+        applyClosure(closure, execProfiles)
+    }
 
     /**
      * Defines system properties and JVM arguments to be passed to the Excelsior JET JVM at runtime, e.g.:
@@ -620,6 +644,19 @@ class ExcelsiorJetExtension {
      * i.e. {@code -Djet.runArgs="arg1,Hello\, World"} will be passed to your application as {@code arg1 "Hello, World"})
      */
     String[] runArgs = []
+
+    /**
+     * If you set {@link #multiApp} to {@code true} then command line arguments for resulting executable
+     * are in the format of multi-app executables.
+     *
+     * So if you need to alter main class and/or VM properties during startup accelerator,
+     * execution profiling or usual run for such case set this parameter that will override {@link #runArgs} parameter.
+     *
+     * You may also set the parameter via the {@code jet.multiAppRunArgs} system property, where arguments
+     * are comma separated (use "\" to escape commas inside arguments,
+     * i.e. {@code -Djet.multiAppRunArgs="-args,arg1,Hello\, World"} will be passed to your application as {@code -args arg1 "Hello, World"})
+     */
+    String[] multiAppRunArgs = []
 
     /**
      * Optimization presets define the default optimization mode for application dependencies.
