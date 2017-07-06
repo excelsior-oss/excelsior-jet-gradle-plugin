@@ -27,7 +27,7 @@ import com.excelsiorjet.api.tasks.RunTask
 import org.gradle.api.tasks.TaskAction
 
 /**
- * Task for running generated executables with Excelsior JET.
+ * Task for running executables generated with Excelsior JET.
  *
  * @author Nikita Lipsky
  */

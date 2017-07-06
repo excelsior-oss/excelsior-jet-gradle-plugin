@@ -133,17 +133,17 @@ class ExcelsiorJetExtension {
     File jetOutputDir
 
     /**
-     * Excelsior project build dir.
+     * Build directory, where the Excelsior JET compiler and tools store their intermediate files.
      *
-     * The value is set to "build" subdirectory of {@link #jetOutputDir}.
+     * The value is set to the "build" subdirectory of {@link #jetOutputDir}.
      */
     File jetBuildDir
 
     /**
-     * Target directory where the plugin places the executable, the required Excelsior JET Runtime files and
-     * package files you configured with {@link #packageFiles} and {@link #packageFilesDir}.
+     * Target directory, where the plugin places the executable, the required Excelsior JET Runtime files,
+     * and any package files configured using {@link #packageFiles} and {@link #packageFilesDir}.
      *
-     * The value is set to "app" subdirectory of {@link #jetOutputDir}.
+     * The value is set to the "app" subdirectory of {@link #jetOutputDir}.
      */
     File jetAppDir
 
@@ -322,8 +322,8 @@ class ExcelsiorJetExtension {
     }
 
     /**
-     * Defines system properties and JVM arguments to be passed to the Excelsior JET JVM at runtime, e.g.:
-     * {@code -Dmy.prop1 -Dmy.prop2=value -ea -Xmx1G -Xss128M -Djet.gc.ratio=11}.
+     * System properties and JVM arguments to be passed to the Excelsior JET JVM at application
+     * launch time, e.g. {@code -Dmy.prop1 -Dmy.prop2=value -ea -Xmx1G -Xss128M -Djet.gc.ratio=11}.
      * <p>
      * Please note that only some of the non-standard Oracle HotSpot JVM arguments
      * (those prefixed with {@code -X}) are recognized.
@@ -646,15 +646,24 @@ class ExcelsiorJetExtension {
     String[] runArgs = []
 
     /**
-     * If you set {@link #multiApp} to {@code true} then command line arguments for resulting executable
-     * are in the format of multi-app executables.
-     *
-     * So if you need to alter main class and/or VM properties during startup accelerator,
-     * execution profiling or usual run for such case set this parameter that will override {@link #runArgs} parameter.
-     *
+     * Command-line parameters for multi-app executables. If set, overrides the {@link #runArgs} parameter.
+     * <p>]
+     * If you set {@link #multiApp} to {@code true}, the resulting executable expects its command line
+     * arguments to be in the respective format:
+     * <p>
+     * {@code [VM-options] main-class [arguments]} or<br>
+     * {@code [VM-options] -args [arguments]} (use default main class)
+     * </p>
+     * <p>
+     * So if you need to alter the main class and/or VM properties during startup profiling,
+     * execution profiling, or normal run, set this parameter.
+     * </p>
+     * <p>
      * You may also set the parameter via the {@code jet.multiAppRunArgs} system property, where arguments
      * are comma separated (use "\" to escape commas inside arguments,
-     * i.e. {@code -Djet.multiAppRunArgs="-args,arg1,Hello\, World"} will be passed to your application as {@code -args arg1 "Hello, World"})
+     * i.e. {@code -Djet.multiAppRunArgs="-args,arg1,Hello\, World"} will be passed to your application
+     * as {@code -args arg1 "Hello, World"})
+     * </p>
      */
     String[] multiAppRunArgs = []
 
