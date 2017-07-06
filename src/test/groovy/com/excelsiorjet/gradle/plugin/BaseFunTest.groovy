@@ -22,7 +22,7 @@ abstract class BaseFunTest extends Specification {
     protected static final boolean dataProtectionSupported = excelsiorJet.dataProtectionSupported
     protected static final boolean tomcatSupported = excelsiorJet.tomcatSupported
     protected static final boolean compactProfilesSupported = excelsiorJet.compactProfilesSupported
-    protected static final boolean diskFootprintReductionSupported = excelsiorJet.diskFootprintReductionSupported
+    protected static final boolean highDiskFootprintReductionSupported = excelsiorJet.highDiskFootprintReductionSupported
     protected static final boolean windowsVersionInfoSupported = excelsiorJet.windowsVersionInfoSupported
     protected static final boolean slimDownSupported = excelsiorJet.slimDownSupported
     protected static final boolean changeRTLocationAvailable = excelsiorJet.changeRTLocationAvailable

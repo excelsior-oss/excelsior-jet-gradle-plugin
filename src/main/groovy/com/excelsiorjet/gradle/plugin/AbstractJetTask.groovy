@@ -37,7 +37,7 @@ import static com.excelsiorjet.api.util.Txt.s
  *
  * @author Aleksey Zhidkov
  */
-class ParentJetTask extends DefaultTask {
+abstract class AbstractJetTask extends DefaultTask {
 
     String jetHome = (project.excelsiorJet as ExcelsiorJetExtension).jetHome
 
@@ -118,7 +118,7 @@ class ParentJetTask extends DefaultTask {
         }
         def duplicatesByName = allDependencies.groupBy { it.path.name }
         duplicatesByName.values().
-                findAll { it.size() > 1 && it.collect({ ParentJetTask.hash(it.path) }).size() > 1 }.
+                findAll { it.size() > 1 && it.collect({ AbstractJetTask.hash(it.path) }).size() > 1 }.
                 each {
                     logger.warn(Txt.s("JetApi.DuplicateFileName", it.collect { it.idStr(true) }))
                 }

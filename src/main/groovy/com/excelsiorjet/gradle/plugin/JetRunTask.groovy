@@ -31,10 +31,10 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author Nikita Lipsky
  */
-class JetRunTask extends ParentJetTask {
+class JetRunTask extends AbstractBuildTask {
 
     @TaskAction
-    def jetBuild() {
+    def jetRun() {
         ExcelsiorJet excelsiorJet = new ExcelsiorJet(jetHome)
         JetProject jetProject = createJetProject()
         new RunTask(excelsiorJet, jetProject).execute()

@@ -21,22 +21,21 @@
 */
 package com.excelsiorjet.gradle.plugin
 
-import com.excelsiorjet.api.ExcelsiorJet
 import com.excelsiorjet.api.tasks.JetProject
 import com.excelsiorjet.api.util.Utils
-import org.gradle.api.tasks.TaskAction
 
 import static com.excelsiorjet.api.util.Txt.s
 
 /**
- * Parent task that collects parameters for building Java (JVM) applications with Excelsior JET.
+ * Base task for tasks that depend on build parameters of the plugin:
+ * {@link JetBuildTask}, {@link JetProfileTask}, {@link JetRunTask).
  *
  * @see ExcelsiorJetExtension
  *
  * @author Aleksey Zhidkov
  * @author Nikita Lipsky
  */
-class ParentBuildTask extends ParentJetTask {
+abstract class AbstractBuildTask extends AbstractJetTask {
 
     @Override
     protected JetProject createJetProject() {

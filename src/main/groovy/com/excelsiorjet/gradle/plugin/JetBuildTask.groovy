@@ -23,10 +23,7 @@ package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.ExcelsiorJet
 import com.excelsiorjet.api.tasks.JetProject
-import com.excelsiorjet.api.util.Utils
 import org.gradle.api.tasks.TaskAction
-
-import static com.excelsiorjet.api.util.Txt.s
 
 /**
  * Main task for building Java (JVM) applications with Excelsior JET.
@@ -35,7 +32,7 @@ import static com.excelsiorjet.api.util.Txt.s
  *
  * @author Aleksey Zhidkov
  */
-class JetBuildTask extends ParentJetTask {
+class JetBuildTask extends AbstractBuildTask {
 
     @TaskAction
     def jetBuild() {
