@@ -5,7 +5,7 @@ import spock.lang.IgnoreIf
 
 class MultiAppRunArgsFunTest extends BaseFunTest implements HelloWorldProject {
 
-    @IgnoreIf({crossCompilation && multiAppSupported})
+    @IgnoreIf({crossCompilation || !multiAppSupported})
     def "multiAppRunArgs is passed to startup accelerator and run"() {
         when:
         def result = runGradle('jetBuild', 'jetRun')
