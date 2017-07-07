@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017 Excelsior LLC.
+ * Copyright (c) 2017 Excelsior LLC.
  *
  *  This file is part of Excelsior JET Gradle Plugin.
  *
@@ -26,19 +26,19 @@ import com.excelsiorjet.api.tasks.JetProject
 import org.gradle.api.tasks.TaskAction
 
 /**
- * Main task for building Java (JVM) applications with Excelsior JET.
+ * Task for profiling Java (JVM) applications with Excelsior JET.
  *
  * @see ExcelsiorJetExtension
  *
- * @author Aleksey Zhidkov
+ * @author Nikita Lipsky
  */
-class JetBuildTask extends AbstractBuildTask {
+class JetProfileTask extends AbstractBuildTask {
 
     @TaskAction
-    def jetBuild() {
+    def jetProfile() {
         ExcelsiorJet excelsiorJet = new ExcelsiorJet(jetHome)
         JetProject jetProject = createJetProject()
-        new com.excelsiorjet.api.tasks.JetBuildTask(excelsiorJet, jetProject, false).execute()
+        new com.excelsiorjet.api.tasks.JetBuildTask(excelsiorJet, jetProject, true).execute()
     }
 
 }

@@ -5,7 +5,7 @@ import spock.lang.IgnoreIf
 
 class DiskFootprintReductionFunTest extends BaseFunTest implements HelloWorldProject {
 
-    @IgnoreIf({!diskFootprintReductionSupported})
+    @IgnoreIf({!highDiskFootprintReductionSupported})
     def "test disk footprint reduction"() {
         setup:
         File rt0Jar = new File(basedir, "build/jet/app/rt/lib/rt-0.jar")

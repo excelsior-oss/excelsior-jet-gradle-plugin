@@ -37,7 +37,7 @@ import static com.excelsiorjet.api.util.Txt.s
  *
  * @author Aleksey Zhidkov
  */
-class AbstractJetTask extends DefaultTask {
+abstract class AbstractJetTask extends DefaultTask {
 
     String jetHome = (project.excelsiorJet as ExcelsiorJetExtension).jetHome
 
@@ -52,6 +52,8 @@ class AbstractJetTask extends DefaultTask {
                 .excelsiorJetPackaging(ext.getPackaging())
                 .artifactName(ext.getArtifactName())
                 .jetOutputDir(ext.getJetOutputDir())
+                .jetBuildDir(ext.getJetBuildDir())
+                .jetAppDir(ext.getJetAppDir())
                 .mainClass(ext.getMainClass())
                 .mainJar(ext.getMainJar())
                 .mainWar(ext.getMainWar())
@@ -65,8 +67,7 @@ class AbstractJetTask extends DefaultTask {
                 .inlineExpansion(ext.getInlineExpansion())
                 .stackAllocation(ext.getStackAllocation())
                 .stackTraceSupport(ext.getStackTraceSupport())
-                .execProfilesDir(ext.getExecProfilesDir())
-                .execProfilesName(ext.getExecProfilesName())
+                .execProfiles(ext.getExecProfiles())
                 .jvmArgs(ext.getJvmArgs())
                 .addWindowsVersionInfo(ext.getAddWindowsVersionInfo())
                 .windowsVersionInfoConfiguration(ext.getWindowsVersionInfo())
@@ -87,6 +88,7 @@ class AbstractJetTask extends DefaultTask {
                 .compilerOptions(ext.getCompilerOptions())
                 .tomcatConfiguration(ext.getTomcat())
                 .runArgs(ext.getRunArgs())
+                .multiAppRunArgs(ext.getMultiAppRunArgs())
                 .dependencies(ext.getDependencies())
                 .optimizationPreset(ext.getOptimizationPreset())
 

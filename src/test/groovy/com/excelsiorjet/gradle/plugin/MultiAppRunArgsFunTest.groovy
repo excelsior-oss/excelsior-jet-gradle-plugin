@@ -3,17 +3,16 @@ package com.excelsiorjet.gradle.plugin
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.IgnoreIf
 
-class RunArgsFunTest extends BaseFunTest implements HelloWorldProject {
+class MultiAppRunArgsFunTest extends BaseFunTest implements HelloWorldProject {
 
-    @IgnoreIf({crossCompilation})
-    def "runArgs is passed to startup accelerator and test runs"() {
+    @IgnoreIf({crossCompilation || !multiAppSupported})
+    def "multiAppRunArgs is passed to startup accelerator and run"() {
         when:
-        def result = runGradle('jetTestRun', 'jetBuild', 'jetRun')
+        def result = runGradle('jetBuild', 'jetRun')
 
         then:
         buildExeFile.exists()
         appExeFile.exists()
-        zipFile.exists()
 
         !result.output.contains("No arguments specified")
         !result.output.contains("The application has terminated with exit code: 3")
@@ -22,12 +21,11 @@ class RunArgsFunTest extends BaseFunTest implements HelloWorldProject {
         result.output.contains("1: arg2.1, arg2.2")
 
         result.task(":jetBuild").outcome == TaskOutcome.SUCCESS
-        result.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
         result.task(":jetRun").outcome == TaskOutcome.SUCCESS
     }
 
     public String testProjectDir() {
-        return "19-run-arguments"
+        return "38-multiapp-run-arguments"
     }
 
 }

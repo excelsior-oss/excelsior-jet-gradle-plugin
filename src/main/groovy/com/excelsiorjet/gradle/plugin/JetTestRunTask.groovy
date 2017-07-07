@@ -66,7 +66,7 @@ import org.gradle.api.tasks.TaskAction
 class JetTestRunTask extends AbstractJetTask {
 
     @TaskAction
-    def jetBuild() {
+    def jetTestRun() {
         ExcelsiorJet excelsiorJet = new ExcelsiorJet(jetHome)
         JetProject jetProject = createJetProject()
         new TestRunTask(excelsiorJet, jetProject).execute()

@@ -15,14 +15,8 @@ version = "1.0-SNAPSHOT"
 
 apply plugin: 'excelsiorJet'
 excelsiorJet {
-    mainClass = 'HelloWorld'
-    packageFiles {
-        file {
-            path = new File(project.projectDir, "packagefiles/custom.file")
-            packagePath = "/customfiles"
-        }
-        folder {
-            path = new File(project.projectDir, "packagefiles/subdir")
-        }
-    }
+    mainClass = "HelloWorld"
+    packaging = "none"
+    multiApp = true
+    multiAppRunArgs = ["-Dnoop", "-args", "arg1", "arg2.1, arg2.2"]
 }

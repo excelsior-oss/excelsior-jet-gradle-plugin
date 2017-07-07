@@ -15,10 +15,10 @@ class PackageFilesFunTest extends BaseFunTest implements HelloWorldProject {
 
         if (!crossCompilation) {
             new File(basedir, "build/jet/build/customfiles/custom.file").exists()
-            new File(basedir, "build/jet/build/customfiles/subdir/subdir.file").exists()
+            new File(basedir, "build/jet/build/subdir/subdir.file").exists()
         }
         new File(basedir, "build/jet/app/customfiles/custom.file").exists()
-        new File(basedir, "build/jet/app/customfiles/subdir/subdir.file").exists()
+        new File(basedir, "build/jet/app/subdir/subdir.file").exists()
 
         if (!crossCompilation) {
             result.task(":jetTestRun").outcome == TaskOutcome.SUCCESS
