@@ -39,7 +39,7 @@ import static com.excelsiorjet.api.util.Txt.s
  */
 abstract class AbstractJetTask extends DefaultTask {
 
-    String jetHome = (project.excelsiorJet as ExcelsiorJetExtension).jetHome
+    @Lazy String jetHome = (project.excelsiorJet as ExcelsiorJetExtension).jetHome
 
     protected JetProject createJetProject() {
         ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
