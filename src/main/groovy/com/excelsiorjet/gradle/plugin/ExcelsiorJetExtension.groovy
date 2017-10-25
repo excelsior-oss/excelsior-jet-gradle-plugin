@@ -420,7 +420,6 @@ class ExcelsiorJetExtension {
         }
         config.metaClass.shortcut = {Closure closure ->
             def shortcut = new Shortcut()
-            shortcut.icon = new PackageFile(PackageFileType.FILE)
             shortcut.metaClass.icon = {Closure iconClosure ->
                 applyClosure(iconClosure, shortcut.icon)
             }
@@ -444,7 +443,6 @@ class ExcelsiorJetExtension {
         }
         config.metaClass.fileAssociation = {Closure closure ->
             def fileAssociation = new FileAssociation()
-            fileAssociation.icon = new PackageFile(PackageFileType.FILE)
             fileAssociation.metaClass.icon = {Closure iconClosure ->
                 applyClosure(iconClosure, fileAssociation.icon)
             }
