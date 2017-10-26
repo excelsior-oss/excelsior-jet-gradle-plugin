@@ -277,6 +277,11 @@ or follow [@ExcelsiorJET](https://twitter.com/ExcelsiorJET) on Twitter.
 
 ## Release Notes
 
+
+Version 1.1.1 (01-Aug-2017)
+
+`jetHome` plugin parameter ignoring (issue #31) fix
+
 Version 1.1.0 (07-Jul-2017)
 
 Support for new features of Excelsior JET 12 and other enhancements:
