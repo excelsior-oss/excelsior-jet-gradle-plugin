@@ -174,7 +174,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         if (target.rootProject == target) {
             return ":$taskName"
         } else {
-            return ":${target.name}:$taskName"
+            return "${target.path}:$taskName"
         }
     }
 
