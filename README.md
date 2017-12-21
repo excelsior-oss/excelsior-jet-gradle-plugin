@@ -45,7 +45,7 @@ First, add the plugin dependency in the `buildscript{}` configuration of the `bu
 and apply the `excelsiorJet` plugin:
 
     buildscript {
-        ext.jetPluginVersion = '1.1.0'
+        ext.jetPluginVersion = '1.1.2'
         repositories {
             mavenCentral()
         }
