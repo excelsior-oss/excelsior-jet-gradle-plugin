@@ -58,34 +58,36 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
         extension = target.getExtensions().create(ExcelsiorJetExtension.EXTENSION_NAME, ExcelsiorJetExtension)
 
-        def archiveTaskName
+        Task archiveTask
         if (target.getPlugins().hasPlugin('war')) {
             isWar = true
-            archiveTaskName = 'war'
+            archiveTask = target.tasks.getByName('war')
         } else if (target.getPlugins().hasPlugin('java')) {
             isWar = false
-            archiveTaskName = 'jar'
+            archiveTask = target.tasks.getByName('jar')
         } else {
             throw new ProjectConfigurationException(Txt.s("ExcelsiorJetGradlePlugin.NoJarOrWarPluginsFound"), null)
         }
 
+        Task testTask = target.tasks.getByName('test')
+
         def jetTestRun = target.tasks.create("jetTestRun", JetTestRunTask)
-        jetTestRun.dependsOn(taskPath(target, archiveTaskName), taskPath(target, "test"))
+        jetTestRun.dependsOn(archiveTask, testTask)
 
         def jetBuild = target.tasks.create("jetBuild", JetBuildTask)
-        jetBuild.dependsOn(taskPath(target, archiveTaskName), taskPath(target, "test"))
+        jetBuild.dependsOn(archiveTask, testTask)
 
         def jetProfile = target.tasks.create("jetProfile", JetProfileTask)
-        jetProfile.dependsOn(taskPath(target, archiveTaskName), taskPath(target, "test"))
+        jetProfile.dependsOn(archiveTask, testTask)
 
         def jetRun = target.tasks.create("jetRun", JetRunTask)
-        jetRun.dependsOn(taskPath(target, archiveTaskName), taskPath(target, "test"))
+        jetRun.dependsOn(archiveTask, testTask)
 
-        addJetBuildConventions(target)
+        addJetBuildConventions(target, archiveTask)
 
     }
 
-    private void addJetBuildConventions(Project project) {
+    private void addJetBuildConventions(Project project, Task archiveTask) {
         extension.conventionMapping.version = {
             if (project.version.toString() == "unspecified") {
                 project.logger.warn(Txt.s("ExcelsiorJetGradlePlugin.ProjectVersionIsNotSet"))
@@ -95,19 +97,19 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
                 return project.version.toString()
             }
         }
-        extension.conventionMapping.artifactName = { getArchiveName(project.tasks.getByPath(taskPath(project, "jar"))) }
+        extension.conventionMapping.artifactName = { getArchiveName(archiveTask) }
         if (!isWar) {
             extension.conventionMapping.mainJar = {
-                new File(project.tasks.getByPath(taskPath(project, "jar")).archivePath as String)
+                archiveTask.archivePath
             }
         } else  {
             extension.conventionMapping.mainWar = {
-                new File(project.tasks.getByPath(taskPath(project, "war")).archivePath as String)
+                archiveTask.archivePath
             }
         }
         extension.conventionMapping.jetHome = { System.getProperty("jet.home") }
         extension.conventionMapping.jetResourcesDir = {
-            new File("${project.projectDir}/src/main/jetresources" as String)
+            project.file("src/main/jetresources")
         }
         extension.conventionMapping.groupId = {
             if (project.group.toString().isEmpty() && (extension.vendor ?: "").isEmpty()) {
@@ -162,19 +164,6 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             jarTask.archiveName.substring(0, jarTask.archiveName.lastIndexOf('.'))
         } else {
             jarTask.archiveName
-        }
-    }
-
-    /**
-     * Resolves task name in the given project into valid full task name string (with project prefix, for subprojects).
-     * Tasks in root project should not be referenced with root project name prefix (e.g ":jar"),
-     * while task in subprojects should be referenced with project name prefix (e.g. ":subproject:jar").
-     */
-    private static String taskPath(Project target, String taskName) {
-        if (target.rootProject == target) {
-            return ":$taskName"
-        } else {
-            return "${target.path}:$taskName"
         }
     }
 
