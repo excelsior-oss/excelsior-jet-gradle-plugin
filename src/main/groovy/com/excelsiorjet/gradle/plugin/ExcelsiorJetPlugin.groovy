@@ -108,9 +108,9 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             }
         }
         extension.conventionMapping.jetHome = { System.getProperty("jet.home") }
-        extension.conventionMapping.jetResourcesDir = {
-            project.file("src/main/jetresources")
-        }
+
+        extension.jetResourcesDir = project.file("src/main/jetresources")
+
         extension.conventionMapping.groupId = {
             if (project.group.toString().isEmpty() && (extension.vendor ?: "").isEmpty()) {
                 return setGroupId(project)
@@ -123,13 +123,8 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             }
         }
 
-        extension.conventionMapping.appType = {
-            if (isWar)  {
-                return ApplicationType.TOMCAT.toString()
-            } else {
-                return ApplicationType.PLAIN.toString();
-            }
-        }
+        extension.appType = isWar ? ApplicationType.TOMCAT.toString()
+                                  : ApplicationType.PLAIN.toString()
     }
 
     private String setGroupId(Object project) {
