@@ -35,6 +35,9 @@ excelsiorJet {
         }
     }
     packaging = "excelsior-installer"
+    pdb {
+        keepInBuildDir = true
+    }
 }
 
 repositories {

@@ -17,6 +17,9 @@ apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = "AppWithFileDeps"
     optimizationPreset = "smart"
+    pdb {
+        keepInBuildDir = true
+    }
     dependencies {
         dependency {
             path = new File(project.projectDir, "libs/single/single-dep.jar")

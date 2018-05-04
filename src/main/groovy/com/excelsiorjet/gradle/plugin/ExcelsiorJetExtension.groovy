@@ -21,6 +21,7 @@
 */
 package com.excelsiorjet.gradle.plugin
 
+import com.excelsiorjet.api.tasks.config.PDBConfig
 import com.excelsiorjet.api.tasks.config.compiler.ExecProfilesConfig
 import com.excelsiorjet.api.tasks.config.excelsiorinstaller.FileAssociation
 import com.excelsiorjet.api.tasks.config.packagefile.PackageFile
@@ -664,6 +665,17 @@ class ExcelsiorJetExtension {
      * </p>
      */
     String[] multiAppRunArgs = []
+
+    /**
+     * Project Database placement configuration.
+     *
+     * @see PDBConfig
+     */
+    PDBConfig pdb = new PDBConfig()
+
+    def pdb(Closure closure) {
+        applyClosure(closure, pdb)
+    }
 
     /**
      * Optimization presets define the default optimization mode for application dependencies.

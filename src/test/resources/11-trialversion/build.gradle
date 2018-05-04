@@ -23,4 +23,7 @@ excelsiorJet {
         expireDate = '01Jun2001'
         expireMessage = 'App is expired'
     }
+    pdb {
+        keepInBuildDir = true
+    }
 }

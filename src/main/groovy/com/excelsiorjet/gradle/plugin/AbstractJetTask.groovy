@@ -91,6 +91,7 @@ abstract class AbstractJetTask extends DefaultTask {
                 .multiAppRunArgs(ext.getMultiAppRunArgs())
                 .dependencies(ext.getDependencies())
                 .optimizationPreset(ext.getOptimizationPreset())
+                .pdbConfiguration(ext.getPdb())
 
         return jetProject
     }

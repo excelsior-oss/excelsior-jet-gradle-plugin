@@ -29,6 +29,7 @@ abstract class BaseFunTest extends Specification {
     protected static final boolean since11_3 = excelsiorJet.since11_3()
     protected static final boolean advancedExcelsiorInstallerFeaturesSupported = excelsiorJet.advancedExcelsiorInstallerFeaturesSupported
     protected static final boolean PGOSupported = excelsiorJet.PGOSupported
+    protected static final boolean smartSupported = excelsiorJet.smartSupported
 
     protected static final String ext = excelsiorJet.targetOS.exeFileExtension
 

@@ -16,4 +16,7 @@ version = "1.0-SNAPSHOT"
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = 'HelloWorld'
+    pdb {
+        keepInBuildDir = true
+    }
 }
