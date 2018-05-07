@@ -86,8 +86,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         def jetRun = target.tasks.create("jetRun", JetRunTask)
         jetRun.dependsOn(archiveTask, testTask)
 
-        def jetClean = target.tasks.create("jetClean", JetCleanTask)
-        jetClean.dependsOn(archiveTask, testTask)
+        target.tasks.create("jetClean", JetCleanTask)
 
         addJetBuildConventions(target, archiveTask)
 
