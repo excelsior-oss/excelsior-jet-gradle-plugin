@@ -23,4 +23,7 @@ excelsiorJet {
         copyright = "MyCopyright"
         description = "My description"
     }
+    pdb {
+        keepInBuildDir = true
+    }
 }

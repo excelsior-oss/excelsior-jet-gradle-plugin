@@ -17,4 +17,7 @@ apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = 'HelloSwing'
     hideConsole = true
+    pdb {
+        keepInBuildDir = true
+    }
 }

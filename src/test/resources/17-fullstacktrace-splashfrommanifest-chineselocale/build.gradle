@@ -29,6 +29,9 @@ excelsiorJet {
     runtime {
         locales = ["Chinese"]
     }
+    pdb {
+        keepInBuildDir = true
+    }
 }
 
 repositories {

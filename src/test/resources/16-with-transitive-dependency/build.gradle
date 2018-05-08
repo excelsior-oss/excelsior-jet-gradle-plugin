@@ -16,6 +16,9 @@ version = "1.0-SNAPSHOT"
 apply plugin: 'excelsiorJet'
 excelsiorJet {
     mainClass = "AppWithDep"
+    pdb {
+        keepInBuildDir = true
+    }
 }
 
 repositories {

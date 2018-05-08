@@ -23,6 +23,7 @@ package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.ExcelsiorJet
 import com.excelsiorjet.api.tasks.JetProject
+import com.excelsiorjet.api.tasks.JetTaskFailureException
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -36,9 +37,17 @@ class JetBuildTask extends AbstractBuildTask {
 
     @TaskAction
     def jetBuild() {
-        ExcelsiorJet excelsiorJet = new ExcelsiorJet(jetHome)
-        JetProject jetProject = createJetProject()
-        new com.excelsiorjet.api.tasks.JetBuildTask(excelsiorJet, jetProject, false).execute()
+        try {
+            ExcelsiorJet excelsiorJet = new ExcelsiorJet(jetHome)
+            JetProject jetProject = createJetProject()
+            new com.excelsiorjet.api.tasks.JetBuildTask(excelsiorJet, jetProject, false).execute()
+        } catch (JetTaskFailureException e) {
+            //just rethrow
+            throw e
+        } catch (Throwable e) {
+            e.printStackTrace()
+            throw e;
+        }
     }
 
 }

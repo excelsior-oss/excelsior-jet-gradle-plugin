@@ -38,13 +38,18 @@ import static com.excelsiorjet.api.util.Txt.s
  * @author Aleksey Zhidkov
  */
 abstract class AbstractJetTask extends DefaultTask {
+    /**
+     * The plugin name. Must be synchronized with the actual version of the plugin.
+     * TODO: retrieve plugin version from binary meta-data if possible.
+    */
+    static private final String PLUGIN_NAME = "Excelsior JET Gradle plugin v1.2.0"
 
     @Lazy String jetHome = (project.excelsiorJet as ExcelsiorJetExtension).jetHome
 
     protected JetProject createJetProject() {
         ExcelsiorJetExtension ext = project.excelsiorJet as ExcelsiorJetExtension
         validateSettings()
-        def jetProject = new JetProject(project.name, ext.getGroupId(), ext.getVersion(),
+        def jetProject = new JetProject(PLUGIN_NAME, project.name, ext.getGroupId(), ext.getVersion(),
                 JetProject.checkAndGetAppType(ext.appType),  project.buildDir, ext.getJetResourcesDir())
 
         // getters should be used to fallback into convention mapping magic, when field is not set
@@ -91,6 +96,7 @@ abstract class AbstractJetTask extends DefaultTask {
                 .multiAppRunArgs(ext.getMultiAppRunArgs())
                 .dependencies(ext.getDependencies())
                 .optimizationPreset(ext.getOptimizationPreset())
+                .pdbConfiguration(ext.getPdb())
 
         return jetProject
     }

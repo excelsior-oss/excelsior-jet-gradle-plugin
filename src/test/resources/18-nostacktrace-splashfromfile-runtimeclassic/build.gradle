@@ -20,6 +20,9 @@ excelsiorJet {
     stackTraceSupport = "none"
     inlineExpansion = "tiny-methods-only"
     compilerOptions = ["-jetrt=CLASSIC"]
+    pdb {
+        keepInBuildDir = true
+    }
 }
 
 repositories {

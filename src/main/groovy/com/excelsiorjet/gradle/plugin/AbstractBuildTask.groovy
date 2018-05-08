@@ -28,7 +28,7 @@ import static com.excelsiorjet.api.util.Txt.s
 
 /**
  * Base task for tasks that depend on build parameters of the plugin:
- * {@link JetBuildTask}, {@link JetProfileTask}, {@link JetRunTask).
+ * {@link JetBuildTask}, {@link JetProfileTask}, {@link JetRunTask), {@link JetCleanTask}.
  *
  * @see ExcelsiorJetExtension
  *
