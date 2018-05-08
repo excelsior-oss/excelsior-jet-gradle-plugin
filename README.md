@@ -45,7 +45,7 @@ First, add the plugin dependency in the `buildscript{}` configuration of the `bu
 and apply the `excelsiorJet` plugin:
 
     buildscript {
-        ext.jetPluginVersion = '1.1.2'
+        ext.jetPluginVersion = '1.2.0'
         repositories {
             mavenCentral()
         }
@@ -219,6 +219,7 @@ See the [Wiki](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/wiki
 
 **Compilation Settings:**
 
+  * [Incremental Compilation](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/wiki/Incremental-Compilation)
   * [Dependency-Specific Settings](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/wiki/Dependency-Specific-Settings)
   * [Optimizations](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/wiki/Optimization-Settings)
   * [Target Executable](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/wiki/Target-Executable-Settings)
@@ -277,6 +278,24 @@ or follow [@ExcelsiorJET](https://twitter.com/ExcelsiorJET) on Twitter.
 
 ## Release Notes
 
+Version 1.2.0 (08-May-2018)
+
+`pdb{}` configuration section introduced to control the location of the Project Database (PDB).
+PDB is used for incremental compilation: once a full build succeeds, only the changed project dependencies
+are recompiled during the subsequent builds.
+The configuration, as well as the incremental compilation feature, are available only for Excelsior JET 15 and above, and only for targets other than 32-bit x86.
+This release of the plugin places the PDB outside of the build directory by default to enable incremental compilation even for clean builds.
+In addition, this version of the plugin also introduces the  `jetClean`  task for cleaning the PDB.
+
+
+Version 1.1.3 (25-Dec-2017)
+
+Fix for issue: "Project task path for nested multiprojects generate incorrect path" (#37)
+
+
+Version 1.1.2 (26-Oct-2017)
+
+Fix for `NullPointerException` when a shortcut with no icon is used for Excelsior Installer backend (issue (#62)[https://github.com/excelsior-oss/excelsior-jet-maven-plugin/issues/62])
 
 Version 1.1.1 (01-Aug-2017)
 
@@ -422,15 +441,3 @@ Version 0.3.0 (06-Jul-2016)
 Version 0.1.0 (24-Jun-2016)
 * Initial release supporting compilation of the Gradle Project with all dependencies into native executable
 and placing it into a separate directory with required Excelsior JET runtime files.
-
-## Roadmap
-
-Even though we are going to base the plugin development on your feedback in the future, we have our own short-term plan as well.
-So the next few releases will add the following features:
-
-* Multi-component support: building dependencies into separate native libraries
-                           to reuse them across multiple Gradle project builds
-                           so as to reduce overall compilation time
-* Code signing.
-
-Note that the order of appearance of these features is not fixed and can be adjusted based on your feedback.
