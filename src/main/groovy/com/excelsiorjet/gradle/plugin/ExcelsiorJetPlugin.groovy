@@ -65,6 +65,9 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         if (target.getPlugins().hasPlugin('war')) {
             isWar = true
             archiveTask = target.tasks.getByName('war')
+        } else if (target.getPlugins().hasPlugin('org.springframework.boot')) {
+            isWar = false
+            archiveTask = target.tasks.getByName('bootJar')
         } else if (target.getPlugins().hasPlugin('java')) {
             isWar = false
             archiveTask = target.tasks.getByName('jar')

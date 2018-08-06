@@ -63,6 +63,8 @@ class ExcelsiorJetExtension {
      * <dt>tomcat</dt>
      * <dd>servlet-based Java application, that runs within Tomcat servlet container,
      * default type if {@code war} plugin applied</dd>
+     * <dt>spring-boot</dt>
+     * <dd>Spring Boot application, that runs as an executable jar</dd>
      * </dl>
      */
     String appType;

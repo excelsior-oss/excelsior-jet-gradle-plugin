@@ -1,0 +1,46 @@
+buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+    }
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.0.4.RELEASE'
+}
+group = "com.excelsior.it"
+version = "1.0-SNAPSHOT"
+
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter:2.0.4.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:2.0.4.RELEASE"
+    compile "org.springframework:spring-webmvc:5.0.8.RELEASE"
+}
+
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    appType = "spring-boot"
+    compilerOptions = ["+baselineall"]
+    dependencies {
+        dependency {
+            artifactId = 'spring-boot-sample-tomcat'
+            pack = 'none'
+        }
+        dependency {
+            artifactId = "spring-webmvc"
+            protect = "not-required"
+        }
+    }
+}
