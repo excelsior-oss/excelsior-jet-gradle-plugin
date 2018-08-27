@@ -51,6 +51,7 @@ import org.gradle.api.logging.LogLevel
 class ExcelsiorJetPlugin implements Plugin<Project> {
 
     private boolean isWar
+    private boolean isSpringBoot
     private ExcelsiorJetExtension extension
 
     @Override
@@ -62,11 +63,18 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         extension = target.getExtensions().create(ExcelsiorJetExtension.EXTENSION_NAME, ExcelsiorJetExtension)
 
         Task archiveTask
+        isSpringBoot = false
         if (target.getPlugins().hasPlugin('war')) {
             isWar = true
-            archiveTask = target.tasks.getByName('war')
+            if (!target.getPlugins().hasPlugin('org.springframework.boot')) {
+              archiveTask = target.tasks.getByName('war')
+            } else {
+              isSpringBoot = true;
+              archiveTask = target.tasks.getByName('bootWar')
+            }
         } else if (target.getPlugins().hasPlugin('org.springframework.boot')) {
             isWar = false
+            isSpringBoot = true
             archiveTask = target.tasks.getByName('bootJar')
         } else if (target.getPlugins().hasPlugin('java')) {
             isWar = false
@@ -131,8 +139,12 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             }
         }
 
-        extension.appType = isWar ? ApplicationType.TOMCAT.toString()
-                                  : ApplicationType.PLAIN.toString()
+        extension.conventionMapping.appType = {
+            if (isWar && isSpringBoot) {
+                throw new ProjectConfigurationException(Txt.s("JetProject.NoAppType.Failure"), null)
+            }
+            isWar ? ApplicationType.TOMCAT.toString(): ApplicationType.PLAIN.toString()
+        }
     }
 
     private String setGroupId(Object project) {
