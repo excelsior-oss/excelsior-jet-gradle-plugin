@@ -112,7 +112,7 @@ abstract class AbstractJetTask extends DefaultTask {
         // https://issues.gradle.org/browse/GRADLE-3301
         // https://discuss.gradle.org/t/oddity-in-the-output-of-dependencyinsight-task/7553/12
         // https://discuss.gradle.org/t/warning-after-gradle-update-1-9-with-pmd-plugin/1731/3
-        def configuration = project.configurations.getByName("compile")
+        def configuration = project.configurations.getByName("runtime")
         def allDependencies = configuration.getResolvedConfiguration().getResolvedArtifacts().collect() {
             def module = it.moduleVersion.id.module
             return new ProjectDependency(module.group, module.name, it.moduleVersion.id.version, it.file, false)
