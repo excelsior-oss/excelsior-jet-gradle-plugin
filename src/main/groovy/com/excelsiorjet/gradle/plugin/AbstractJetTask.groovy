@@ -97,6 +97,7 @@ abstract class AbstractJetTask extends DefaultTask {
                 .dependencies(ext.getDependencies())
                 .optimizationPreset(ext.getOptimizationPreset())
                 .pdbConfiguration(ext.getPdb())
+                .terminationPolicy(ext.getTerminationPolicy())
 
         return jetProject
     }

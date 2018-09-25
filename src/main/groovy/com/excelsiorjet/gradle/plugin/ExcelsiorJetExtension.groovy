@@ -735,4 +735,20 @@ class ExcelsiorJetExtension {
      * If set to to {@code true} project dependencies is ignored.
      */
     boolean ignoreProjectDependencies = false
+
+    /**
+     * Termination policy for {@link JetStopTask}. Permitted values are:
+     * <dl>
+     * <dt>ctrl-c</dt>
+     * <dd>send Ctrl-C event to a running application</dd>
+     * <dt>halt</dt>
+     * <dd>call java.lang.Shutdown.halt() (System.exit()) within a running application</dd>
+     * </dl>
+     *
+     * Applications may perform some shutdown actions upon termination (e.g. close a database).
+     * Some applications do not terminate well on System.exit() call such as Tomcat and Spring Boot applications.
+     * So by default, we use Ctrl-C termination policy for such applications to terminate properly.
+     */
+    String terminationPolicy
+
 }

@@ -1,0 +1,31 @@
+buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+    }
+}
+
+apply plugin: "java"
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    mainClass = "App"
+    packaging = "none"
+    profileStartup = false
+    terminationPolicy = Random.newInstance().nextBoolean() ? "halt" : "ctrl-c"
+    optimizationPreset = "smart"
+    runArgs = [System.getProperty("gradle.exec"), "jetStop",
+               "-DexcelsiorJetPluginVersion=" + System.getProperty("excelsiorJetPluginVersion")]
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "com.excelsiorjet:excelsior-jet-api:1.2.0"
+}

@@ -6,6 +6,7 @@ test {
     systemProperty 'excelsiorJetPluginVersion', version
     systemProperty 'jet.home', System.properties['jet.home']
     systemProperty 'tomcat.home', System.properties['tomcat.home']
+    systemProperty 'gradle.exec', System.properties['gradle.exec']
     testLogging {
         events "started", "passed", "skipped", "failed"//, "standardOut", "standardError"
         info {
