@@ -42,7 +42,7 @@ abstract class AbstractJetTask extends DefaultTask {
      * The plugin name. Must be synchronized with the actual version of the plugin.
      * TODO: retrieve plugin version from binary meta-data if possible.
     */
-    static private final String PLUGIN_NAME = "Excelsior JET Gradle plugin v1.2.1"
+    static private final String PLUGIN_NAME = "Excelsior JET Gradle plugin v1.3.0"
 
     @Lazy String jetHome = (project.excelsiorJet as ExcelsiorJetExtension).jetHome
 
