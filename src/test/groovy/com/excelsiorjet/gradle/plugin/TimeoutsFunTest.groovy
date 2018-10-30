@@ -5,7 +5,7 @@ import spock.lang.IgnoreIf
 
 class TimeoutsFunTest extends BaseFunTest implements HelloWorldProject {
 
-    @IgnoreIf({crossCompilation})
+    @IgnoreIf({crossCompilation || !PGOSupported})
     def "tests test run, profile timeouts"() {
         setup:
 

@@ -7,7 +7,7 @@ class StopTaskFunTest extends BaseFunTest implements HelloWorldProject {
 
     protected static final String gradleExec = System.getProperty("gradle.exec")
 
-    @IgnoreIf({crossCompilation || (gradleExec == null)})
+    @IgnoreIf({crossCompilation || (gradleExec == null) || !PGOSupported})
     def "stops test run, profile, run tasks "() {
         setup:
 
