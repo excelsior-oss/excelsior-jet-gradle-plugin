@@ -42,7 +42,7 @@ abstract class AbstractJetTask extends DefaultTask {
      * The plugin name. Must be synchronized with the actual version of the plugin.
      * TODO: retrieve plugin version from binary meta-data if possible.
     */
-    static private final String PLUGIN_NAME = "Excelsior JET Gradle plugin v1.2.0"
+    static private final String PLUGIN_NAME = "Excelsior JET Gradle plugin v1.3.0"
 
     @Lazy String jetHome = (project.excelsiorJet as ExcelsiorJetExtension).jetHome
 
@@ -97,6 +97,7 @@ abstract class AbstractJetTask extends DefaultTask {
                 .dependencies(ext.getDependencies())
                 .optimizationPreset(ext.getOptimizationPreset())
                 .pdbConfiguration(ext.getPdb())
+                .terminationPolicy(ext.getTerminationPolicy())
 
         return jetProject
     }
@@ -112,7 +113,7 @@ abstract class AbstractJetTask extends DefaultTask {
         // https://issues.gradle.org/browse/GRADLE-3301
         // https://discuss.gradle.org/t/oddity-in-the-output-of-dependencyinsight-task/7553/12
         // https://discuss.gradle.org/t/warning-after-gradle-update-1-9-with-pmd-plugin/1731/3
-        def configuration = project.configurations.getByName("compile")
+        def configuration = project.configurations.getByName("runtime")
         def allDependencies = configuration.getResolvedConfiguration().getResolvedArtifacts().collect() {
             def module = it.moduleVersion.id.module
             return new ProjectDependency(module.group, module.name, it.moduleVersion.id.version, it.file, false)

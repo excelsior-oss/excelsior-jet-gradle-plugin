@@ -1,0 +1,27 @@
+buildscript {
+    def pluginVersion = System.properties['excelsiorJetPluginVersion']
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.excelsiorjet:excelsior-jet-gradle-plugin:$pluginVersion"
+    }
+}
+
+apply plugin: "java"
+
+apply plugin: 'excelsiorJet'
+excelsiorJet {
+    mainClass = "App"
+    packaging = "none"
+    profileStartup = false
+    execProfiles {
+        testRunTimeout = 5
+        profileRunTimeout = 5
+    }
+}
+
+repositories {
+    mavenCentral()
+}

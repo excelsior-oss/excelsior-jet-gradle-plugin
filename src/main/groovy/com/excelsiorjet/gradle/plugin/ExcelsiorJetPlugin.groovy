@@ -51,6 +51,7 @@ import org.gradle.api.logging.LogLevel
 class ExcelsiorJetPlugin implements Plugin<Project> {
 
     private boolean isWar
+    private boolean isSpringBoot
     private ExcelsiorJetExtension extension
 
     @Override
@@ -62,9 +63,19 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         extension = target.getExtensions().create(ExcelsiorJetExtension.EXTENSION_NAME, ExcelsiorJetExtension)
 
         Task archiveTask
+        isSpringBoot = false
         if (target.getPlugins().hasPlugin('war')) {
             isWar = true
-            archiveTask = target.tasks.getByName('war')
+            if (!target.getPlugins().hasPlugin('org.springframework.boot')) {
+              archiveTask = target.tasks.getByName('war')
+            } else {
+              isSpringBoot = true;
+              archiveTask = target.tasks.getByName('bootWar')
+            }
+        } else if (target.getPlugins().hasPlugin('org.springframework.boot')) {
+            isWar = false
+            isSpringBoot = true
+            archiveTask = target.tasks.getByName('bootJar')
         } else if (target.getPlugins().hasPlugin('java')) {
             isWar = false
             archiveTask = target.tasks.getByName('jar')
@@ -85,6 +96,8 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
 
         def jetRun = target.tasks.create("jetRun", JetRunTask)
         jetRun.dependsOn(archiveTask, testTask)
+
+        target.tasks.create("jetStop", JetStopTask)
 
         target.tasks.create("jetClean", JetCleanTask)
 
@@ -128,8 +141,12 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
             }
         }
 
-        extension.appType = isWar ? ApplicationType.TOMCAT.toString()
-                                  : ApplicationType.PLAIN.toString()
+        extension.conventionMapping.appType = {
+            if (isWar && isSpringBoot) {
+                throw new ProjectConfigurationException(Txt.s("JetProject.NoAppType.Failure"), null)
+            }
+            isWar ? ApplicationType.TOMCAT.toString(): ApplicationType.PLAIN.toString()
+        }
     }
 
     private String setGroupId(Object project) {
@@ -143,7 +160,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         def allCodeSourceSets = project.sourceSets.main.allSource.source.findAll({
             // pattern: "main <<language> source|resources>",
             // eg: "main Java source", "main resources"
-            (it.name as String).matches('^main \\w+ source$')
+            (it.name as String).matches('^main \\w+ source$') || it.name == "java"
         })
 
         // Map Gradle SourceSet objects to sources root
