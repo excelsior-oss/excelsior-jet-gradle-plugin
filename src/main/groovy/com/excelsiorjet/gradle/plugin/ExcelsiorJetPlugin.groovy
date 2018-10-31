@@ -160,7 +160,7 @@ class ExcelsiorJetPlugin implements Plugin<Project> {
         def allCodeSourceSets = project.sourceSets.main.allSource.source.findAll({
             // pattern: "main <<language> source|resources>",
             // eg: "main Java source", "main resources"
-            (it.name as String).matches('^main \\w+ source$')
+            (it.name as String).matches('^main \\w+ source$') || it.name == "java"
         })
 
         // Map Gradle SourceSet objects to sources root
