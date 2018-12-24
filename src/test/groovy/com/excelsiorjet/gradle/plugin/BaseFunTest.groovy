@@ -1,6 +1,7 @@
 package com.excelsiorjet.gradle.plugin
 
 import com.excelsiorjet.api.ExcelsiorJet
+import com.excelsiorjet.api.platform.Host
 import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification
 
@@ -31,6 +32,7 @@ abstract class BaseFunTest extends Specification {
     protected static final boolean advancedExcelsiorInstallerFeaturesSupported = excelsiorJet.advancedExcelsiorInstallerFeaturesSupported
     protected static final boolean PGOSupported = excelsiorJet.PGOSupported
     protected static final boolean smartSupported = excelsiorJet.smartSupported
+    protected static final boolean tarGzPackagingSupported = !excelsiorJet.crossCompilation || !Host.windows
 
     protected static final String ext = excelsiorJet.targetOS.exeFileExtension
 
