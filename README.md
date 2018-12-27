@@ -47,7 +47,7 @@ First, add the plugin dependency in the `buildscript{}` configuration of the `bu
 and apply the `excelsiorJet` plugin:
 
     buildscript {
-        ext.jetPluginVersion = '1.3.0'
+        ext.jetPluginVersion = '1.3.1'
         repositories {
             mavenCentral()
         }
@@ -299,6 +299,11 @@ or follow [@ExcelsiorJET](https://twitter.com/ExcelsiorJET) on Twitter.
 
 
 ## Release Notes
+
+Version 1.3.1 (26-Dec-2018)
+
+* `tar-gz` [packaging](https://github.com/excelsior-oss/excelsior-jet-gradle-plugin/wiki/Build-Process#packaging) type added for creation `tar.gz` archive
+   as the resulting output artifact (#79 Maven plugin issue).
 
 Version 1.3.0 (31-Oct-2018)
 
