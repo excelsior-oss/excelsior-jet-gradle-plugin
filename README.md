@@ -47,7 +47,7 @@ First, add the plugin dependency in the `buildscript{}` configuration of the `bu
 and apply the `excelsiorJet` plugin:
 
     buildscript {
-        ext.jetPluginVersion = '1.3.1'
+        ext.jetPluginVersion = '1.3.2'
         repositories {
             mavenCentral()
         }
@@ -299,6 +299,11 @@ or follow [@ExcelsiorJET](https://twitter.com/ExcelsiorJET) on Twitter.
 
 
 ## Release Notes
+
+Version 1.3.3 (13-Jun-2019)
+
+* macOS application bundles creation updated to support Notarization.
+
 
 Version 1.3.1 (26-Dec-2018)
 
